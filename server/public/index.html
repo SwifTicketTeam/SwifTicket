@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SwifTicket's Server</title>
+  <style>
+    html {
+      font-size: 1.5rem;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<h1>Welcome to SwifTicket's Server</h1>
+<h2>SwifTicket – Universal Ticket Booking System</h2>
+
+SwifTicket is a full-stack web application built with the MEVN stack (MongoDB, Express.js, Vue.js, Node.js). It offers a seamless experience for booking tickets across different categories such as movies, concerts, events, and more.
+
+<h3> Project Status </h3>
+
+- Phase 1 (Frontend UI for Login & Registration) – Completed
+- Current Focus – Backend API setup with authentication
+
+<h3> Tech Stack </h3>
+
+<h4> Frontend </h4>
+- Vue.js 2 – Component-based UI for building the user interface
+- Vue Router – For routing between login, register, and dashboard pages
+- Vuex – To manage global state (auth, user roles)
+- Axios – For making API calls to backend
+
+<h4> Backend </h4>
+- Node.js – Server runtime environment
+- Express.js – RESTful API and middleware support
+- Bcrypt – Password hashing and validation
+- JSON Web Token (JWT) – Token-based session management
+- MongoDB – NoSQL database for user and event data
+- Mongoose – ODM for MongoDB
+
+<h4> Authentication </h4>
+- Manual Authentication – Username/email and password based login
+- OAuth 2.0 – Planned (Google, GitHub login without external libraries)
+- Role-based Access Control – User, Vendor, Admin roles
+- Token Storage – JWT stored on client via localStorage or Vuex
+
+<h4> Testing </h4>
+- Postman – API testing and validation
+- Pre-request Scripts – Email uniqueness and login validation
+- Newman – CLI test automation (optional)
+
+<h4> Core Features </h4>
+
+- User registration and login with hashed passwords
+- Role differentiation: Admin, Vendor, and General User
+- Token-based authentication using JWT
+- Form validation and route guards
+- Responsive UI with dynamic component switching (Login/Register)
+- Event booking and listing (planned)
+
+<h3> Project Roadmap </h3>
+
+<h4> Phase 1: Frontend Development – Completed </h4>
+- Responsive UI for Login and Sign-Up using Vue
+- Form validations and route navigation
+- State management with Vuex
+- Page structure: `/login`, `/register`, `/dashboard`
+
+<h4> Phase 2: Mock API Integration and Testing </h4>
+- Use Reqres or other mock APIs for simulating login
+- Use Postman to test requests, responses, and conditions
+- Pre-request checks for duplicates and validations
+
+<h4> Phase 3: Custom Backend with Node.js and Express </h4>
+- Create REST API routes: `/login`, `/register`, `/profile`
+- Connect to MongoDB via Mongoose
+- Hash passwords with bcrypt
+- Use JWT for login and protected routes
+
+<h4> Phase 4: Secure Role-Based Access and API Protection </h4>
+- Role check for admin/vendor routes
+- Middleware to verify JWT in backend
+- Setup error responses and access control
+
+<h4> Phase 5: OAuth 2.0 and Advanced Features
+  - Add Google/GitHub login without third-party libraries </h4>
+- Integrate OAuth flow manually (DAuth style)
+- Add event creation and booking modules
+
+</body>
+</html>

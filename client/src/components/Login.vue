@@ -4,28 +4,54 @@
       <h1>Your Events Await!</h1>
       <div class = "fields">
         <label for = "eMail">EMAIL</label>
-        <input type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck = "false" autocomplete = "off">
+        <input v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck = "false" autocomplete = "off">
       </div>
       <div class = "fields">
         <label for = "passWord">PASSWORD</label>
-        <input type = "password" name = "passWord" id = "passWord" placeholder = "Unlock your SwifTicket Experience" spellcheck="false" autocomplete = "off">
+        <input v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Unlock your SwifTicket Experience" spellcheck="false" autocomplete = "off">
       </div>
       <a>Forgot Password?</a>
-      <button>SUBMIT</button>
+      <p :class = "{isWarn : isWarning}">{{ warning }}</p>
+      <button @click = "login">SUBMIT</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "LoginUser"
+  name: "LoginUser",
+  data() {
+    return {
+      email: "",
+      password: "",
+      warning: "",
+      isWarning: false,
+    }
+  },
+  methods: {
+    login() {
+      axios.post("http://localhost:3000/login", {
+        email: this.email,
+        password: this.password,
+      }).then(res => {
+        this.isWarning = false;
+        this.$store.state.token = res.data.token;
+        this.$router.push({
+          path: "/dashboard",
+        });
+      }).catch(err => {
+        this.warning = err.response.data;
+        this.isWarning = true;
+      })
+    }
+  }
 }
 </script>
 
-<style src = "../styles/form-styles.css"></style>
-
+<style scoped src = "../styles/form-styles.css"></style>
 <style scoped>
-
 
 a {
   width: 90%;

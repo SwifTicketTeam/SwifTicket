@@ -1,53 +1,16 @@
-# SwifTicket – Universal Ticket Booking System
+# SwifTicket – Universal Ticketing Platform
 
-SwifTicket is a full-stack web application built with the MEVN stack (MongoDB, Express.js, Vue.js, Node.js). It offers a seamless experience for booking tickets across different categories such as movies, concerts, events, and more.
+SwifTicket is a modern web-based ticket booking system designed to offer fast, secure, and unified access to events. Built using the MEVN Stack (MongoDB, Express, Vue, Node), it focuses on a streamlined user experience with clean UI, custom authentication logic, and upcoming support for OAuth and role-based access.
 
 ---
 
 ## Project Status
 
 - Phase 1 (Frontend UI for Login & Registration) – Completed
-- Current Focus – Backend API setup with custom authentication
-
----
-
-## Tech Stack
-
-### Frontend
-- Vue.js 2 – Component-based UI for building the user interface
-- Vue Router – For routing between login, register, and dashboard pages
-- Vuex – To manage global state (auth, user roles)
-- Axios – For making API calls to backend
-
-### Backend
-- Node.js – Server runtime environment
-- Express.js – RESTful API and middleware support
-- Bcrypt – Password hashing and validation
-- JSON Web Token (JWT) – Token-based session management
-- MongoDB – NoSQL database for user and event data
-- Mongoose – ODM for MongoDB
-
-### Authentication
-- Manual Authentication – Username/email and password based login
-- OAuth 2.0 – Planned (Google, GitHub login without external libraries)
-- Role-based Access Control – User, Vendor, Admin roles
-- Token Storage – JWT stored on client via localStorage or Vuex
-
-### Testing
-- Postman – API testing and validation
-- Pre-request Scripts – Email uniqueness and login validation
-- Newman – CLI test automation (optional)
-
----
-
-## Core Features
-
-- User registration and login with hashed passwords
-- Role differentiation: Admin, Vendor, and General User
-- Token-based authentication using JWT
-- Form validation and route guards
-- Responsive UI with dynamic component switching (Login/Register)
-- Event booking and listing (planned)
+- Phase 2 (API Testing and Backend Server) – Completed
+- Phase 3 (Connecting the Database, Backend and the Frontend) – Completed
+- Phase 4 (JWT Session Management, Route Protection and Forgot Password) – Ongoing
+- Phase 5 (OAuth Integration and Role Expansion) – Planned
 
 ---
 
@@ -59,25 +22,48 @@ SwifTicket is a full-stack web application built with the MEVN stack (MongoDB, E
 - State management with Vuex
 - Page structure: `/login`, `/register`, `/dashboard`
 
-### Phase 2: Mock API Integration and Testing
-- Use Reqres or other mock APIs for simulating login
-- Use Postman to test requests, responses, and conditions
-- Pre-request checks for duplicates and validations
+### Phase 2: Mock API Integration and Testing – Completed
+- Used Reqres and mock API for simulating login
+- Pre-request duplicate checks using Postman scripts
+- Validated API response flows and conditions
 
-### Phase 3: Custom Backend with Node.js and Express
-- Create REST API routes: `/login`, `/register`, `/profile`
-- Connect to MongoDB via Mongoose
-- Hash passwords with bcrypt
-- Use JWT for login and protected routes
+### Phase 3: Custom Backend with Node.js and Express – Completed
+- Developed RESTful API routes: `/login`, `/register`
+- Connected MongoDB via Mongoose
+- Hashed passwords securely with bcrypt
+- Created JWT tokens and stored using HTTP-only cookies
+- Integrated Axios for frontend-backend communication
 
-### Phase 4: Secure Role-Based Access and API Protection
-- Role check for admin/vendor routes
-- Middleware to verify JWT in backend
-- Setup error responses and access control
+### Phase 4: JWT Session Management, Route Protection and Forgot Password – Ongoing
+- Middleware to verify JWT tokens
+- Role-based access (admin, vendor, user)
+- Protected routes and redirection logic
 
-### Phase 5: OAuth 2.0 and Advanced Features
-- Add Google/GitHub login without third-party libraries
-- Integrate OAuth flow manually (DAuth style)
-- Add event creation and booking modules
+### Phase 5: OAuth Integration and Role Expansion – Planned
+- Implement Google/GitHub OAuth without external libraries
+- Add DAuth-style flow
+- Extend functionality with event creation and booking logic
 
 ---
+
+## Tech Stack
+
+**Frontend**
+- Vue.js 2
+- Vuex (state management)
+- Vue Router
+- Axios
+
+**Backend**
+- Node.js
+- Express.js
+- Mongoose
+- bcrypt
+- jsonwebtoken (JWT)
+
+**Database**
+- MongoDB (MongoDB Atlas)
+
+**Testing**
+- Postman (Manual API testing)
+- Pre-request and Post-request scripting
