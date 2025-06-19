@@ -2,7 +2,7 @@
   <div id = "auth">
     <transition name = "fade" mode = "out-in">
       <keep-alive>
-        <component :is = "authMode"></component>
+        <component :is = "authMode" @isUserTypeChanged = "changeUserType"></component>
       </keep-alive>
     </transition>
     <CardView @isUserTypeChanged = "changeUserType"></CardView>
@@ -12,6 +12,8 @@
 <script>
 import LoginUser from "./Login";
 import RegisterUser from "./Register";
+import ForgotPassword from "./ForgotPassword.vue";
+import ReRoute from "./ReRoute";
 import CardView from "./Card";
 
 export default{
@@ -19,6 +21,8 @@ export default{
   components: {
     LoginUser,
     RegisterUser,
+    ForgotPassword: ForgotPassword,
+    ReRoute,
     CardView
   },
   data() {
@@ -30,6 +34,12 @@ export default{
     changeUserType(authMode) {
       this.authMode = authMode;
     }
+  },
+  created() {
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push("/dashboard");
+    }
+    this.$store.dispatch("deleteToken")
   }
 };
 </script>

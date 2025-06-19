@@ -12,4 +12,10 @@ router.post('/register', controller.putUserCredentials)
 // Login
 router.post('/login', controller.getUserCredentials)
 
+// Verification
+router.get('/verified', controller.giveVerified)
+
+// Forgot Password
+router.post('/forgotPassword', controller.forgotPassword)
+
 module.exports = router;

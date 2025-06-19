@@ -10,7 +10,7 @@
         <label for = "passWord">PASSWORD</label>
         <input v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Unlock your SwifTicket Experience" spellcheck="false" autocomplete = "off">
       </div>
-      <a>Forgot Password?</a>
+      <a @click = "passwordReset">Forgot Password?</a>
       <p :class = "{isWarn : isWarning}">{{ warning }}</p>
       <button @click = "login">SUBMIT</button>
     </div>
@@ -32,12 +32,12 @@ export default {
   },
   methods: {
     login() {
-      axios.post("http://localhost:3000/login", {
+      axios.post( process.env.VUE_APP_SERVER + "/login", {
         email: this.email,
         password: this.password,
       }).then(res => {
         this.isWarning = false;
-        this.$store.state.token = res.data.token;
+        this.$store.dispatch("saveToken", res.data.token);
         this.$router.push({
           path: "/dashboard",
         });
@@ -45,12 +45,15 @@ export default {
         this.warning = err.response.data;
         this.isWarning = true;
       })
+    },
+    passwordReset() {
+      this.$emit('isUserTypeChanged', 'ForgotPassword');
     }
   }
 }
 </script>
 
-<style scoped src = "../styles/form-styles.css"></style>
+<style scoped src = "../../styles/form-styles.css"></style>
 <style scoped>
 
 a {

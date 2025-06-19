@@ -41,20 +41,19 @@ export default {
   },
   methods: {
     register() {
-      axios.post("http://localhost:3000/register", {
+      axios.post(process.env.VUE_APP_SERVER + "/register", {
         username: this.username,
         email: this.email,
         password: this.password,
         confirm_password: this.confirmPassword,
-      }).then(res => {
+      }).then(() => {
         this.isWarning = false;
-        this.$store.state.token = res.data.token;
-        this.$router.push({
-          path: "/dashboard",
-        });
+        this.$emit('isUserTypeChanged', 'ReRoute');
       }).catch(err => {
         this.warning = err.response.data;
         this.isWarning = true;
+      }, {
+        withCredentials: true,
       })
     }
   }
@@ -62,4 +61,4 @@ export default {
 </script>
 
 
-<style scoped src = "../styles/form-styles.css"></style>
+<style scoped src = "../../styles/form-styles.css"></style>

@@ -63,6 +63,11 @@ button {
   border-radius: 1rem;
   border: 0;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #FFC94D;
 }
 
 </style>

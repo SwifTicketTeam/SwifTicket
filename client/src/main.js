@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Routes from "./routes";
 import { store } from './store/index';
-import SwifTicket from "./SwifTicket.vue";
+import Client from "./client.vue";
 
 Vue.use(VueRouter)
 
@@ -14,5 +14,5 @@ const router = new VueRouter({
 new Vue({
     store : store,
     router: router,
-    render: h => h(SwifTicket)
+    render: h => h(Client)
 }).$mount('#app')
