@@ -16,6 +16,9 @@ router.post('/login', controller.getUserCredentials)
 router.get('/verified', controller.giveVerified)
 
 // Forgot Password
-router.post('/forgotPassword', controller.forgotPassword)
+router.post('/forgot-password', controller.forgotPassword)
+
+// Reset Password
+router.post('/reset-password', controller.resetPassword)
 
 module.exports = router;

@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     login() {
+      this.isWarning = false;
       axios.post( process.env.VUE_APP_SERVER + "/login", {
         email: this.email,
         password: this.password,

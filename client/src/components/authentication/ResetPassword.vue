@@ -1,15 +1,7 @@
 <template>
-  <div id = "entry">
+  <div id = "reset-password">
     <div id = "Form">
-      <h1>Join the Swift Side of Ticketing!</h1>
-      <div class = "fields">
-        <label for = "userName">USERNAME</label>
-        <input v-model = "username" type = "text" name = "userName" id = "userName" placeholder = "What should we call you?" spellcheck="false" autocomplete = "off">
-      </div>
-      <div class = "fields">
-        <label for = "eMail">EMAIL</label>
-        <input v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck="false" autocomplete = "off">
-      </div>
+      <h1>Choose your new SwifTicket Password</h1>
       <div class = "fields">
         <label for = "passWord">PASSWORD</label>
         <input v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Secure your SwifTicket Account" spellcheck="false" autocomplete = "off">
@@ -19,53 +11,68 @@
         <input v-model = "confirmPassword" type = "password" name = "confirmPassword" id = "confirmPassword" placeholder = "Just to be sure…" spellcheck="false" autocomplete = "off">
       </div>
       <p :class = "{isWarn : isWarning}">{{ warning }}</p>
-      <button @click = "register">REGISTER</button>
+      <button @click = "resetPassword">RESET PASSWORD</button>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
-import {eventBus} from "@/main";
 
 export default {
-  name: "RegisterUser",
+  name: "ResetPassword",
   data() {
     return {
-      username: "",
-      email: "",
       password: "",
       confirmPassword: "",
       warning: "",
-      isWarning: false,
+      isWarning: false
     }
   },
+  created() {
+    this.token = this.$route.query.token;
+  },
   methods: {
-    register() {
+    resetPassword() {
       if (this.password !== this.confirmPassword) {
         this.warning = "Passwords do not match";
         this.isWarning = true;
         return;
       }
-      this.isWarning = false;
-      axios.post(process.env.VUE_APP_SERVER + "/register", {
-        username: this.username,
-        email: this.email,
+      axios.post( process.env.VUE_APP_SERVER + "/reset-password", {
         password: this.password,
+        token: this.token
       }).then(() => {
         this.isWarning = false;
-        this.$emit('isUserTypeChanged', 'ReRoute');
-        eventBus.$emit("rerouting", "register");
+        this.$router.push({
+          path: '/'
+        })
       }).catch(err => {
-        this.warning = err.response.data;
         this.isWarning = true;
-      }, {
-        withCredentials: true,
+        console.log(err);
+        if (err.name !== "AxiosError") this.warning = err.response.data;
+        else this.isWarning = "No Response from Server"
       })
     }
   }
 }
 </script>
 
+<style src = "../../styles/form-styles.css" scoped></style>
 
-<style scoped src = "../../styles/form-styles.css"></style>
+<style scoped>
+
+#reset-password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#Form {
+  width: 60%;
+  height: 80%;
+}
+
+</style>

@@ -14,6 +14,7 @@
 
 <script>
 import axios from "axios";
+import {eventBus} from "@/main";
 
 export default {
   name: "ForgotPassword",
@@ -26,10 +27,12 @@ export default {
   },
   methods: {
     sendEmail() {
-      axios.post(process.env.VUE_APP_SERVER + '/forgotPassword', {
+      this.isWarning = false;
+      axios.post(process.env.VUE_APP_SERVER + '/forgot-password', {
         email: this.email,
       }).then(() => {
         this.$emit('isUserTypeChanged', 'ReRoute');
+        eventBus.$emit("rerouting", "reset");
       }).catch(err => {
         this.isWarning = true;
         this.warning = err.response.data;

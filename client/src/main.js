@@ -6,6 +6,8 @@ import Client from "./client.vue";
 
 Vue.use(VueRouter)
 
+export const eventBus = new Vue();
+
 const router = new VueRouter({
     routes: Routes,
     mode: 'history'

@@ -1,6 +1,6 @@
 import Authentication from "../components/authentication/Authentication.vue";
 import Dashboard from "../components/authentication/Dashboard.vue";
-import ChangePassword from "../components/authentication/ChangePassword.vue";
+import ResetPassword from "../components/authentication/ResetPassword.vue";
 
 export default [
     {
@@ -12,7 +12,7 @@ export default [
         component: Dashboard,
     },
     {
-        path: '/change-password',
-        component: ChangePassword,
+        path: '/reset-password',
+        component: ResetPassword,
     }
 ]
