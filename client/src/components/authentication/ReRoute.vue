@@ -17,7 +17,6 @@ export default {
   },
   created() {
     eventBus.$on('rerouting', (message) => {
-      console.log(message);
       if (message === 'register') {
         this.message = "🎉 Thank you for registering with SwifTicket!\nWe're thrilled to have you on board.";
 
@@ -25,13 +24,17 @@ export default {
         this.message = "🔐 You are all Set!\nPlease check your inbox and follow the link to reset your password.";
 
       }
-    })
+    });
+    eventBus.$emit("starting reroute");
+  },
+  activated() {
+    eventBus.$emit("starting reroute");
   }
 }
 </script>
 
-<style scoped src = "../../styles/form-styles.css"></style>
-<style>
+<style scoped src = "../../styles/forms.css"></style>
+<style scoped>
 
 h1 {
   text-align: center;

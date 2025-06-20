@@ -15,6 +15,7 @@ import RegisterUser from "./Register";
 import ForgotPassword from "./ForgotPassword.vue";
 import ReRoute from "./ReRoute";
 import CardView from "./Card";
+import axios from "axios";
 
 export default{
   name: "AuthUser",
@@ -37,9 +38,19 @@ export default{
   },
   created() {
     if (this.$store.getters.isAuthenticated) {
-      this.$router.push("/dashboard");
+
+      axios.post(process.env.VUE_APP_SERVER + '/jwt', {
+        token: this.$store.getters.getToken
+      }).then(res => {
+        this.$store.state.username = res.data.username;
+        this.$store.state.email = res.data.email;
+        this.$store.state.role = res.data.role;
+        this.$router.push("/events");
+      }).catch(() => {
+        this.$store.dispatch("deleteToken");
+        alert("Your SwifTicket Session has expired. Please Login Again")
+      })
     }
-    this.$store.dispatch("deleteToken")
   }
 };
 </script>
@@ -55,7 +66,7 @@ export default{
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.45s ease-in-out;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0.2;

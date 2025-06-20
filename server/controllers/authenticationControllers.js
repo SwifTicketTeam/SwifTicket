@@ -79,7 +79,6 @@ module.exports.getUserCredentials = async (req, res) => {
                 expiresIn: 3 * 24 * 60 * 60,
             });
             return res.status(200).json({
-                user : user._id,
                 token : token,
                 role : user.role,
             });
@@ -97,7 +96,7 @@ module.exports.giveVerified = async (req, res) => {
     const token = req.query.token;
 
     try {
-        if (!token) return res.status(400).send("Token not provided.");
+        if (!token) return res.redirect('http://localhost:8080/verification-error?error=' + "Token not provided.");
         const payload = jwt.verify(token, process.env.EMAIL_SECRET)
 
         const verification = await User.updateOne({ _id: payload.id }, {
@@ -105,11 +104,13 @@ module.exports.giveVerified = async (req, res) => {
         });
 
         if (verification.matchedCount) res.redirect('http://localhost:8080/');
-        else res.status(400).send("Verification Process was Unsuccessful");
+        else res.redirect('http://localhost:8080/verification-error?error=' + "Verification Process was Unsuccessful");
 
     } catch (err) {
+        if(err.name === "JsonWebTokenError") return res.redirect('http://localhost:8080/verification-error?error=' + "Invalid Token");
+
         const decoded = jwt.decode(token);
-        if (!decoded || !decoded.id) return res.status(400).send("Invalid token");
+        if (!decoded || !decoded.id) return res.redirect('http://localhost:8080/verification-error?error=' + "Invalid token");
 
         const user = await User.findOne({_id: decoded.id});
         const checkEmail = await sendMail({
@@ -120,12 +121,13 @@ module.exports.giveVerified = async (req, res) => {
         });
 
         if (checkEmail === 535) {
-            return res.status(400).send("Failed to Resend Verification Email");
+            return res.redirect('http://localhost:8080/verification-error?error=' + "Failed to Resend Verification Email");
         }
-        return res.status(400).send("Verification link has expired. A New Verification Email has been sent.");
+        return res.redirect('http://localhost:8080/verification-error?error=' + "Verification link has expired. A New Verification Email has been sent.");
     }
 }
 
+// Forgot Password
 module.exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -146,6 +148,7 @@ module.exports.forgotPassword = async (req, res) => {
     }
 }
 
+// Reset Password
 module.exports.resetPassword = async (req, res) => {
     const {password, token} = req.body;
 
@@ -163,10 +166,8 @@ module.exports.resetPassword = async (req, res) => {
         else return res.status(400).send("Reset Process was Unsuccessful");
 
     } catch (err) {
-        console.log(err)
-        if (err.message.includes('User validation failed')) {
-            return res.status(400).send(Object.values(err.errors)[0].properties.message);
-        }
+        if (err.message.includes('User validation failed')) return res.status(400).send(Object.values(err.errors)[0].properties.message);
+        if (err.name === "JsonWebTokenError") return res.status(400).send("Invalid Token");
 
         const decoded = jwt.decode(token);
         if (!decoded || !decoded.id) return res.status(400).send("Invalid token");
@@ -183,5 +184,26 @@ module.exports.resetPassword = async (req, res) => {
             return res.status(400).send("Failed to Resend Reset Email");
         }
         return res.status(400).send("Reset link has expired. A New Reset Password Email has been sent.");
+    }
+}
+
+// Session Verification
+module.exports.sessionVerification = async (req, res) => {
+    const { token } = req.body;
+
+    try {
+        if (!token) return res.status(400).send("Token not provided.");
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById({_id : payload.id})
+        res.status(200).send({
+            username: user.username,
+            email : user.email,
+            role : user.role,
+        });
+
+    } catch(err) {
+        if(err.name === "JsonWebTokenError") return res.status(400).send("Invalid Token");
+        else if (err.name === "TokenExpiredError") return res.status(400).send("Session has Expired");
     }
 }

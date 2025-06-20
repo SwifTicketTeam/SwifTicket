@@ -15,7 +15,7 @@ export default {
 
 #swifticket {
   height: 100%;
-  background-color: #F7F5F2;
+  background: linear-gradient(to right, #DFDFDE, #F5EDDC);
 }
 
 </style>
@@ -28,8 +28,11 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: min(0.9vw, 1.5vh);
   font-family: 'Poppins', sans-serif;
-  overflow: hidden;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 </style>

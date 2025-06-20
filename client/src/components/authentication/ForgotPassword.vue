@@ -25,6 +25,11 @@ export default {
       isWarning: false,
     }
   },
+  created() {
+    eventBus.$on("starting reroute", () => {
+      eventBus.$emit("rerouting", "reset");
+    })
+  },
   methods: {
     sendEmail() {
       this.isWarning = false;
@@ -32,7 +37,6 @@ export default {
         email: this.email,
       }).then(() => {
         this.$emit('isUserTypeChanged', 'ReRoute');
-        eventBus.$emit("rerouting", "reset");
       }).catch(err => {
         this.isWarning = true;
         this.warning = err.response.data;
@@ -43,7 +47,7 @@ export default {
 
 </script>
 
-<style scoped src = "../../styles/form-styles.css"></style>
+<style scoped src = "../../styles/forms.css"></style>
 <style scoped>
 
 button {

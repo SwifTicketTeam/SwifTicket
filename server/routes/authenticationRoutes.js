@@ -21,4 +21,7 @@ router.post('/forgot-password', controller.forgotPassword)
 // Reset Password
 router.post('/reset-password', controller.resetPassword)
 
+// Session Verification
+router.post('/jwt', controller.sessionVerification)
+
 module.exports = router;

@@ -40,6 +40,11 @@ export default {
       isWarning: false,
     }
   },
+  created() {
+    eventBus.$on("starting reroute", () => {
+      eventBus.$emit("rerouting", "register");
+    })
+  },
   methods: {
     register() {
       if (this.password !== this.confirmPassword) {
@@ -55,17 +60,18 @@ export default {
       }).then(() => {
         this.isWarning = false;
         this.$emit('isUserTypeChanged', 'ReRoute');
-        eventBus.$emit("rerouting", "register");
       }).catch(err => {
-        this.warning = err.response.data;
-        this.isWarning = true;
-      }, {
-        withCredentials: true,
-      })
+        try {
+          this.warning = err.response.data;
+          this.isWarning = true;
+        } catch {
+          alert("Network Error");
+        }
+      });
     }
   }
 }
 </script>
 
 
-<style scoped src = "../../styles/form-styles.css"></style>
+<style scoped src = "../../styles/forms.css"></style>

@@ -1,6 +1,7 @@
 <template>
   <div id = "reset-password">
     <div id = "Form">
+      <img src = "../../assets/swifticket-logo.png">
       <h1>Choose your new SwifTicket Password</h1>
       <div class = "fields">
         <label for = "passWord">PASSWORD</label>
@@ -58,19 +59,28 @@ export default {
 }
 </script>
 
-<style src = "../../styles/form-styles.css" scoped></style>
+<style src = "../../styles/forms.css" scoped></style>
 
 <style scoped>
 
 #reset-password {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
 }
 
+img {
+  margin-top: 3rem;
+  width: min(30%, 31vh);
+  height: auto;
+}
+
 #Form {
+  display: flex;
+  justify-content: flex-start;
   width: 60%;
   height: 80%;
 }

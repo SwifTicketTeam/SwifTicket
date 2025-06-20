@@ -8,66 +8,85 @@ All notable changes to this project are documented here.
 
 ### Phase 1 – Frontend Foundation
 
-- Created `Auth.vue` as the main container component for authentication
-- Developed `Login.vue` and `Register.vue` with toggle logic and shared form structure
-- Built `Card.vue` for branding and switchable layout
-- Achieved a responsive UI with Flexbox
-- Unified styles between login and register forms using a shared stylesheet
-- Added “Forgot Password” and submit functionalities to both forms
-- Established modular and reusable Vue component architecture
+- Created `Auth.vue` as the main wrapper for authentication
+- Developed `Login.vue` and `Register.vue` with dynamic toggle support
+- Implemented `Card.vue` for branding and layout control
+- Built responsive UI using modern Flexbox layouts
+- Unified visual design through shared CSS for form components
+- Added "Forgot Password" link and styled submit buttons
+- Established reusable and modular Vue component structure
 
 ---
 
 ## [Beta v0.0] – June 19, 2025
 
-### Phase 2 – API Testing and Backend Server Integration
+### Phase 2 – Backend Integration and API Testing
 
-- Developed backend with Node.js and Express.js
-- Connected frontend using Axios for `/login` and `/register` routes
-- Integrated Postman for API testing using real server endpoints
-- Removed mock API; tested with actual backend functionality
-- Configured MongoDB Atlas with Mongoose
+- Set up Node.js + Express.js backend with `/login` and `/register` routes
+- Connected Vue frontend to backend via Axios
+- Replaced mock API with real-time backend calls
+- Validated request/response flows using Postman
+- Configured environment variables for secure development
+- Linked MongoDB Atlas and integrated Mongoose for data modeling
 
 ---
 
-### Phase 3 – Database and Authentication
+### Phase 3 – Database and Authentication Logic
 
-- Designed `User` schema with validation (username, email, password)
-- Applied password hashing via `bcrypt`
-- Implemented JWT-based authentication for login
-- Tokens stored in **Vuex and localStorage** (not cookies)
-- Handled duplicate email errors using MongoDB unique indexing
-- Completed full registration and login flow
+- Designed `User` schema with proper field validation and indexing
+- Applied secure password hashing via `bcrypt`
+- Implemented JWT-based login authentication
+- Stored JWT in Vuex and localStorage for client session state
+- Added unique email validation and duplicate handling
+- Enabled full registration/login functionality across frontend and backend
 
 ---
 
 ## [Beta Extended v0.0] – June 19, 2025
 
-### Phase 4 – JWT Session Management, Email Messaging, and Forgot Password (In Progress)
+### Phase 4 – Session Management, Email Workflows, and Reset Flow Setup
 
-- JWT-based session creation completed
-- Nodemailer integration for sending:
-    - Welcome emails after registration
-    - Password reset emails via secure link
-- Reset password form UI and endpoint routing setup started
-- Initial version of forgot password functionality implemented
-- Link generation logic added
-- Placeholder logic for password update on reset route
+- Integrated JWT session creation logic for secure login sessions
+- Configured Nodemailer to send:
+  - Welcome emails post-registration
+  - Password reset emails with tokenized links
+- Added reset password routing and designed the reset form layout
+- Implemented the "Forgot Password" request flow with secure link generation
+- Verified base reset flow using temporary token structure and tested via email
 
 ---
 
 ## [v0.0] – June 20, 2025
 
-### Phase 4 – Forgot Password Completed and Bug Fixes
+### Phase 4 – Forgot Password Completion and Token Security Enhancements
 
-- Completed the full **Forgot Password** flow:
-    - Verified user email
-    - Sent password reset email with secure reset link
-    - Reset link now includes **JWT token with expiry** for security
-    - Password updated on confirmation via reset page
-- Used `jwt.verify()` to validate and extract token payload
-- Improved server response and error messaging for invalid/expired tokens
-- Resolved token decoding bugs and refined reset-password route logic
-- Finalized form and messaging for successful password change
+- Finalized full **Forgot Password** functionality:
+  - Verified user identity through email
+  - Sent reset password email containing **expiring JWT token**
+  - Updated password securely via reset route after token verification
+- Used `jwt.verify()` to decode and validate reset tokens on the server
+- Improved handling for expired or invalid tokens with detailed error messages
+- Optimized server logic and added confirmation flow for successful resets
+- Polished messaging, routing, and backend token workflows
+
+---
+
+## [Pre Beta v0.1] – June 21, 2025
+*Note: OAuth and Role-Based Route Protection have been postponed. Route protection will be implemented once vendor and admin dashboards are structured.*
+
+### Phase 5 – Events Page Layout, Session Verification, and Visual Enhancements
+
+- Introduced official SwifTicket logo to reinforce branding
+- Resolved login-related token handling bugs to ensure stable authentication
+- Built the initial `Events` page layout featuring:
+  - Fixed-position header bar
+  - Integrated event search input for future filtering
+- Verified sessions using JWT and populated Vuex state with:
+  - Authenticated user's username, email, and role
+- Ensured users are redirected to the `Events` page immediately after login
+- Added `Dashboard` navigation from `Events` for seamless user flow
+- Implemented `verification-error` page to handle broken/invalid email token links gracefully
+  - Prevented the server’s `/verify` endpoint from idling or misrouting
+- Enhanced text responsiveness and spacing across all screens for better visual hierarchy and clarity
 
 ---

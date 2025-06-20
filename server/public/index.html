@@ -1,92 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SwifTicket's Server</title>
-  <style>
-    html {
-      font-size: 1.5rem;
-    }
-    h1 {
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>SwifTicket – Universal Ticketing Platform</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 2rem;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+        ul {
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: #ddd;
+            margin: 2rem 0;
+        }
+        .section {
+            margin-bottom: 2rem;
+        }
+        code {
+            background-color: #eee;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to SwifTicket's Server</h1>
-<h2>SwifTicket – Universal Ticket Booking System</h2>
+<div class="container">
+    <h1>SwifTicket – Universal Ticketing Platform</h1>
+    <p><strong>SwifTicket</strong> is a modern web-based ticket booking system designed to offer fast, secure, and unified access to events. Built using the <strong>MEVN Stack</strong> (MongoDB, Express, Vue, Node), it focuses on a streamlined user experience with clean UI, custom authentication logic, and upcoming support for OAuth and role-based access.</p>
 
-SwifTicket is a full-stack web application built with the MEVN stack (MongoDB, Express.js, Vue.js, Node.js). It offers a seamless experience for booking tickets across different categories such as movies, concerts, events, and more.
+    <hr>
 
-<h3> Project Status </h3>
+    <div class="section">
+        <h2>Project Status</h2>
+        <ul>
+            <li>Phase 1 (Frontend UI for Login & Registration) – <strong>Completed</strong></li>
+            <li>Phase 2 (API Testing and Backend Server) – <strong>Completed</strong></li>
+            <li>Phase 3 (Connecting the Database, Backend and the Frontend) – <strong>Completed</strong></li>
+            <li>Phase 4 (JWT Session Management, Email Messaging, and Forgot Password) – <strong>Completed</strong></li>
+            <li>Phase 5 (Route Protection, Role Expansion, and OAuth Integration) – <strong>Planned</strong></li>
+        </ul>
+    </div>
 
-- Phase 1 (Frontend UI for Login & Registration) – Completed
-- Current Focus – Backend API setup with authentication
+    <div class="section">
+        <h2>Project Roadmap</h2>
 
-<h3> Tech Stack </h3>
+        <h3>Phase 1: Frontend Development – Completed</h3>
+        <ul>
+            <li>Responsive UI for Login and Sign-Up using Vue</li>
+            <li>Form validations and route navigation</li>
+            <li>State management with Vuex</li>
+            <li>Page structure: <code>/login</code>, <code>/register</code>, <code>/dashboard</code></li>
+        </ul>
 
-<h4> Frontend </h4>
-- Vue.js 2 – Component-based UI for building the user interface
-- Vue Router – For routing between login, register, and dashboard pages
-- Vuex – To manage global state (auth, user roles)
-- Axios – For making API calls to backend
+        <h3>Phase 2: API Integration and Backend Server Setup – Completed</h3>
+        <ul>
+            <li>Developed Express server with endpoints for login and registration</li>
+            <li>Designed and tested RESTful routes using Postman</li>
+            <li>Connected frontend forms with backend via Axios</li>
+            <li>Setup environment variables for frontend and backend</li>
+        </ul>
 
-<h4> Backend </h4>
-- Node.js – Server runtime environment
-- Express.js – RESTful API and middleware support
-- Bcrypt – Password hashing and validation
-- JSON Web Token (JWT) – Token-based session management
-- MongoDB – NoSQL database for user and event data
-- Mongoose – ODM for MongoDB
+        <h3>Phase 3: Database and Custom Authentication – Completed</h3>
+        <ul>
+            <li>Integrated MongoDB with Mongoose for persistent storage</li>
+            <li>Defined <code>User</code> model with schema constraints and validations</li>
+            <li>Hashed passwords securely using bcrypt</li>
+            <li>Handled unique email validation errors from MongoDB</li>
+            <li>Implemented JWT-based authentication for login</li>
+            <li>Frontend now receives and stores tokens using Vuex and localStorage</li>
+        </ul>
 
-<h4> Authentication </h4>
-- Manual Authentication – Username/email and password based login
-- OAuth 2.0 – Planned (Google, GitHub login without external libraries)
-- Role-based Access Control – User, Vendor, Admin roles
-- Token Storage – JWT stored on client via localStorage or Vuex
+        <h3>Phase 4: JWT Session Management, Email Messaging, and Forgot Password – Completed</h3>
+        <ul>
+            <li>Created JWT tokens with secure expiry handling</li>
+            <li>Built and sent dynamic HTML emails for onboarding and password reset</li>
+            <li>Integrated email verification and reset logic using Nodemailer</li>
+            <li>Implemented forgot password functionality via email token verification</li>
+            <li>Verified new password securely and updated in the database</li>
+        </ul>
 
-<h4> Testing </h4>
-- Postman – API testing and validation
-- Pre-request Scripts – Email uniqueness and login validation
-- Newman – CLI test automation (optional)
+        <h3>Phase 5: Route Protection, Role Expansion, and OAuth Integration – Planned</h3>
+        <ul>
+            <li>Add middleware to verify JWT tokens on protected routes</li>
+            <li>Implement user role-based access (admin, vendor, user)</li>
+            <li>Setup Google/GitHub OAuth 2.0 login flow</li>
+            <li>Extend functionality to include event creation and booking</li>
+        </ul>
+    </div>
 
-<h4> Core Features </h4>
-
-- User registration and login with hashed passwords
-- Role differentiation: Admin, Vendor, and General User
-- Token-based authentication using JWT
-- Form validation and route guards
-- Responsive UI with dynamic component switching (Login/Register)
-- Event booking and listing (planned)
-
-<h3> Project Roadmap </h3>
-
-<h4> Phase 1: Frontend Development – Completed </h4>
-- Responsive UI for Login and Sign-Up using Vue
-- Form validations and route navigation
-- State management with Vuex
-- Page structure: `/login`, `/register`, `/dashboard`
-
-<h4> Phase 2: Mock API Integration and Testing </h4>
-- Use Reqres or other mock APIs for simulating login
-- Use Postman to test requests, responses, and conditions
-- Pre-request checks for duplicates and validations
-
-<h4> Phase 3: Custom Backend with Node.js and Express </h4>
-- Create REST API routes: `/login`, `/register`, `/profile`
-- Connect to MongoDB via Mongoose
-- Hash passwords with bcrypt
-- Use JWT for login and protected routes
-
-<h4> Phase 4: Secure Role-Based Access and API Protection </h4>
-- Role check for admin/vendor routes
-- Middleware to verify JWT in backend
-- Setup error responses and access control
-
-<h4> Phase 5: OAuth 2.0 and Advanced Features
-  - Add Google/GitHub login without third-party libraries </h4>
-- Integrate OAuth flow manually (DAuth style)
-- Add event creation and booking modules
-
+    <div class="section">
+        <h2>Tech Stack</h2>
+        <ul>
+            <li><strong>Frontend:</strong> Vue.js 2, Vuex, Vue Router, Axios</li>
+            <li><strong>Backend:</strong> Node.js, Express.js, Mongoose, bcrypt, jsonwebtoken (JWT)</li>
+            <li><strong>Database:</strong> MongoDB (MongoDB Atlas)</li>
+            <li><strong>Testing:</strong> Postman (Manual API testing)</li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>

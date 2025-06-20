@@ -1,7 +1,7 @@
 <template>
   <div id = "card">
-    <h1>SWIFTICKET</h1>
-    <p>Welcome to SwifTicket — your all-in-one platform for discovering, booking, and managing tickets to the events you love. Whether it’s a blockbuster movie, a local concert, a live sports match, or a weekend workshop, SwifTicket brings them all to your fingertips with speed and simplicity. Join thousands of users who trust us for a smoother, faster, and smarter ticketing experience.</p>
+    <img src = "../../assets/swifticket-logo.png">
+    <p>Welcome to <strong>SwifTicket</strong> — your all-in-one platform for discovering, booking, and managing tickets to the events you love. Whether it’s a blockbuster movie, a local concert, a live sports match, or a weekend workshop, SwifTicket brings them all to your fingertips with speed and simplicity. Join thousands of users who trust us for a smoother, faster, and smarter ticketing experience.</p>
     <h3>{{ (isNewUser) ? 'Already have a SwifTicket account? Log in to continue booking your favorite events.' : 'New to SwifTicket? Create an account to start your event journey.' }}</h3>
     <button @click.stop = "isUserTypeChanged">{{ (isNewUser) ? 'Log In' : 'Register Now' }}</button>
   </div>
@@ -37,15 +37,19 @@ export default {
   width: 48%;
   height: 95%;
   margin: 0 1rem;
-  background-color: #FA9494;
+  background: linear-gradient(#CFD2CF, #FA9494);
   box-shadow: -0.75rem 0.5rem 0.8rem 0.05rem rgba(0, 0, 0, 0.25);
   border-radius: 2rem;
   border: 0.15rem solid black;
 }
 
-h1 {
-  font-size: 3.5rem;
-  margin-bottom: 0;
+img {
+  width: min(70%, 55vh);
+  height: auto;
+}
+
+h3 {
+  height: 5%;
 }
 
 h3, p {

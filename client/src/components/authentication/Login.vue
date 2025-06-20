@@ -40,7 +40,7 @@ export default {
         this.isWarning = false;
         this.$store.dispatch("saveToken", res.data.token);
         this.$router.push({
-          path: "/dashboard",
+          path: "/events",
         });
       }).catch(err => {
         this.warning = err.response.data;
@@ -54,7 +54,7 @@ export default {
 }
 </script>
 
-<style scoped src = "../../styles/form-styles.css"></style>
+<style scoped src = "../../styles/forms.css"></style>
 <style scoped>
 
 a {
