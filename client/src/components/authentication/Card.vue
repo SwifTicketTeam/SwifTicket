@@ -1,9 +1,9 @@
 <template>
   <div id = "card">
-    <img src = "../../assets/swifticket-logo.png">
+    <img src = "../../assets/swifticket-logo.png" class = "no-select">
     <p>Welcome to <strong>SwifTicket</strong> — your all-in-one platform for discovering, booking, and managing tickets to the events you love. Whether it’s a blockbuster movie, a local concert, a live sports match, or a weekend workshop, SwifTicket brings them all to your fingertips with speed and simplicity. Join thousands of users who trust us for a smoother, faster, and smarter ticketing experience.</p>
     <h3>{{ (isNewUser) ? 'Already have a SwifTicket account? Log in to continue booking your favorite events.' : 'New to SwifTicket? Create an account to start your event journey.' }}</h3>
-    <button @click.stop = "isUserTypeChanged">{{ (isNewUser) ? 'Log In' : 'Register Now' }}</button>
+    <button @click.stop = "isUserTypeChanged" class = "no-select">{{ (isNewUser) ? 'Log In' : 'Register Now' }}</button>
   </div>
 </template>
 
@@ -64,14 +64,16 @@ button {
   font-family: 'Poppins', sans-serif;
   background-color: #FFD586;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border-radius: 1rem;
-  border: 0;
+  border-radius: 0.8rem;
+  border: 0.1rem solid black;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease,
+              border-radius 0.3s ease;
 }
 
 button:hover {
   background-color: #FFC94D;
+  border-radius: 1.5rem;
 }
 
 </style>

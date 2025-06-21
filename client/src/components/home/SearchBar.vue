@@ -22,7 +22,7 @@ export default {
 <style scoped>
 
 input {
-  border-radius: 5rem;
+  border-radius: 1.5rem;
   width: 50%;
   height: 3.5rem;
   padding: 0 1rem;

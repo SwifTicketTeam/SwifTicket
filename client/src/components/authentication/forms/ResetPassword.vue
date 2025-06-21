@@ -1,23 +1,23 @@
 <template>
   <div id = "reset-password">
     <div id = "Form">
-      <img src = "../../assets/swifticket-logo.png">
-      <h1>Choose your new SwifTicket Password</h1>
+      <img src = "../../../assets/swifticket-logo.png" class = "no-select">
+      <h1 class = "no-select">Choose your new SwifTicket Password</h1>
       <div class = "fields">
-        <label for = "passWord">PASSWORD</label>
-        <input v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Secure your SwifTicket Account" spellcheck="false" autocomplete = "off">
+        <label for = "passWord" class = "no-select fieldLabel">PASSWORD</label>
+        <input class = "field" v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Secure your SwifTicket Account" spellcheck="false" autocomplete = "off">
       </div>
       <div class = "fields">
-        <label for = "confirmPassword">CONFIRM PASSWORD</label>
-        <input v-model = "confirmPassword" type = "password" name = "confirmPassword" id = "confirmPassword" placeholder = "Just to be sure…" spellcheck="false" autocomplete = "off">
+        <label for = "confirmPassword" class = "no-select fieldLabel">CONFIRM PASSWORD</label>
+        <input class = "field" v-model = "confirmPassword" type = "password" name = "confirmPassword" id = "confirmPassword" placeholder = "Just to be sure…" spellcheck="false" autocomplete = "off">
       </div>
       <p :class = "{isWarn : isWarning}">{{ warning }}</p>
-      <button @click = "resetPassword">RESET PASSWORD</button>
+      <button @click = "resetPassword" class = "no-select">RESET PASSWORD</button>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import axios from "axios";
 
 export default {
@@ -45,9 +45,7 @@ export default {
         token: this.token
       }).then(() => {
         this.isWarning = false;
-        this.$router.push({
-          path: '/'
-        })
+        this.$router.push('/');
       }).catch(err => {
         this.isWarning = true;
         console.log(err);
@@ -59,7 +57,7 @@ export default {
 }
 </script>
 
-<style src = "../../styles/forms.css" scoped></style>
+<style src = "../../../styles/forms.css" scoped></style>
 
 <style scoped>
 

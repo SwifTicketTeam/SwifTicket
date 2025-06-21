@@ -3,16 +3,16 @@
     <div id = "Form">
       <h1>Your Events Await!</h1>
       <div class = "fields">
-        <label for = "eMail">EMAIL</label>
-        <input v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck = "false" autocomplete = "off">
+        <label for = "eMail" class = "no-select fieldLabel">EMAIL</label>
+        <input class = "field" v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck = "false" autocomplete = "off">
       </div>
       <div class = "fields">
-        <label for = "passWord">PASSWORD</label>
-        <input v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Unlock your SwifTicket Experience" spellcheck="false" autocomplete = "off">
+        <label for = "passWord" class = "no-select fieldLabel">PASSWORD</label>
+        <input class = "field" v-model = "password" type = "password" name = "passWord" id = "passWord" placeholder = "Unlock your SwifTicket Experience" spellcheck="false" autocomplete = "off">
       </div>
       <a @click = "passwordReset">Forgot Password?</a>
       <p :class = "{isWarn : isWarning}">{{ warning }}</p>
-      <button @click = "login">SUBMIT</button>
+      <button @click = "login" class = "no-select">SUBMIT</button>
     </div>
   </div>
 </template>
@@ -30,6 +30,12 @@ export default {
       isWarning: false,
     }
   },
+  mounted() {
+    if (!this.$store.getters.isAuthenticated && this.$store.state.token !== "") {
+      this.warning = "Your Session has Expired. Please Login Again";
+      this.isWarning = true;
+    }
+  },
   methods: {
     login() {
       this.isWarning = false;
@@ -39,9 +45,7 @@ export default {
       }).then(res => {
         this.isWarning = false;
         this.$store.dispatch("saveToken", res.data.token);
-        this.$router.push({
-          path: "/events",
-        });
+        this.$router.push("/home");
       }).catch(err => {
         this.warning = err.response.data;
         this.isWarning = true;
@@ -54,7 +58,7 @@ export default {
 }
 </script>
 
-<style scoped src = "../../styles/forms.css"></style>
+<style scoped src = "../../../styles/forms.css"></style>
 <style scoped>
 
 a {

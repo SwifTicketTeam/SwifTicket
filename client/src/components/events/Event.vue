@@ -1,28 +1,55 @@
 <template>
   <div>
-    <h1>EVENT NAME</h1>
-    <h1>EVENT IMAGE</h1>
+    <HomeHeader></HomeHeader>
+    <button @click = "eventClicked">BACK</button>{
   </div>
 </template>
 
 <script>
-export default{
-  name: "EventInfo"
+import HomeHeader from "@/components/home/HomeHeader.vue";
+
+export default {
+  name: "EventInfo",
+  components: {
+    HomeHeader
+  },
+  methods: {
+    eventClicked() {
+      this.$router.push("/home");
+    }
+  }
 }
 </script>
 
 <style scoped>
 
 div {
-  width: 23%;
-  height: 50vh;
-  margin: 1.2rem 0;
-  border-radius: 1.5rem;
-  border: 0.2rem solid black;
+  display: flex;
+  margin-top: 12vh;
+  justify-content: space-between;
+  width: 100%;
+  height: auto
 }
 
-h1 {
-  text-align: center;
+button {
+  height: 3rem;
+  padding: 0 1.5rem;
+  margin: 1rem 0 1rem 1rem;
+  text-wrap: nowrap;
+  font-size: 1.2rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFD586;
+  border-radius: 0.6rem;
+  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
+  border: 0.1rem solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease,
+  border-radius 0.3s ease;
+}
+
+button:hover {
+  background-color: #FFC94D;
+  border-radius: 1.5rem;
 }
 
 </style>

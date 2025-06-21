@@ -1,8 +1,9 @@
 import Authentication from "../components/authentication/Authentication.vue";
-import Dashboard from "../components/Dashboard.vue";
-import ResetPassword from "../components/authentication/ResetPassword.vue";
-import EventsPagePage from "../components/events/EventsPage.vue";
+import MyAccount from "@/components/account/MyAccount.vue";
+import ResetPassword from "../components/authentication/forms/ResetPassword.vue";
+import HomePage from "../components/home/HomePage.vue";
 import VerificationError from "../components/authentication/VerificationError.vue";
+import Event from "../components/events/Event.vue";
 
 export default [
     {
@@ -10,16 +11,20 @@ export default [
         component: Authentication,
     },
     {
-        path: '/dashboard',
-        component: Dashboard,
+        path: '/account',
+        component: MyAccount,
     },
     {
         path: '/reset-password',
         component: ResetPassword,
     },
     {
-        path: '/events',
-        component: EventsPagePage,
+        path: '/home',
+        component: HomePage,
+    },
+    {
+        path: '/event',
+        component: Event,
     },
     {
         path: '/verification-error',

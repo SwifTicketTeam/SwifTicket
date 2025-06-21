@@ -10,12 +10,11 @@
 </template>
 
 <script>
-import LoginUser from "./Login";
-import RegisterUser from "./Register";
-import ForgotPassword from "./ForgotPassword.vue";
+import LoginUser from "./forms/Login.vue";
+import RegisterUser from "./forms/Register.vue";
+import ForgotPassword from "./forms/ForgotPassword.vue";
 import ReRoute from "./ReRoute";
 import CardView from "./Card";
-import axios from "axios";
 
 export default{
   name: "AuthUser",
@@ -38,20 +37,9 @@ export default{
   },
   created() {
     if (this.$store.getters.isAuthenticated) {
-
-      axios.post(process.env.VUE_APP_SERVER + '/jwt', {
-        token: this.$store.getters.getToken
-      }).then(res => {
-        this.$store.state.username = res.data.username;
-        this.$store.state.email = res.data.email;
-        this.$store.state.role = res.data.role;
-        this.$router.push("/events");
-      }).catch(() => {
-        this.$store.dispatch("deleteToken");
-        alert("Your SwifTicket Session has expired. Please Login Again")
-      })
+      this.$router.push("/home");
     }
-  }
+  },
 };
 </script>
 
@@ -63,13 +51,6 @@ export default{
   justify-content: space-around;
   align-items: center;
   height: 100%;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.45s ease-in-out;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0.2;
 }
 
 </style>

@@ -3,11 +3,11 @@
     <div id = "Form">
       <h1>No worries! Let’s get you back on track</h1>
       <div class = "fields">
-        <label for = "eMail">EMAIL</label>
-        <input v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck="false" autocomplete = "off">
+        <label for = "eMail" class = "no-select fieldLabel">EMAIL</label>
+        <input class = "field" v-model = "email" type = "text" name = "eMail" id = "eMail" placeholder = "What’s your email?" spellcheck="false" autocomplete = "off">
       </div>
       <p :class = "{isWarn : isWarning}">{{ warning }}</p>
-      <button @click = "sendEmail">SEND EMAIL</button>
+      <button @click = "sendEmail" class = "no-select">SEND EMAIL</button>
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
 
 </script>
 
-<style scoped src = "../../styles/forms.css"></style>
+<style scoped src = "../../../styles/forms.css"></style>
 <style scoped>
 
 button {

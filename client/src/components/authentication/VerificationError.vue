@@ -1,10 +1,10 @@
 <template>
   <div>
     <header>
-      <img @click = "toLogin" src = "../../assets/swifticket-logo.png">
+      <img @click = "toLogin" class = "no-select" src = "../../assets/swifticket-logo.png">
     </header>
     <h1>{{ error }}</h1>
-    <button @click = "toLogin">Take Me to the Login Page</button>
+    <button @click = "toLogin" class = "no-select">Take Me to the Login Page</button>
   </div>
 </template>
 <script>

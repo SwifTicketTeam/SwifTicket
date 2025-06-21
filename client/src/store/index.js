@@ -6,9 +6,9 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         token:  localStorage.getItem('token') || null,
-        username: "",
-        email: "",
-        role: "",
+        username:  "",
+        email:  "",
+        role:  "",
     },
     mutations: {
         setToken(state, token) {
@@ -21,7 +21,7 @@ export const store = new Vuex.Store({
             state.email = '';
             state.role = '';
             localStorage.removeItem('token');
-        }
+        },
     },
     actions: {
         saveToken: (context, token) => {

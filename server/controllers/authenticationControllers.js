@@ -1,5 +1,6 @@
 const fs = require('fs');
 const User = require('../models/User');
+const UserDetail = require('../models/UserDetail');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { sendMail } = require("../mails/sendMail");
@@ -32,8 +33,11 @@ module.exports.putUserCredentials = async (req, res) => {
         });
 
         if (checkEmail === 535) {
+            await User.deleteOne({id: user._id});
             return res.status(400).send("Give us a Valid Email");
         }
+
+        await UserDetail.create({_id: user._id});
 
         return res.status(201).json({
             user : user._id,
@@ -190,7 +194,6 @@ module.exports.resetPassword = async (req, res) => {
 // Session Verification
 module.exports.sessionVerification = async (req, res) => {
     const { token } = req.body;
-
     try {
         if (!token) return res.status(400).send("Token not provided.");
         const payload = jwt.verify(token, process.env.JWT_SECRET);
