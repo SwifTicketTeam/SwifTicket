@@ -23,7 +23,7 @@ All notable changes to this project are documented here.
 ### Phase 2 – API Testing and Backend Server Integration
 
 - Developed backend with Node.js and Express.js
-- Connected frontend using Axios for `/login` and `/register` routes
+- Connected frontend using Axios for `/` and `/home` routes
 - Integrated Postman for API testing using real server endpoints
 - Removed mock API; tested with actual backend functionality
 - Configured MongoDB Atlas with Mongoose
@@ -112,3 +112,14 @@ All notable changes to this project are documented here.
   - Profile picture (Will not retain on leaving the My Account Tab)
   - Username
   - Email address
+
+## [Beta Extended v0.1] – June 23, 2025
+
+### Phase 6 Extended – Storage, Persistence, API Docs, and Restructure
+
+- Integrated **Storage** to persist files across sessions and devices
+- Profile photo is now **retained across page refreshes, sessions, and devices**
+- Restructured project’s **file/folder organization** for clarity and scalability
+- Added an **API documentation page** detailing all backend routes and their usage
+- Revised several `GET` and `POST` API endpoints for consistency and RESTful standards
+

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Routes from "./routes";
-import { store } from './store/index';
+import {AuthStore} from '@/stores/AuthStore';
 import Client from "./client.vue";
 import axios from "axios";
 
@@ -15,14 +15,14 @@ const router = new VueRouter({
 });
 
 export const authenticate = async () => {
-    await axios.post(process.env.VUE_APP_SERVER + '/jwt', {
-        token: store.state.token,
+    await axios.post(process.env.VUE_APP_SERVER + '/api/auth/jwt', {
+        token: AuthStore.state.token,
     }).then(res => {
-        store.state.username = res.data.username;
-        store.state.email = res.data.email;
-        store.state.role = res.data.role;
+        AuthStore.state.username = res.data.username;
+        AuthStore.state.email = res.data.email;
+        AuthStore.state.role = res.data.role;
     }).catch(() => {
-        store.dispatch('deleteToken');
+        AuthStore.dispatch('deleteToken');
     });
 }
 
@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
 
 // Start Client
 new Vue({
-    store: store,
+    store: AuthStore,
     router: router,
     render: h => h(Client)
 }).$mount('#app')

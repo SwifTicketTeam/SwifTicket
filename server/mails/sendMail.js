@@ -17,7 +17,7 @@ module.exports.sendMail = async (user) => {
 
     let subject;
     if (user.template === 'welcome') {
-        template = template.replace('{{ link }}', process.env.SERVER + `/verified?token=${user.token}`);
+        template = template.replace('{{ link }}', process.env.SERVER + `/api/auth/verified?token=${user.token}`);
         subject = "🎟️ Welcome to SwifTicket — Your Gateway to Events!";
     }
 

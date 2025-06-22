@@ -53,7 +53,7 @@ export default {
         return;
       }
       this.isWarning = false;
-      axios.post(process.env.VUE_APP_SERVER + "/register", {
+      axios.post(process.env.VUE_APP_SERVER + "/api/auth/register", {
         username: this.username,
         email: this.email,
         password: this.password,
@@ -62,7 +62,7 @@ export default {
         this.$emit('isUserTypeChanged', 'ReRoute');
       }).catch(err => {
         try {
-          this.warning = err.response.data;
+          this.warning = err.response.data.message;
           this.isWarning = true;
         } catch {
           alert("Network Error");

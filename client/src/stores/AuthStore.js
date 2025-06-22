@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export const store = new Vuex.Store({
+export const AuthStore = new Vuex.Store({
     state: {
         token:  localStorage.getItem('token') || null,
         username:  "",

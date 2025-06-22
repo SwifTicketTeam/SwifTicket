@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const Routes = require('./routes/Routes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
+const accountRoutes = require('./routes/accountRoutes');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -10,6 +13,7 @@ app.use(cors({
     origin: process.env.CLIENT,
     credentials: true,
 }));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -25,4 +29,8 @@ mongoose.connect(dbURI)
     .catch((err) => {
         console.log("Failed to connect to the Database.");
     })
+
+// Routes
 app.use(authenticationRoutes);
+app.use(accountRoutes)
+app.use(Routes);

@@ -40,7 +40,7 @@ export default {
         this.isWarning = true;
         return;
       }
-      axios.post( process.env.VUE_APP_SERVER + "/reset-password", {
+      axios.post( process.env.VUE_APP_SERVER + "/api/auth/reset-password", {
         password: this.password,
         token: this.token
       }).then(() => {
@@ -49,7 +49,7 @@ export default {
       }).catch(err => {
         this.isWarning = true;
         console.log(err);
-        if (err.name !== "AxiosError") this.warning = err.response.data;
+        if (err.name !== "AxiosError") this.warning = err.response.data.message;
         else this.isWarning = "No Response from Server"
       })
     }

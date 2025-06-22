@@ -6,11 +6,11 @@
     </label>
     <div id = "about">
       <div class = "fields">
-        <label for = "userName" class = "fieldLabel">USERNAME</label>
+        <label for = "userName" class = "fieldLabel no-select">USERNAME</label>
         <input class = "field" v-model = "username" type = "text" name = "userName" id = "userName" spellcheck="false" autocomplete = "off">
       </div>
       <div class = "fields">
-        <label for = "eMail" class = "fieldLabel">EMAIL</label>
+        <label for = "eMail" class = "fieldLabel no-select">EMAIL</label>
         <input class = "field" v-model = "email" type = "text" name = "eMail" id = "eMail" spellcheck="false" autocomplete = "off">
       </div>
     </div>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ProfileOption",
   data() {
@@ -30,18 +32,39 @@ export default {
   created() {
     this.username = this.$store.state.username;
     this.email = this.$store.state.email;
+
+    axios.get(process.env.VUE_APP_SERVER + `/api/uploads/images/users?token=${this.$store.state.token}`, {
+      responseType: "blob",
+    }).
+    then((res) => {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        this.image = evt.target.result;
+      }
+      reader.readAsDataURL(res.data)
+    })
   },
   methods: {
     preview() {
-      const file = this.$refs.file.files[0];
-      if(!file) return;
-      if (file.size > 1024 * 1024) alert("File should not exceed 1MB")
+      let file = this.$refs.file.files[0];
+
+      const image = new FormData();
+      image.append("userProfilePhoto", file);
+      image.append("token", this.$store.state.token);
+
+      axios.post(process.env.VUE_APP_SERVER + "/api/uploads/images/users", image, {
+        headers: {"Content-Type": "multipart/form-data"},
+        responseType: "blob"
+      }).then(() => {
+        console.log("Upload Success");
+      }).catch((err) => {
+        console.log(err);
+      })
 
       const reader = new FileReader();
       reader.onload = (evt) => {
         this.image = evt.target.result;
       }
-
       reader.readAsDataURL(file)
     }
   }

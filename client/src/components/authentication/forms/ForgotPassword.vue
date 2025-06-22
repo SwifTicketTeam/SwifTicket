@@ -33,13 +33,13 @@ export default {
   methods: {
     sendEmail() {
       this.isWarning = false;
-      axios.post(process.env.VUE_APP_SERVER + '/forgot-password', {
+      axios.post(process.env.VUE_APP_SERVER + '/api/auth/forgot-password', {
         email: this.email,
       }).then(() => {
         this.$emit('isUserTypeChanged', 'ReRoute');
       }).catch(err => {
         this.isWarning = true;
-        this.warning = err.response.data;
+        this.warning = err.response.data.message;
       })
     }
   }

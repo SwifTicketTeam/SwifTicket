@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SwifTicket API Docs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            padding: 2rem;
+            max-width: 800px;
+            margin: auto;
+        }
+        h1, h2, h3 {
+            color: #000;
+        }
+        code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background: #222;
+            color: #eee;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow: auto;
+        }
+        hr {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>SwifTicket API</h1>
+<p>Welcome to the official API documentation for <strong>SwifTicket – Universal Ticketing Platform</strong>.</p>
+
+<hr>
+
+<h2>Authentication & Session Routes</h2>
+
+<h3>1. Register a New User</h3>
+<p><strong>POST</strong> <code>/api/auth/register</code></p>
+<pre>{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "your_password"
+}</pre>
+
+<h3>2. Login</h3>
+<p><strong>POST</strong> <code>/api/auth/login</code></p>
+<pre>{
+  "email": "john@example.com",
+  "password": "your_password"
+}</pre>
+
+<h3>3. Email Verification</h3>
+<p><strong>GET</strong> <code>/api/auth/verified</code><br>
+    <strong>Headers:</strong> <code>Authorization: Bearer &lt;token&gt;</code></p>
+
+<h3>4. Forgot Password</h3>
+<p><strong>POST</strong> <code>/api/auth/forgot-password</code></p>
+<pre>{
+  "email": "john@example.com"
+}</pre>
+
+<h3>5. Reset Password</h3>
+<p><strong>POST</strong> <code>/api/auth/reset-password</code></p>
+<pre>{
+  "password": "new_password",
+  "token": "reset_token"
+}</pre>
+
+<h3>6. Session Verification</h3>
+<p><strong>POST</strong> <code>/api/auth/jwt</code></p>
+<pre>{
+  "token": "jwt_token_here"
+}</pre>
+
+<hr>
+
+<h2>Profile Photo Uploads</h2>
+
+<h3>7. Upload Profile Photo</h3>
+<p><strong>POST</strong> <code>/api/uploads/images/users/</code></p>
+<p><strong>FormData:</strong></p>
+<ul>
+    <li><code>userProfilePhoto</code>: File</li>
+    <li><code>token</code>: JWT</li>
+</ul>
+
+<h3>8. Get Profile Photo</h3>
+<p><strong>GET</strong> <code>/api/uploads/images/users?token=</code></p>
+<p>Returns user’s profile image.</p>
+
+<hr>
+
+<h2>Other Routes</h2>
+
+<h3>9. API Landing Page</h3>
+<p><strong>POST</strong> <code>/api</code><br>Returns this API documentation</p>
+
+<h3>10. Server Root</h3>
+<p><strong>GET</strong> <code>/</code><br>Server status or homepage</p>
+
+</body>
+</html>

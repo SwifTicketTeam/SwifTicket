@@ -13,6 +13,7 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
 - Phase 5 (Events Page Layout, Session Verification, and Visual Enhancements) – Completed  
   *Note: OAuth and Role-Based Route Protection are postponed. Route protection is on hold until admin/vendor-specific pages are developed.*
 - Phase 6 (My Account Tab, Transitions, and Event Page Routing) – Completed
+- Phase 6 Extended: Persistent Storage, API Documentation, and Structural Cleanup – Completed
 
 ---
 
@@ -22,7 +23,7 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
 - Responsive UI for Login and Sign-Up using Vue
 - Form validations and route navigation
 - State management with Vuex
-- Page structure: `/login`, `/register`, `/dashboard`
+- Page structure: `/`, `/home`, `/account`
 
 ### Phase 2: API Integration and Backend Server Setup – Completed
 - Developed Express server with endpoints for login and registration
@@ -62,6 +63,14 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
   - Includes back button functionality
 - Added `Profile` tab showing profile picture, username, and email
   - Uploaded image preview works; not yet connected to backend storage
+
+### Phase 6 Extended: Persistent Storage, API Documentation, and Structural Cleanup – Completed
+
+- Added backend support for file storage to persist files.
+- Profile picture now remains visible across sessions and across devices
+- Refactored and cleaned up project directory structure
+- Added detailed **API documentation** page to support developers and testing
+- Revised and standardized API route naming for `GET` and `POST` endpoints
 
 ---
 

@@ -3,25 +3,22 @@ const controller = require('../controllers/authenticationControllers');
 
 const router = express.Router();
 
-// Server Home Page
-router.get('/', controller.serverHome)
-
 // Register
-router.post('/register', controller.putUserCredentials)
+router.post('/api/auth/register', controller.putUserCredentials)
 
 // Login
-router.post('/login', controller.getUserCredentials)
+router.post('/api/auth/login', controller.getUserCredentials)
 
 // Verification
-router.get('/verified', controller.giveVerified)
+router.get('/api/auth/verified', controller.giveVerified)
 
 // Forgot Password
-router.post('/forgot-password', controller.forgotPassword)
+router.post('/api/auth/forgot-password', controller.forgotPassword)
 
 // Reset Password
-router.post('/reset-password', controller.resetPassword)
+router.post('/api/auth/reset-password', controller.resetPassword)
 
 // Session Verification
-router.post('/jwt', controller.sessionVerification)
+router.post('/api/auth/jwt', controller.sessionVerification)
 
 module.exports = router;

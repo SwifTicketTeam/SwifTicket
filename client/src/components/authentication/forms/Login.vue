@@ -39,7 +39,7 @@ export default {
   methods: {
     login() {
       this.isWarning = false;
-      axios.post( process.env.VUE_APP_SERVER + "/login", {
+      axios.post( process.env.VUE_APP_SERVER + "/api/auth/login", {
         email: this.email,
         password: this.password,
       }).then(res => {
@@ -47,7 +47,7 @@ export default {
         this.$store.dispatch("saveToken", res.data.token);
         this.$router.push("/home");
       }).catch(err => {
-        this.warning = err.response.data;
+        this.warning = err.response.data.message;
         this.isWarning = true;
       })
     },
