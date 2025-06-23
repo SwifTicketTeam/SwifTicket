@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const UserDetail = require('../models/UserDetail');
+const UserDetails = require('../models/UserDetails');
 const { sendMail } = require("../mails/sendMail");
 require('dotenv').config();
 
@@ -25,7 +25,7 @@ module.exports.putUserCredentials = async (req, res) => {
             });
         }
 
-        await UserDetail.create({_id: user._id});
+        await UserDetails.create({_id: user._id});
 
         return res.status(201).json({
             user : user._id,
@@ -167,7 +167,7 @@ module.exports.resetPassword = async (req, res) => {
         });
         const payload = jwt.verify(token, process.env.RESET_SECRET);
 
-        const user = await User.findById({ _id: payload.id });
+        const user = await User.findById(payload.id);
 
         if (user) {
             user.password = password;
@@ -221,19 +221,26 @@ module.exports.sessionVerification = async (req, res) => {
         });
         const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await User.findById({_id : payload.id})
+        const user = await User.findById(payload.id)
+        const userDetails = await UserDetails.findById(payload.id);
+
         res.status(200).send({
+            UID: user._id,
             username: user.username,
             email : user.email,
             role : user.role,
+            bio: userDetails.bio,
         });
 
     } catch(err) {
+        console.log(err)
         if(err.name === "JsonWebTokenError") return res.status(400).send({
             message: "Invalid Token"
         });
         else if (err.name === "TokenExpiredError") return res.status(400).send({
             message: "Session has Expired"
+        }); else return res.status(400).send({
+            message: "Invalid User"
         });
     }
 }

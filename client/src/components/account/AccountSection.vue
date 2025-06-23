@@ -7,11 +7,13 @@
 <script>
 import {eventBus} from "@/main";
 import Profile from "./options/Profile.vue"
+import MyTickets from "./options/MyTickets.vue"
 
 export default {
   name: "AccountSection",
   components: {
     Profile,
+    MyTickets,
   },
   data() {
     return {
@@ -19,7 +21,9 @@ export default {
     }
   },
   created() {
-    eventBus.$on("select-option", this.selectOption);
+    eventBus.$on("select-option", (option) => {
+      this.selectedOption = option.replace(/\s+/g, "");
+    });
   }
 }
 </script>

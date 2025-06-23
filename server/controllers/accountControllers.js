@@ -1,24 +1,21 @@
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
-const User = require("../models/User");
-const {serverHome} = require("./Controllers");
-const router = require("../routes/Routes");
+const User = require('../models/User');
+const UserDetails = require('../models/UserDetails');
 
-const storageAddress = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage')
-const fileExtension = '.jpg';
+const storageAddress = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/users')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, storageAddress);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + fileExtension);
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 })
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype.includes('image/')) {
+    if (file.mimetype.includes('image/jpeg') || file.mimetype.includes('image/png')) {
         cb(null, true);
     } else {
         cb(new multer.MulterError("LIMIT_FILE_EXTENSION"));
@@ -35,10 +32,16 @@ const upload = multer({
 
 // Save Profile Photo
 module.exports.saveProfilePhoto = async (req, res) => {
-    upload.single('userProfilePhoto')(req, res, (err) => {
+    upload.single('userProfilePhoto')(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
+            let error = "";
+            if (err.code === "LIMIT_FILE_EXTENSION") {
+                error = "Profile Picture should be of .jpeg or .png";
+            } else if (err.code === "LIMIT_FILE_SIZE") {
+                error = "Image should not exceed 1MB";
+            }
             return res.status(400).send({
-                message: err.code,
+                message: error,
             })
         } else if (err) {
             return res.status(400).send({
@@ -49,31 +52,30 @@ module.exports.saveProfilePhoto = async (req, res) => {
                 message: "No File Uploaded",
             })
         }
-        const token = req.body.token;
         try {
-            if (!token) return res.status(400).send({
-                message: "Token not provided."
-            });
-            const payload = jwt.verify(token, process.env.JWT_SECRET);
-            const id = payload.id;
-            const imageAddress = storageAddress + '/' + id + fileExtension
-            fs.rename(req.file.path, imageAddress, (err) => {
-                if (err) {
-                    return res.status(400).send({
-                        message: "Error Renaming File",
+            const uID = path.basename(req.url);
+            const isUser = await User.findById(uID)
+            if (isUser) {
+                const imageAddress = storageAddress + '/' + uID + path.extname(req.file.originalname);
+                fs.rename(req.file.path, imageAddress, (err) => {
+                    if (err) {
+                        return res.status(400).send({
+                            message: "Error Renaming File",
+                        })
+                    }
+                    return res.status(200).json({
+                        message: 'Profile Photo Uploaded Successfully',
                     })
-                }
-                return res.status(200).json({
-                    message: 'Profile Photo Uploaded Successfully',
                 })
-            })
+            } else {
+                return res.status(400).send({
+                    message: "No Such User Found",
+                })
+            }
         } catch(err) {
-            if(err.name === "JsonWebTokenError") return res.status(400).send({
-                message: "Invalid Token"
-            });
-            else if (err.name === "TokenExpiredError") return res.status(400).send({
-                message: "Session has Expired"
-            });
+            return res.status(400).send({
+                message: "Invalid Image Address",
+            })
         }
     });
 
@@ -81,29 +83,54 @@ module.exports.saveProfilePhoto = async (req, res) => {
 
 // Get Profile Photo
 module.exports.getProfilePhoto = async (req, res) => {
-    const token = req.query.token;
+    const uID = path.basename(req.url)
     try {
-        if (!token) return res.status(400).send({
-            message: "Token not provided."
+        const imageName = '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/users/' + uID
+        for (const ext of ['.jpg', '.jpeg', '.png']) {
+            const imageAddress = imageName + ext;
+            if (fs.existsSync(imageAddress)) {
+                return res.status(200).sendFile(imageAddress);
+            }
+        }
+        return res.status(400).send({
+            message: "No Profile Photo"
         });
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        const id = payload.id;
-        const imageAddress = '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/' + id + fileExtension
-        if (fs.existsSync(imageAddress)) {
-            res.sendFile(imageAddress);
-        }
-        else {
-            res.status(200).send({
-                message: "No Profile Photo"
-            })
-        }
     } catch(err) {
-        console.log(err)
-        if(err.name === "JsonWebTokenError") return res.status(400).send({
-            message: "Invalid Token"
-        });
-        else if (err.name === "TokenExpiredError") return res.status(400).send({
-            message: "Session has Expired"
-        });
+        return res.status(400).send({
+            message: "Invalid Image Address"
+        })
     }
+}
+
+// Change Account Details
+module.exports.changeUserDetails = async (req, res) => {
+    const {username, email, bio} = req.body;
+    const uID = path.basename(req.url)
+    const user = await User.findById(uID);
+    const userDetails = await UserDetails.findById(uID);
+    if(!user || !userDetails) {
+        return res.status(400).send({
+            message: "No Such User Found",
+        })
+    }
+    const details = {
+        ...user.toObject(),
+        ...userDetails.toObject(),
+    }
+
+    if (username !== user.username) {
+        await User.updateOne({_id: uID}, {
+            username: username,
+        })
+    }
+    if (email !== user.email) {
+    }
+    if (bio !== user.bio) {
+        await UserDetails.updateOne({_id: uID}, {
+            bio: bio,
+        })
+    }
+    res.status(200).send({
+        message: `Details have been updated successfully`,
+    })
 }

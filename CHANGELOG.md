@@ -93,7 +93,7 @@ All notable changes to this project are documented here.
 
 ## [Beta v0.1] – June 22, 2025
 
-### Phase 6 – My Account Tab, Transitions, and Event Page Routing
+### Phase 6 – My Account Tab, Transitions, and Movie Page Routing
 
 - Introduced `My Account` tab featuring:
   - Profile
@@ -122,4 +122,25 @@ All notable changes to this project are documented here.
 - Restructured project’s **file/folder organization** for clarity and scalability
 - Added an **API documentation page** detailing all backend routes and their usage
 - Revised several `GET` and `POST` API endpoints for consistency and RESTful standards
+
+## [Beta Polished v0.1] – June 24, 2025
+
+### Phase 7 – Profile Enhancement & Movie Dataset Integration
+
+- Polished Profile Picture support:
+  - Handled errors gracefully (upload failures, invalid formats, etc.)
+  - Retained uploaded image across sessions and devices
+
+- Expanded Profile Info:
+  - Added display for Bio, Role, and UID
+  - Enabled input editing for Username and Bio
+
+- Events Page Upgrade:
+  - Integrated with **Pablinho Movie Dataset**
+  - Downloaded all **9,826 movie posters** into local storage
+  - Populated MongoDB with movie data and linked poster references
+
+*Note:* Versioning continues from Beta as features are now stable. Next release may begin OAuth and Vendor Panel integrations.
+
+
 

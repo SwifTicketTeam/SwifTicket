@@ -53,7 +53,7 @@ export default {
         return;
       }
       this.isWarning = false;
-      axios.post(process.env.VUE_APP_SERVER + "/api/auth/register", {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/auth/register`, {
         username: this.username,
         email: this.email,
         password: this.password,

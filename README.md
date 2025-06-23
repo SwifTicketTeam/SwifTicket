@@ -12,8 +12,9 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
 - Phase 4 (JWT Session Management, Email Messaging, and Forgot Password) – Completed
 - Phase 5 (Events Page Layout, Session Verification, and Visual Enhancements) – Completed  
   *Note: OAuth and Role-Based Route Protection are postponed. Route protection is on hold until admin/vendor-specific pages are developed.*
-- Phase 6 (My Account Tab, Transitions, and Event Page Routing) – Completed
+- Phase 6 (My Account Tab, Transitions, and Movie Page Routing) – Completed
 - Phase 6 Extended: Persistent Storage, API Documentation, and Structural Cleanup – Completed
+- Phase 7 – Profile Enhancement & Movie Dataset Integration
 
 ---
 
@@ -52,7 +53,7 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
 - Enhanced token-based session verification and Vuex state update
 - Integrated logo and improved layout design and responsiveness
 
-### Phase 6: My Account Tab, Transitions, and Event Page Routing – Completed
+### Phase 6: My Account Tab, Transitions, and Movie Page Routing – Completed
 - Created `My Account` tab with the following options:
   - Profile, Transaction History, My Tickets, Favorites, Security
   - If user: "Become a Vendor" option
@@ -71,6 +72,23 @@ SwifTicket is a modern web-based ticket booking system designed to offer fast, s
 - Refactored and cleaned up project directory structure
 - Added detailed **API documentation** page to support developers and testing
 - Revised and standardized API route naming for `GET` and `POST` endpoints
+
+### Phase 7 – Profile Enhancement & Movie Dataset Integration - Completed
+
+- Polished the **Profile Picture** upload system:
+  - Added client-side and server-side error handling
+  - Ensured the profile picture persists across sessions and devices
+- Expanded profile display to include:
+  - **Bio**
+  - **Role**
+  - **UID**
+- Allowed **editable Username and Bio** fields with controlled input and update options
+
+- For the **Events** section:
+  - Sourced and curated a real-world movie dataset from the **Pablinho Movie Dataset**
+  - Downloaded and stored **9,826 movie posters** locally
+  - Populated MongoDB with full movie metadata and file references
+
 
 ---
 

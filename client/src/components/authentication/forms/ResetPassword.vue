@@ -40,7 +40,7 @@ export default {
         this.isWarning = true;
         return;
       }
-      axios.post( process.env.VUE_APP_SERVER + "/api/auth/reset-password", {
+      axios.post( `${process.env.VUE_APP_SERVER}/api/auth/reset-password`, {
         password: this.password,
         token: this.token
       }).then(() => {

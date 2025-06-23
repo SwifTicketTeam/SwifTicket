@@ -18,9 +18,9 @@ export default{
     }
   },
   created() {
-    if (this.$store.state.role === "user") {
+    if (this.$store.state.auth.role === "user") {
       this.options.push("Become a Vendor")
-    } else if (this.$store.state.role === "vendor") {
+    } else if (this.$store.state.auth.role === "vendor") {
       this.options.push("Manage Events")
     }
   },

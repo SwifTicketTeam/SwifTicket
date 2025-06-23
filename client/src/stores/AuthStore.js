@@ -3,12 +3,14 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export const AuthStore = new Vuex.Store({
+export default {
+    namespaced: true,
     state: {
         token:  localStorage.getItem('token') || null,
-        username:  "",
-        email:  "",
-        role:  "",
+        UID: '',
+        username:  '',
+        email:  '',
+        role:  '',
     },
     mutations: {
         setToken(state, token) {
@@ -16,12 +18,16 @@ export const AuthStore = new Vuex.Store({
             localStorage.setItem('token', token);
         },
         clearToken(state) {
-            state.token = '';
+            state.token = null;
+            state.UID = '';
             state.username = '';
             state.email = '';
             state.role = '';
             localStorage.removeItem('token');
         },
+        setName(state, name) {
+            state.username = name;
+        }
     },
     actions: {
         saveToken: (context, token) => {
@@ -29,10 +35,12 @@ export const AuthStore = new Vuex.Store({
         },
         deleteToken: (context) => {
             context.commit('clearToken');
+        },
+        saveName: (context, name) => {
+            context.commit('setName', name);
         }
     },
     getters: {
         isAuthenticated: (state) => !!state.token,
-        getToken: (state) => state.token,
     }
-});
+}

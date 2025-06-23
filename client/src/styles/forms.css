@@ -30,6 +30,11 @@
     border-radius: 2rem;
 }
 
+.field {
+    border-radius: 0.8rem;
+    box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
+}
+
 p {
     opacity: 0;
     text-align: center;

@@ -36,7 +36,7 @@ export default{
     }
   },
   created() {
-    if (this.$store.getters.isAuthenticated) {
+    if (this.$store.getters['auth/isAuthenticated']) {
       this.$router.push("/home");
     }
   },

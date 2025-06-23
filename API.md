@@ -1,24 +1,28 @@
-# SwifTicket API Official Documentation
+# 📘 SwifTicket API – Official Documentation
 
-All API endpoints are prefixed with `http://localhost:3000`
+All endpoints are prefixed with `http://localhost:3000`
 
 ---
 
-### 🔐 Authentication & Session Routes
+## 🔐 Authentication & Session Routes
 
-#### 1. Register a New User
-- **POST** `/api/auth/register`
+### 1. Register a New User
+
+**POST** `/api/auth/register`
+
 ```json
 {
   "username": "john_doe",
   "email": "john@example.com",
   "password": "your_password"
 }
-````
+```
 
-#### 2. Login
+---
 
-* **POST** `/api/auth/login`
+### 2. Login
+
+**POST** `/api/auth/login`
 
 ```json
 {
@@ -27,15 +31,22 @@ All API endpoints are prefixed with `http://localhost:3000`
 }
 ```
 
-#### 3. Email Verification
+---
 
-* **GET** `/api/auth/verified`
-* **Headers:** `Authorization: Bearer <token>`
-* **Behavior:** Redirects to login page if verified, or verification error page if token is invalid/expired
+### 3. Email Verification
 
-#### 4. Forgot Password
+**GET** `/api/auth/verified`
+**Headers:** `Authorization: Bearer <token>`
+**Behavior:**
 
-* **POST** `/api/auth/forgot-password`
+* Redirects to login page if verified
+* Redirects to verification error page if token is invalid or expired
+
+---
+
+### 4. Forgot Password
+
+**POST** `/api/auth/forgot-password`
 
 ```json
 {
@@ -43,9 +54,11 @@ All API endpoints are prefixed with `http://localhost:3000`
 }
 ```
 
-#### 5. Reset Password
+---
 
-* **POST** `/api/auth/reset-password`
+### 5. Reset Password
+
+**POST** `/api/auth/reset-password`
 
 ```json
 {
@@ -54,9 +67,11 @@ All API endpoints are prefixed with `http://localhost:3000`
 }
 ```
 
-#### 6. Session Verification
+---
 
-* **POST** `/api/auth/jwt`
+### 6. Session Verification
+
+**POST** `/api/auth/jwt`
 
 ```json
 {
@@ -64,7 +79,7 @@ All API endpoints are prefixed with `http://localhost:3000`
 }
 ```
 
-* **Response:**
+**Response:**
 
 ```json
 {
@@ -76,18 +91,17 @@ All API endpoints are prefixed with `http://localhost:3000`
 
 ---
 
-### 🖼️ Profile Photo Uploads
+## 👤 User Profile & Account
 
-#### 7. Upload Profile Photo
+### 7. Upload Profile Photo
 
-* **POST** `/api/uploads/images/users/`
+**POST** `/api/uploads/images/users/:userid`
+**FormData:**
 
-* **FormData:**
+* `userProfilePhoto`: image file (`.jpg`, `.png`, etc.)
+* `token`: JWT token
 
-    * `userProfilePhoto`: image file (e.g. `.jpg`, `.png`)
-    * `token`: JWT token
-
-* **Success Response:**
+**Response:**
 
 ```json
 {
@@ -95,24 +109,59 @@ All API endpoints are prefixed with `http://localhost:3000`
 }
 ```
 
-#### 8. Get Profile Photo
+---
 
-* **GET** `/api/uploads/images/users?token=`
-* **Response:**
-  Returns the profile image associated with the given JWT token
+### 8. Get Profile Photo
+
+**GET** `/api/uploads/images/users/:userid`
+
+**Response:**
+
+* Returns an image blob (MIME type: `image/*`)
+* Can be directly rendered as profile picture in frontend
 
 ---
 
-### 🌐 Miscellaneous
+### 9. Change User Details
 
-#### 9. API Landing Page
+**PUT** `/api/account/users/:userid`
+**Request Body:**
 
-* **POST** `/api`
-* **Behavior:** Returns this API documentation in HTML or Markdown
-
-#### 10. Server Root
-
-* **GET** `/`
-* **Behavior:** Displays server status or homepage
-
+```json
+{
+  "username": "new_username",    // optional
+  "email": "new_email",          // optional
+  "bio": "new_bio"               // optional
+}
 ```
+
+**Behavior:**
+
+* Updates only fields that differ from current values
+* If `email` is updated, a verification mail is sent — change is **not** immediate
+
+**Success Response:**
+
+```json
+{
+  "message": "User details updated successfully"
+}
+```
+
+---
+
+## 🌐 Miscellaneous
+
+### 10. API Landing Page
+
+**POST** `/api`
+**Behavior:** Returns this API documentation as HTML or Markdown
+
+---
+
+### 11. Server Root
+
+**GET** `/`
+**Behavior:** Displays server status or homepage
+
+---

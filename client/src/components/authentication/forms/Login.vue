@@ -31,7 +31,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.$store.getters.isAuthenticated && this.$store.state.token !== "") {
+    if (!this.$store.getters['auth/isAuthenticated'] && this.$store.state.auth.token !== "") {
       this.warning = "Your Session has Expired. Please Login Again";
       this.isWarning = true;
     }
@@ -39,12 +39,12 @@ export default {
   methods: {
     login() {
       this.isWarning = false;
-      axios.post( process.env.VUE_APP_SERVER + "/api/auth/login", {
+      axios.post( `${process.env.VUE_APP_SERVER}/api/auth/login`, {
         email: this.email,
         password: this.password,
       }).then(res => {
         this.isWarning = false;
-        this.$store.dispatch("saveToken", res.data.token);
+        this.$store.dispatch("auth/saveToken", res.data.token);
         this.$router.push("/home");
       }).catch(err => {
         this.warning = err.response.data.message;

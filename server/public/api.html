@@ -2,111 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SwifTicket API Docs</title>
+    <title>SwifTicket API Documentation</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #fdfdfd;
             color: #333;
-            padding: 2rem;
-            max-width: 800px;
-            margin: auto;
         }
         h1, h2, h3 {
-            color: #000;
+            color: #2c3e50;
         }
         code {
-            background: #eee;
+            background-color: #eee;
             padding: 2px 4px;
             border-radius: 4px;
-            font-family: monospace;
         }
         pre {
-            background: #222;
-            color: #eee;
-            padding: 1rem;
-            border-radius: 8px;
-            overflow: auto;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+            overflow-x: auto;
         }
-        hr {
-            border: none;
-            border-bottom: 1px solid #ccc;
-            margin: 2rem 0;
+        section {
+            margin-bottom: 2rem;
+        }
+        .endpoint {
+            font-weight: bold;
+            color: #3498db;
         }
     </style>
 </head>
 <body>
 
-<h1>SwifTicket API</h1>
-<p>Welcome to the official API documentation for <strong>SwifTicket – Universal Ticketing Platform</strong>.</p>
+<h1>📘 SwifTicket API – Official Documentation</h1>
+<p>All endpoints are prefixed with <code>http://localhost:3000</code></p>
 
-<hr>
+<section>
+    <h2>🔐 Authentication & Session Routes</h2>
 
-<h2>Authentication & Session Routes</h2>
-
-<h3>1. Register a New User</h3>
-<p><strong>POST</strong> <code>/api/auth/register</code></p>
-<pre>{
+    <h3>1. Register a New User</h3>
+    <p class="endpoint">POST /api/auth/register</p>
+    <pre>{
   "username": "john_doe",
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
 
-<h3>2. Login</h3>
-<p><strong>POST</strong> <code>/api/auth/login</code></p>
-<pre>{
+    <h3>2. Login</h3>
+    <p class="endpoint">POST /api/auth/login</p>
+    <pre>{
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
 
-<h3>3. Email Verification</h3>
-<p><strong>GET</strong> <code>/api/auth/verified</code><br>
-    <strong>Headers:</strong> <code>Authorization: Bearer &lt;token&gt;</code></p>
+    <h3>3. Email Verification</h3>
+    <p class="endpoint">GET /api/auth/verified</p>
+    <ul>
+        <li><strong>Headers:</strong> Authorization: Bearer &lt;token&gt;</li>
+        <li><strong>Behavior:</strong> Redirects to login page if verified; error page if invalid/expired</li>
+    </ul>
 
-<h3>4. Forgot Password</h3>
-<p><strong>POST</strong> <code>/api/auth/forgot-password</code></p>
-<pre>{
+    <h3>4. Forgot Password</h3>
+    <p class="endpoint">POST /api/auth/forgot-password</p>
+    <pre>{
   "email": "john@example.com"
 }</pre>
 
-<h3>5. Reset Password</h3>
-<p><strong>POST</strong> <code>/api/auth/reset-password</code></p>
-<pre>{
+    <h3>5. Reset Password</h3>
+    <p class="endpoint">POST /api/auth/reset-password</p>
+    <pre>{
   "password": "new_password",
   "token": "reset_token"
 }</pre>
 
-<h3>6. Session Verification</h3>
-<p><strong>POST</strong> <code>/api/auth/jwt</code></p>
-<pre>{
+    <h3>6. Session Verification</h3>
+    <p class="endpoint">POST /api/auth/jwt</p>
+    <pre>{
   "token": "jwt_token_here"
 }</pre>
+    <strong>Response:</strong>
+    <pre>{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "role": "user"
+}</pre>
+</section>
 
-<hr>
+<section>
+    <h2>👤 User Profile & Account</h2>
 
-<h2>Profile Photo Uploads</h2>
+    <h3>7. Upload Profile Photo</h3>
+    <p class="endpoint">POST /api/uploads/images/users/:userid</p>
+    <p><strong>FormData:</strong></p>
+    <ul>
+        <li><code>userProfilePhoto</code>: image file (.jpg, .png, etc.)</li>
+        <li><code>token</code>: JWT token</li>
+    </ul>
+    <strong>Response:</strong>
+    <pre>{
+  "message": "Profile Photo Uploaded Successfully"
+}</pre>
 
-<h3>7. Upload Profile Photo</h3>
-<p><strong>POST</strong> <code>/api/uploads/images/users/</code></p>
-<p><strong>FormData:</strong></p>
-<ul>
-    <li><code>userProfilePhoto</code>: File</li>
-    <li><code>token</code>: JWT</li>
-</ul>
+    <h3>8. Get Profile Photo</h3>
+    <p class="endpoint">GET /api/uploads/images/users/:userid</p>
+    <p><strong>Response:</strong> Returns image blob (MIME: image/*)</p>
 
-<h3>8. Get Profile Photo</h3>
-<p><strong>GET</strong> <code>/api/uploads/images/users?token=</code></p>
-<p>Returns user’s profile image.</p>
+    <h3>9. Change User Details</h3>
+    <p class="endpoint">PUT /api/account/users/:userid</p>
+    <p><strong>Request Body:</strong></p>
+    <pre>{
+  "username": "new_username",
+  "email": "new_email",
+  "bio": "new_bio"
+}</pre>
+    <ul>
+        <li>Only updates fields that are different</li>
+        <li>If <code>email</code> is changed, sends a verification mail instead of updating directly</li>
+    </ul>
+    <strong>Response:</strong>
+    <pre>{
+  "message": "User details updated successfully"
+}</pre>
+</section>
 
-<hr>
+<section>
+    <h2>🌐 Miscellaneous</h2>
 
-<h2>Other Routes</h2>
+    <h3>10. API Landing Page</h3>
+    <p class="endpoint">POST /api</p>
+    <p>Returns this API documentation</p>
 
-<h3>9. API Landing Page</h3>
-<p><strong>POST</strong> <code>/api</code><br>Returns this API documentation</p>
-
-<h3>10. Server Root</h3>
-<p><strong>GET</strong> <code>/</code><br>Server status or homepage</p>
+    <h3>11. Server Root</h3>
+    <p class="endpoint">GET /</p>
+    <p>Displays server status or homepage</p>
+</section>
 
 </body>
 </html>

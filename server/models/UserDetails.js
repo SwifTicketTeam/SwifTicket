@@ -4,8 +4,12 @@ const Schema = mongoose.Schema;
 const userDetailSchema = new Schema({
     _id: {
         type: Schema.Types.ObjectId,
-        ref: "swifticket-users",
+        ref: "User",
         required: true,
+    },
+    bio: {
+        type: String,
+        default: '',
     },
     tickets: {
         type: [{type: Schema.Types.ObjectId, ref: "swifticket-events"}],
@@ -17,5 +21,5 @@ const userDetailSchema = new Schema({
     }
 })
 
-const userDetail = mongoose.model("UserDetail", userDetailSchema, "swifticket-user-details");
-module.exports = userDetail;
+const userDetails = mongoose.model("UserDetail", userDetailSchema, "swifticket-user-details");
+module.exports = userDetails;
