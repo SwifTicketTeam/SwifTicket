@@ -33,8 +33,7 @@ export const authenticate = async () => {
         store.state.auth.email = res.data.email;
         store.state.auth.role = res.data.role;
         store.state.account.bio = res.data.bio;
-    }).catch((err) => {
-        console.log(err)
+    }).catch(() => {
         try {
             store.dispatch('auth/deleteToken');
         } catch (err) {

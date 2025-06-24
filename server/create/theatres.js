@@ -1,0 +1,1 @@
+const cities = ["Chennai", "Mumbai"]

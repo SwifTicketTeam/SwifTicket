@@ -8,12 +8,14 @@
 import {eventBus} from "@/main";
 import Profile from "./options/Profile.vue"
 import MyTickets from "./options/MyTickets.vue"
+import Security from "./options/Security.vue"
 
 export default {
   name: "AccountSection",
   components: {
     Profile,
     MyTickets,
+    Security
   },
   data() {
     return {

@@ -1,126 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SwifTicket – Universal Ticketing Platform</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 2rem;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: Arial, sans-serif;
+            max-width: 960px;
+            margin: auto;
+            padding: 2rem;
             line-height: 1.6;
         }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        h1 {
-            text-align: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        h1, h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 4px;
         }
         ul {
-            padding-left: 1.5rem;
-        }
-        li {
-            margin-bottom: 0.5rem;
-        }
-        hr {
-            border: none;
-            height: 1px;
-            background: #ddd;
-            margin: 2rem 0;
-        }
-        .section {
-            margin-bottom: 2rem;
+            padding-left: 1.25rem;
         }
         code {
-            background-color: #eee;
-            padding: 0.1rem 0.4rem;
+            background: #f0f0f0;
+            padding: 2px 4px;
             border-radius: 4px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>SwifTicket – Universal Ticketing Platform</h1>
-    <p><strong>SwifTicket</strong> is a modern web-based ticket booking system designed to offer fast, secure, and unified access to events. Built using the <strong>MEVN Stack</strong> (MongoDB, Express, Vue, Node), it focuses on a streamlined user experience with clean UI, custom authentication logic, and upcoming support for OAuth and role-based access.</p>
 
-    <hr>
+<h1>SwifTicket – Universal Ticketing Platform</h1>
 
-    <div class="section">
-        <h2>Project Status</h2>
-        <ul>
-            <li>Phase 1 (Frontend UI for Login & Registration) – <strong>Completed</strong></li>
-            <li>Phase 2 (API Testing and Backend Server) – <strong>Completed</strong></li>
-            <li>Phase 3 (Connecting the Database, Backend and the Frontend) – <strong>Completed</strong></li>
-            <li>Phase 4 (JWT Session Management, Email Messaging, and Forgot Password) – <strong>Completed</strong></li>
-            <li>Phase 5 (Route Protection, Role Expansion, and OAuth Integration) – <strong>Planned</strong></li>
-        </ul>
-    </div>
+<p>
+    SwifTicket is a full-stack universal ticket booking platform developed using Vue.js, Node.js, and MongoDB.
+    It provides seamless user authentication, profile management, event browsing, and movie discovery features.
+    The platform is backed by a real-world movie dataset and optimized for responsiveness with debounced search,
+    genre filtering, and dynamic routing.
+</p>
 
-    <div class="section">
-        <h2>Project Roadmap</h2>
+<hr />
 
-        <h3>Phase 1: Frontend Development – Completed</h3>
-        <ul>
-            <li>Responsive UI for Login and Sign-Up using Vue</li>
-            <li>Form validations and route navigation</li>
-            <li>State management with Vuex</li>
-            <li>Page structure: <code>/</code>, <code>/home</code>, <code>/account</code></li>
-        </ul>
+<h2>Project Overview</h2>
 
-        <h3>Phase 2: API Integration and Backend Server Setup – Completed</h3>
-        <ul>
-            <li>Developed Express server with endpoints for login and registration</li>
-            <li>Designed and tested RESTful routes using Postman</li>
-            <li>Connected frontend forms with backend via Axios</li>
-            <li>Setup environment variables for frontend and backend</li>
-        </ul>
+<h3>Frontend Features</h3>
+<ul>
+    <li>Responsive user interfaces for login, registration, dashboard, and profile</li>
+    <li>Dynamic routing with route guards and animated page transitions</li>
+    <li>Global state management using Vuex for authentication and session persistence</li>
+    <li>Organized multi-page structure: <code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/reset-password</code>, and more</li>
+    <li>Editable profile section with support for profile image uploads, bio, username updates, and logout</li>
+</ul>
 
-        <h3>Phase 3: Database and Custom Authentication – Completed</h3>
-        <ul>
-            <li>Integrated MongoDB with Mongoose for persistent storage</li>
-            <li>Defined <code>User</code> model with schema constraints and validations</li>
-            <li>Hashed passwords securely using bcrypt</li>
-            <li>Handled unique email validation errors from MongoDB</li>
-            <li>Implemented JWT-based authentication for login</li>
-            <li>Frontend now receives and stores tokens using Vuex and localStorage</li>
-        </ul>
+<h3>Backend & API Features</h3>
+<ul>
+    <li>Modular Express server handling authentication, user data, and image uploads</li>
+    <li>MongoDB integration using Mongoose with well-defined schemas and validations</li>
+    <li>Defined initial <strong>Theatre Schema</strong> to model screens and seat layout</li>
+    <li>JWT-based authentication system for secure session handling</li>
+    <li>Integrated email verification and password reset flows using Nodemailer</li>
+    <li>Persistent image uploads with static serving for profile pictures and movie posters</li>
+    <li>API documentation route providing details of all available endpoints</li>
+</ul>
 
-        <h3>Phase 4: JWT Session Management, Email Messaging, and Forgot Password – Completed</h3>
-        <ul>
-            <li>Created JWT tokens with secure expiry handling</li>
-            <li>Built and sent dynamic HTML emails for onboarding and password reset</li>
-            <li>Integrated email verification and reset logic using Nodemailer</li>
-            <li>Implemented forgot password functionality via email token verification</li>
-            <li>Verified new password securely and updated in the database</li>
-        </ul>
+<h3>Events & Movies Section</h3>
+<ul>
+    <li>Linked real-world movie dataset (9,800+ movies) to events system</li>
+    <li>Posters downloaded and stored locally with reference mapping in MongoDB</li>
+    <li>Live search bar with debounced input to reduce request load</li>
+    <li>Multi-select genre filter system to refine movie listings</li>
+    <li>Dedicated dynamic pages for each movie with routing and placeholder actions</li>
+</ul>
 
-        <h3>Phase 5: Route Protection, Role Expansion, and OAuth Integration – Planned</h3>
-        <ul>
-            <li>Add middleware to verify JWT tokens on protected routes</li>
-            <li>Implement user role-based access (admin, vendor, user)</li>
-            <li>Setup Google/GitHub OAuth 2.0 login flow</li>
-            <li>Extend functionality to include event creation and booking</li>
-        </ul>
-    </div>
+<h3>User Experience & Design</h3>
+<ul>
+    <li>Clean, modern UI with transition animations</li>
+    <li>Conditional UI behavior based on user roles (User or Vendor)</li>
+    <li>Modular component design and organized folder structure for maintainability</li>
+</ul>
 
-    <div class="section">
-        <h2>Tech Stack</h2>
-        <ul>
-            <li><strong>Frontend:</strong> Vue.js 2, Vuex, Vue Router, Axios</li>
-            <li><strong>Backend:</strong> Node.js, Express.js, Mongoose, bcrypt, jsonwebtoken (JWT)</li>
-            <li><strong>Database:</strong> MongoDB (MongoDB Atlas)</li>
-            <li><strong>Testing:</strong> Postman (Manual API testing)</li>
-        </ul>
-    </div>
-</div>
+<hr />
+
+<h2>Tech Stack</h2>
+
+<h4>Frontend</h4>
+<ul>
+    <li>Vue.js 2</li>
+    <li>Vuex (State Management)</li>
+    <li>Vue Router</li>
+    <li>Axios</li>
+</ul>
+
+<h4>Backend</h4>
+<ul>
+    <li>Node.js</li>
+    <li>Express.js</li>
+    <li>Mongoose</li>
+</ul>
+
+<h4>Database</h4>
+<ul>
+    <li>MongoDB Compass</li>
+</ul>
+
+<h4>Testing</h4>
+<ul>
+    <li>Postman (Manual API Testing)</li>
+</ul>
+
 </body>
 </html>

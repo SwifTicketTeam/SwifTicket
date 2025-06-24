@@ -1,7 +1,7 @@
 const fs = require('fs');
 const csv = require('csv-parser')
 const axios = require('axios');
-const Movie = require('./models/Movie');
+const Movie = require('../models/Movie');
 const path = require("path");
 require("dotenv").config();
 const mongoose = require("mongoose");

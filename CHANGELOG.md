@@ -113,6 +113,8 @@ All notable changes to this project are documented here.
   - Username
   - Email address
 
+*Note:* Versioning continues from Beta as features are now stable. Next release may begin OAuth and Vendor Panel integrations.
+
 ## [Beta Extended v0.1] – June 23, 2025
 
 ### Phase 6 Extended – Storage, Persistence, API Docs, and Restructure
@@ -140,7 +142,22 @@ All notable changes to this project are documented here.
   - Downloaded all **9,826 movie posters** into local storage
   - Populated MongoDB with movie data and linked poster references
 
-*Note:* Versioning continues from Beta as features are now stable. Next release may begin OAuth and Vendor Panel integrations.
+## [v0.1] – June 24, 2025
 
+### Phase 8 – Discovery Engine Activation, Search, Filter & Dynamic Routing
 
-
+- Home Page now dynamically displays movies from MongoDB dataset
+- Implemented dynamic routing for each movie to its own detail page:
+  - Includes working Back button
+  - "Book Now" and "Favorite" buttons added (currently non-functional)
+- Introduced Debounced Search:
+  - Input delay of 400ms before triggering API
+  - Prevents excessive server requests and improves performance
+- Added Genre Filters:
+  - Supports multi-select genre-based filtering of movies
+- Added Logout Functionality:
+  - Clears session and resets application state
+- Added initial **Theatre Schema** to support scalable layout and screen mapping
+  - Basic layout with rows and seat types
+  - Simplified structure for testing and future seat selection logic
+---

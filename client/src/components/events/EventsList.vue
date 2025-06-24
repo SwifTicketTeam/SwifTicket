@@ -1,8 +1,8 @@
 <template>
   <div id = "box">
-    <SearchBar></SearchBar>
+    <SearchBar @movies = "getMovies"></SearchBar>
     <div id = "list">
-      <EventCard v-for = "(event, index) in 20" :key = "index"></EventCard>
+      <EventCard v-for = "(event, index) in events" :key = "index" :event = "event"></EventCard>
     </div>
   </div>
 </template>
@@ -17,6 +17,16 @@ export default{
     SearchBar,
     EventCard
   },
+  data() {
+    return{
+      events: {},
+    }
+  },
+  methods: {
+    getMovies(movies) {
+      this.events = movies
+    }
+  }
 }
 </script>
 

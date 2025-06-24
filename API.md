@@ -1,14 +1,20 @@
-# 📘 SwifTicket API – Official Documentation
+# SwifTicket API – Official Documentation
 
-All endpoints are prefixed with `http://localhost:3000`
+All endpoints are prefixed with:
+
+```
+http://localhost:3000
+```
 
 ---
 
-## 🔐 Authentication & Session Routes
+## Authentication & Session Routes
 
 ### 1. Register a New User
 
 **POST** `/api/auth/register`
+
+**Request Body:**
 
 ```json
 {
@@ -24,6 +30,8 @@ All endpoints are prefixed with `http://localhost:3000`
 
 **POST** `/api/auth/login`
 
+**Request Body:**
+
 ```json
 {
   "email": "john@example.com",
@@ -36,10 +44,15 @@ All endpoints are prefixed with `http://localhost:3000`
 ### 3. Email Verification
 
 **GET** `/api/auth/verified`
-**Headers:** `Authorization: Bearer <token>`
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
 **Behavior:**
 
-* Redirects to login page if verified
+* Redirects to login page if token is valid and verified
 * Redirects to verification error page if token is invalid or expired
 
 ---
@@ -47,6 +60,8 @@ All endpoints are prefixed with `http://localhost:3000`
 ### 4. Forgot Password
 
 **POST** `/api/auth/forgot-password`
+
+**Request Body:**
 
 ```json
 {
@@ -60,6 +75,8 @@ All endpoints are prefixed with `http://localhost:3000`
 
 **POST** `/api/auth/reset-password`
 
+**Request Body:**
+
 ```json
 {
   "password": "new_password",
@@ -72,6 +89,8 @@ All endpoints are prefixed with `http://localhost:3000`
 ### 6. Session Verification
 
 **POST** `/api/auth/jwt`
+
+**Request Body:**
 
 ```json
 {
@@ -91,14 +110,14 @@ All endpoints are prefixed with `http://localhost:3000`
 
 ---
 
-## 👤 User Profile & Account
+## User Profile & Account
 
 ### 7. Upload Profile Photo
 
 **POST** `/api/uploads/images/users/:userid`
 **FormData:**
 
-* `userProfilePhoto`: image file (`.jpg`, `.png`, etc.)
+* `userProfilePhoto`: image file (`.jpg`, `.jpeg`, `.png`)
 * `token`: JWT token
 
 **Response:**
@@ -114,33 +133,30 @@ All endpoints are prefixed with `http://localhost:3000`
 ### 8. Get Profile Photo
 
 **GET** `/api/uploads/images/users/:userid`
-
 **Response:**
-
-* Returns an image blob (MIME type: `image/*`)
-* Can be directly rendered as profile picture in frontend
+Returns the profile photo as an image blob (`image/*` MIME type)
 
 ---
 
 ### 9. Change User Details
 
 **PUT** `/api/account/users/:userid`
-**Request Body:**
+**Request Body (any or all fields optional):**
 
 ```json
 {
-  "username": "new_username",    // optional
-  "email": "new_email",          // optional
-  "bio": "new_bio"               // optional
+  "username": "new_username",
+  "email": "new_email",
+  "bio": "updated bio"
 }
 ```
 
 **Behavior:**
 
-* Updates only fields that differ from current values
-* If `email` is updated, a verification mail is sent — change is **not** immediate
+* Only fields that differ from existing values are updated
+* If `email` is changed, a verification email is sent instead of immediate change
 
-**Success Response:**
+**Response:**
 
 ```json
 {
@@ -150,18 +166,61 @@ All endpoints are prefixed with `http://localhost:3000`
 
 ---
 
-## 🌐 Miscellaneous
+## Events & Movie Search
 
-### 10. API Landing Page
+### 10. Get Movie List
 
-**POST** `/api`
-**Behavior:** Returns this API documentation as HTML or Markdown
+**GET** `/api/events/movies`
+
+**Query Parameters:**
+
+* `search`: optional string to match title (partial, case-insensitive)
+* `genre`: optional comma-separated genre string
+
+**Example:**
+
+```
+/api/events/movies?search=spider&genre=Action,Adventure
+```
+
+**Response:**
+
+```json
+[
+  {
+    "_id": "movieid123",
+    "title": "Spider-Man: No Way Home",
+    "genres": ["Action", "Adventure"],
+    "poster": "server/storage/images/movieid123.jpg"
+  },
+  ...
+]
+```
+
+**Behavior:**
+
+* Filters movies by title match and/or genre
+* Uses MongoDB for optimized query performance
+* Poster image path refers to static storage
 
 ---
 
-### 11. Server Root
+## Miscellaneous
+
+### 11. API Landing Page
+
+**GET** `/api`
+
+**Behavior:**
+Returns the API documentation as Markdown or HTML
+
+---
+
+### 12. Server Root
 
 **GET** `/`
-**Behavior:** Displays server status or homepage
+
+**Behavior:**
+Returns server status or welcome message
 
 ---

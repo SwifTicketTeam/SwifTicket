@@ -31,7 +31,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.$store.getters['auth/isAuthenticated'] && this.$store.state.auth.token !== "") {
+    if (!this.$store.getters['auth/isAuthenticated']) {
       this.warning = "Your Session has Expired. Please Login Again";
       this.isWarning = true;
     }

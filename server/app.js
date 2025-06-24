@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const Routes = require('./routes/Routes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
 const accountRoutes = require('./routes/accountRoutes');
+const eventRoutes = require('./routes/eventRoutes')
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -16,6 +17,8 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+
+app.use('/storage/images', express.static('/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/movies'));
 
 // Connect with MongoDB
 dbURI = process.env.MONGODB_URI
@@ -32,5 +35,6 @@ mongoose.connect(dbURI)
 
 // Routes
 app.use(authenticationRoutes);
-app.use(accountRoutes)
+app.use(accountRoutes);
+app.use(eventRoutes)
 app.use(Routes);

@@ -1,51 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SwifTicket API Documentation</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
+            max-width: 960px;
+            margin: auto;
+            padding: 2rem;
             line-height: 1.6;
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #fdfdfd;
-            color: #333;
         }
-        h1, h2, h3 {
-            color: #2c3e50;
+        h1, h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 4px;
         }
-        code {
-            background-color: #eee;
-            padding: 2px 4px;
+        code, pre {
+            background: #f2f2f2;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
+            font-family: monospace;
         }
         pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-left: 3px solid #3498db;
+            padding: 1rem;
             overflow-x: auto;
         }
         section {
             margin-bottom: 2rem;
         }
-        .endpoint {
-            font-weight: bold;
-            color: #3498db;
-        }
     </style>
 </head>
 <body>
+<h1>SwifTicket API – Official Documentation</h1>
 
-<h1>📘 SwifTicket API – Official Documentation</h1>
-<p>All endpoints are prefixed with <code>http://localhost:3000</code></p>
+<p><strong>Base URL:</strong> <code>http://localhost:3000</code></p>
 
 <section>
-    <h2>🔐 Authentication & Session Routes</h2>
+    <h2>Authentication & Session Routes</h2>
 
     <h3>1. Register a New User</h3>
-    <p class="endpoint">POST /api/auth/register</p>
+    <p><strong>POST</strong> <code>/api/auth/register</code></p>
     <pre>{
   "username": "john_doe",
   "email": "john@example.com",
@@ -53,38 +48,35 @@
 }</pre>
 
     <h3>2. Login</h3>
-    <p class="endpoint">POST /api/auth/login</p>
+    <p><strong>POST</strong> <code>/api/auth/login</code></p>
     <pre>{
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
 
     <h3>3. Email Verification</h3>
-    <p class="endpoint">GET /api/auth/verified</p>
-    <ul>
-        <li><strong>Headers:</strong> Authorization: Bearer &lt;token&gt;</li>
-        <li><strong>Behavior:</strong> Redirects to login page if verified; error page if invalid/expired</li>
-    </ul>
+    <p><strong>GET</strong> <code>/api/auth/verified</code></p>
+    <p><strong>Headers:</strong> <code>Authorization: Bearer &lt;token&gt;</code></p>
 
     <h3>4. Forgot Password</h3>
-    <p class="endpoint">POST /api/auth/forgot-password</p>
+    <p><strong>POST</strong> <code>/api/auth/forgot-password</code></p>
     <pre>{
   "email": "john@example.com"
 }</pre>
 
     <h3>5. Reset Password</h3>
-    <p class="endpoint">POST /api/auth/reset-password</p>
+    <p><strong>POST</strong> <code>/api/auth/reset-password</code></p>
     <pre>{
   "password": "new_password",
   "token": "reset_token"
 }</pre>
 
     <h3>6. Session Verification</h3>
-    <p class="endpoint">POST /api/auth/jwt</p>
+    <p><strong>POST</strong> <code>/api/auth/jwt</code></p>
     <pre>{
   "token": "jwt_token_here"
 }</pre>
-    <strong>Response:</strong>
+    <p><strong>Response:</strong></p>
     <pre>{
   "username": "john_doe",
   "email": "john@example.com",
@@ -93,51 +85,63 @@
 </section>
 
 <section>
-    <h2>👤 User Profile & Account</h2>
+    <h2>User Profile & Account</h2>
 
     <h3>7. Upload Profile Photo</h3>
-    <p class="endpoint">POST /api/uploads/images/users/:userid</p>
-    <p><strong>FormData:</strong></p>
-    <ul>
-        <li><code>userProfilePhoto</code>: image file (.jpg, .png, etc.)</li>
-        <li><code>token</code>: JWT token</li>
-    </ul>
-    <strong>Response:</strong>
+    <p><strong>POST</strong> <code>/api/uploads/images/users/:userid</code></p>
+    <p><strong>FormData:</strong> <code>userProfilePhoto</code> (image file), <code>token</code> (JWT)</p>
     <pre>{
   "message": "Profile Photo Uploaded Successfully"
 }</pre>
 
     <h3>8. Get Profile Photo</h3>
-    <p class="endpoint">GET /api/uploads/images/users/:userid</p>
-    <p><strong>Response:</strong> Returns image blob (MIME: image/*)</p>
+    <p><strong>GET</strong> <code>/api/uploads/images/users/:userid</code></p>
+    <p>Returns the profile photo as image blob</p>
 
     <h3>9. Change User Details</h3>
-    <p class="endpoint">PUT /api/account/users/:userid</p>
-    <p><strong>Request Body:</strong></p>
+    <p><strong>PUT</strong> <code>/api/account/users/:userid</code></p>
     <pre>{
   "username": "new_username",
   "email": "new_email",
-  "bio": "new_bio"
+  "bio": "updated bio"
 }</pre>
-    <ul>
-        <li>Only updates fields that are different</li>
-        <li>If <code>email</code> is changed, sends a verification mail instead of updating directly</li>
-    </ul>
-    <strong>Response:</strong>
+    <p><strong>Response:</strong></p>
     <pre>{
   "message": "User details updated successfully"
 }</pre>
 </section>
 
 <section>
-    <h2>🌐 Miscellaneous</h2>
+    <h2>Events & Movies</h2>
 
-    <h3>10. API Landing Page</h3>
-    <p class="endpoint">POST /api</p>
-    <p>Returns this API documentation</p>
+    <h3>10. Get Movies</h3>
+    <p><strong>GET</strong> <code>/api/events/movies</code></p>
+    <p><strong>Query Parameters:</strong></p>
+    <ul>
+        <li><code>search</code>: optional string</li>
+        <li><code>genre</code>: optional comma-separated genre string</li>
+    </ul>
+    <p><strong>Example:</strong> <code>/api/events/movies?search=spider&genre=Action,Adventure</code></p>
+    <p><strong>Response:</strong></p>
+    <pre>[
+  {
+    "_id": "movieid123",
+    "title": "Spider-Man: No Way Home",
+    "genres": ["Action", "Adventure"],
+    "poster": "server/storage/images/movieid123.jpg"
+  }
+]</pre>
+</section>
 
-    <h3>11. Server Root</h3>
-    <p class="endpoint">GET /</p>
+<section>
+    <h2>Miscellaneous</h2>
+
+    <h3>11. API Landing Page</h3>
+    <p><strong>GET</strong> <code>/api</code></p>
+    <p>Returns this documentation</p>
+
+    <h3>12. Server Root</h3>
+    <p><strong>GET</strong> <code>/</code></p>
     <p>Displays server status or homepage</p>
 </section>
 

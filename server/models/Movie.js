@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Movie = new Schema({
+const movieSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -28,8 +28,12 @@ const Movie = new Schema({
     poster: {
         type: String,
         default: ''
-    }
+    },
+    isScreening: {
+        type: Boolean,
+        default: false
+    },
 })
 
-const movie = mongoose.model("Movie", Movie, "swifticket-movies");
+const movie = mongoose.model("Movie", movieSchema, "swifticket-movies");
 module.exports = movie;

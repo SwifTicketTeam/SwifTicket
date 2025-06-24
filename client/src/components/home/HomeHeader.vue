@@ -15,7 +15,7 @@ export default{
   name: "HomeHeader",
   data() {
     return {
-      ticketClasses: ["Movies", "Shows", "Sports", "Travels", "Virtual", "Others"],
+      ticketClasses: ["Movies", "Shows", "Sports", "Travels", "Virtual"],
       selectedTicketClass: "Movies"
     }
   },
@@ -52,12 +52,12 @@ li {
   color: #333;
   cursor: pointer;
   border-radius: 0.8rem;
-  transition: background-color 1s ease,
-              box-shadow 0.15s ease;
+  transition: background-color 0.5s ease,
+              box-shadow 0.25s ease;
 }
 
 li:hover {
-  background-color: #F59B9B;
+  background-color: #F6ACAC;
 }
 
 .selected, .selected:hover {

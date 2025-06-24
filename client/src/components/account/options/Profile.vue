@@ -135,6 +135,7 @@ export default {
   },
   watch: {
     bio() {
+      console.log("Bio")
       if (this.bio !== this.$store.state.account.bio) {
         this.$refs.saveBio.style.opacity = "1";
       } else {
