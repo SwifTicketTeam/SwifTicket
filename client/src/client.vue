@@ -17,7 +17,6 @@ export default {
 
 #client {
   height: 100%;
-  background: linear-gradient(to right, #DFDFDE, #F5EDDC);
 }
 
 </style>
@@ -65,10 +64,10 @@ html::-webkit-scrollbar {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
 }
 .fade-enter, .fade-leave-to {
-  opacity: 0.2;
+  opacity: 0.1;
 }
 
 </style>

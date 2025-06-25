@@ -131,16 +131,50 @@
     "poster": "server/storage/images/movieid123.jpg"
   }
 ]</pre>
+
+    <h3>12. Add to Favorites</h3>
+    <p><strong>POST</strong> <code>/api/events/movies/favorites</code></p>
+    <p><strong>Request Body:</strong></p>
+    <pre><code>{
+  "userId": "user_id_here",
+  "movieId": "movie_id_here"
+}</code></pre>
+    <p><strong>Response:</strong></p>
+    <pre><code>{
+  "message": "Event Added to Favorites"
+}</code></pre>
+
+    <h3>13. Get Favorite Movies</h3>
+    <p><strong>POST</strong> <code>/api/account/favorites</code></p>
+    <p><strong>Request Body:</strong></p>
+    <pre><code>{
+  "userId": "user_id_here"
+}</code></pre>
+    <p><strong>Response:</strong> Returns an array of movie objects:</p>
+    <pre><code>[
+  {
+    "_id": "6859a80fba86f37d59551264",
+    "title": "Spider-Man: No Way Home",
+    "overview": "Peter Parker is unmasked and no longer able to separate his normal life...",
+    "genres": ["Action", "Adventure", "Science Fiction"],
+    "rating": 8.3,
+    "language": "English",
+    "release": "2021-12-15T00:00:00.000Z",
+    "poster": "../../swifticket-storage/images/movies/6859a80fba86f37d59551264.jpg",
+    "__v": 0
+  }
+]</code></pre>
+
 </section>
 
 <section>
     <h2>Miscellaneous</h2>
 
-    <h3>11. API Landing Page</h3>
+    <h3>13. API Landing Page</h3>
     <p><strong>GET</strong> <code>/api</code></p>
     <p>Returns this documentation</p>
 
-    <h3>12. Server Root</h3>
+    <h3>14. Server Root</h3>
     <p><strong>GET</strong> <code>/</code></p>
     <p>Displays server status or homepage</p>
 </section>

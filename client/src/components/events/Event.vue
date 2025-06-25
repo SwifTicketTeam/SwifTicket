@@ -3,18 +3,16 @@
     <div>
       <div id = "mini-header">
         <button @click = "eventClicked" id = "back">BACK</button>
-        <button id = "fav"></button>
       </div>
     </div>
     <div id = "section">
-      <img :src = "'http://localhost:3000/storage/images/' + (evt._id) + '.jpg'">
+      <img :src = "`${storageUrl}/${evt._id}.jpg`">
       <div id = "info">
-        <div>
-          <h1>{{evt.title.toUpperCase()}}</h1>
+        <div class = "mini-section">
+          <h1 id = "title">{{evt.title.toUpperCase()}}</h1>
+          <button id = "fav" @click = "addFavorites"></button>
         </div>
-        <div>
-          <p>{{evt.overview}}</p>
-        </div>
+        <p>{{evt.overview}}</p>
         <br>
         <div>
           <p>GENRES: </p>
@@ -28,7 +26,7 @@
         </div>
         <div class = "line-box last">
           <p>RATING : {{evt.rating}} / 10</p>
-          <button class = "no-select">BOOK NOW</button>
+          <button class = "no-select" @click = "book">BOOK NOW</button>
         </div>
       </div>
     </div>
@@ -37,11 +35,17 @@
 
 <script>
 import {eventBus} from "@/main";
+import axios from "axios";
 
 export default {
   name: "EventInfo",
   props: {
     evt: Object,
+  },
+  data() {
+    return {
+      storageUrl: process.env.VUE_APP_STORAGE_URL,
+    }
   },
   methods: {
     eventClicked() {
@@ -49,6 +53,20 @@ export default {
     },
     getDate(date) {
       return `${date.getDate().toString().padStart(2, '0')} - ${String(date.getMonth() + 1).padStart(2, '0')} - ${date.getFullYear()}`;
+    },
+    book() {
+      sessionStorage.setItem("event", JSON.stringify(this.evt));
+      this.$router.push("/booking");
+    },
+    addFavorites() {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/events/movies/favorites`, {
+        userId: this.$store.state.auth.UID,
+        movieId: this.evt._id,
+      }).then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   },
 };
@@ -78,9 +96,21 @@ export default {
 #section {
   display: flex;
   flex-direction: row;
-  border: 0.02rem solid black;
-  margin: 0 1rem;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+  margin: 1rem;
   border-radius: 2rem;
+  padding: 1.1rem;
+}
+
+.mini-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+#title {
+  margin: 0 auto;
 }
 
 #fav {
@@ -91,15 +121,16 @@ button {
   height: 3rem;
   padding: 0 1.5rem;
   text-wrap: nowrap;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-family: 'Poppins', sans-serif;
   background-color: #FFD586;
   border-radius: 0.6rem;
-  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.1rem solid black;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.02rem rgba(0, 0, 0, 0.2);
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s ease,
   border-radius 0.3s ease;
+  opacity: 0.85;
 }
 
 button:hover {
@@ -108,10 +139,11 @@ button:hover {
 }
 
 img {
-  margin: 1rem;
-  width: 30%;
+  margin: 1rem 2rem 1rem 1rem;
+  width: 25%;
   border-radius: 1.2rem;
-  border: 0.25rem solid black;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.25rem rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }
 
 #info {
@@ -120,11 +152,14 @@ img {
 
 h1{
   text-align: center;
+  opacity: 0.85;
 }
 
 p, li {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  opacity: 0.85;
 }
+
 
 .line-box {
   display: flex;

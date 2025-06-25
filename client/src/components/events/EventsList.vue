@@ -4,6 +4,7 @@
     <div id = "list">
       <EventCard v-for = "(event, index) in events" :key = "index" :event = "event"></EventCard>
     </div>
+    <h1 v-if = "isNoResults">NO MOVIES FOUND</h1>
   </div>
 </template>
 
@@ -20,11 +21,15 @@ export default{
   data() {
     return{
       events: {},
+      isNoResults: false,
     }
   },
   methods: {
     getMovies(movies) {
       this.events = movies
+      if (!Object.keys(this.events).length) {
+        this.isNoResults = true;
+      }
     }
   }
 }
@@ -33,9 +38,10 @@ export default{
 <style scoped>
 
 #box {
-  margin-top: 12vh;
+  margin-top: 15vh;
   padding: 1rem;
   width: 100%;
+  overflow: hidden;
 }
 
 #list {
@@ -45,6 +51,13 @@ export default{
   flex-wrap: wrap;
   width: 100%;
   height: auto;
+  margin-left: 0.5rem;
+}
+
+h1 {
+  font-size: 5rem;
+  text-align: center;
+  font-weight: normal;
 }
 
 </style>

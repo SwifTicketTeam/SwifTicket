@@ -1,110 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>SwifTicket – Universal Ticketing Platform</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 960px;
-            margin: auto;
-            padding: 2rem;
-            line-height: 1.6;
-        }
-        h1, h2 {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4px;
-        }
-        ul {
-            padding-left: 1.25rem;
-        }
-        code {
-            background: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-
 <h1>SwifTicket – Universal Ticketing Platform</h1>
+<p>SwifTicket is a full-stack universal ticket booking platform developed using Vue.js, Node.js, and MongoDB. It provides seamless user authentication, profile management, event browsing, and movie discovery features. The platform is backed by a real-world movie dataset and optimized for responsiveness with debounced search, genre filtering, and dynamic routing.</p>
 
-<p>
-    SwifTicket is a full-stack universal ticket booking platform developed using Vue.js, Node.js, and MongoDB.
-    It provides seamless user authentication, profile management, event browsing, and movie discovery features.
-    The platform is backed by a real-world movie dataset and optimized for responsiveness with debounced search,
-    genre filtering, and dynamic routing.
-</p>
+<hr>
 
-<hr />
+<h2>Project Roadmap</h2>
+<ul>
+    <li>Phase 1: Frontend Development</li>
+    <li>Phase 2: Backend and API Integration</li>
+    <li>Phase 3: Authentication and Database</li>
+    <li>Phase 4: Session and Email Support</li>
+    <li>Phase 5: Events UI and Session Handling</li>
+    <li>Phase 6: Account Section and Movie Routing</li>
+    <li>Phase 6 Extended: Persistent Storage & Docs</li>
+    <li>Phase 7: Profile and Movie Dataset</li>
+    <li>Phase 8: Search and Filtering</li>
+    <li>Phase 9: UI Overhaul and Favorites System
+    </li>
+</ul>
+
+<hr>
 
 <h2>Project Overview</h2>
 
 <h3>Frontend Features</h3>
 <ul>
-    <li>Responsive user interfaces for login, registration, dashboard, and profile</li>
+    <li>Redesigned UI layout and navigation structure</li>
+    <li>Responsive interfaces for login, registration, dashboard, and profile</li>
     <li>Dynamic routing with route guards and animated page transitions</li>
-    <li>Global state management using Vuex for authentication and session persistence</li>
-    <li>Organized multi-page structure: <code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/reset-password</code>, and more</li>
-    <li>Editable profile section with support for profile image uploads, bio, username updates, and logout</li>
+    <li>Vuex-based state management for auth and session persistence</li>
+    <li>Multi-page structure: <code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/reset-password</code></li>
+    <li>Editable user profile with image uploads, bio, and username update</li>
+    <li>Favorites system for bookmarking movies and fetching favorites</li>
 </ul>
 
 <h3>Backend & API Features</h3>
 <ul>
-    <li>Modular Express server handling authentication, user data, and image uploads</li>
-    <li>MongoDB integration using Mongoose with well-defined schemas and validations</li>
-    <li>Defined initial <strong>Theatre Schema</strong> to model screens and seat layout</li>
-    <li>JWT-based authentication system for secure session handling</li>
-    <li>Integrated email verification and password reset flows using Nodemailer</li>
-    <li>Persistent image uploads with static serving for profile pictures and movie posters</li>
-    <li>API documentation route providing details of all available endpoints</li>
+    <li>Modular Express server for auth, users, uploads, and favorites</li>
+    <li>MongoDB with Mongoose schema validation</li>
+    <li>JWT-based authentication for secure session handling</li>
+    <li>Email verification and password reset via Nodemailer</li>
+    <li>Static file handling for profile and movie posters</li>
+    <li>Favorites endpoint to fetch saved movies</li>
 </ul>
 
 <h3>Events & Movies Section</h3>
 <ul>
-    <li>Linked real-world movie dataset (9,800+ movies) to events system</li>
-    <li>Posters downloaded and stored locally with reference mapping in MongoDB</li>
-    <li>Live search bar with debounced input to reduce request load</li>
-    <li>Multi-select genre filter system to refine movie listings</li>
-    <li>Dedicated dynamic pages for each movie with routing and placeholder actions</li>
+    <li>Integrated with 9,800+ real-world movie entries</li>
+    <li>Posters stored locally and linked in MongoDB</li>
+    <li>Debounced search bar to reduce backend load</li>
+    <li>Genre-based multi-select filtering</li>
+    <li>Dynamic route rendering for individual movie pages</li>
 </ul>
 
 <h3>User Experience & Design</h3>
 <ul>
-    <li>Clean, modern UI with transition animations</li>
-    <li>Conditional UI behavior based on user roles (User or Vendor)</li>
-    <li>Modular component design and organized folder structure for maintainability</li>
+    <li>Updated UI with modern layout and logo</li>
+    <li>“My Account” replaced with profile icon</li>
+    <li>Favorites tab added under account section</li>
+    <li>Role-based UI rendering for User and Vendor</li>
 </ul>
 
-<hr />
+<hr>
 
 <h2>Tech Stack</h2>
-
-<h4>Frontend</h4>
 <ul>
-    <li>Vue.js 2</li>
-    <li>Vuex (State Management)</li>
-    <li>Vue Router</li>
-    <li>Axios</li>
+    <li><strong>Frontend:</strong> Vue.js 2, Vuex, Vue Router, Axios</li>
+    <li><strong>Backend:</strong> Node.js, Express.js, Mongoose</li>
+    <li><strong>Database:</strong> MongoDB Atlas / Compass</li>
+    <li><strong>Testing:</strong> Postman</li>
 </ul>
-
-<h4>Backend</h4>
-<ul>
-    <li>Node.js</li>
-    <li>Express.js</li>
-    <li>Mongoose</li>
-</ul>
-
-<h4>Database</h4>
-<ul>
-    <li>MongoDB Compass</li>
-</ul>
-
-<h4>Testing</h4>
-<ul>
-    <li>Postman (Manual API Testing)</li>
-</ul>
-
-</body>
-</html>

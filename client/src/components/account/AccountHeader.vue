@@ -14,7 +14,7 @@ export default{
   },
   methods: {
     home() {
-      this.$router.push("/home");
+      this.$router.push("/events");
     },
   }
 }
@@ -26,11 +26,22 @@ export default{
 
 img {
   padding-top: 0.5rem;
-  padding-left: 1rem;
-  width: min(12%, 21vh);
+  padding-left: 2rem;
+  width: min(16%, 14vw);
   height: auto;
   margin-right: 1rem;
   cursor: pointer;
+}
+
+button {
+  width: 6%;
+  height: 35%;
+  font-size: 1.2rem;
+  margin: 0 2rem 0 0;
+}
+
+button:hover {
+  border-radius: 1rem;
 }
 
 </style>

@@ -3,8 +3,10 @@
 All endpoints are prefixed with:
 
 ```
+
 http://localhost:3000
-```
+
+````
 
 ---
 
@@ -22,7 +24,7 @@ http://localhost:3000
   "email": "john@example.com",
   "password": "your_password"
 }
-```
+````
 
 ---
 
@@ -133,6 +135,7 @@ Authorization: Bearer <token>
 ### 8. Get Profile Photo
 
 **GET** `/api/uploads/images/users/:userid`
+
 **Response:**
 Returns the profile photo as an image blob (`image/*` MIME type)
 
@@ -205,9 +208,66 @@ Returns the profile photo as an image blob (`image/*` MIME type)
 
 ---
 
+### 11. Add to Favorites
+
+**POST** `/api/events/movies/favorites`
+
+**Request Body:**
+
+```json
+{
+  "userId": "user_id_here",
+  "movieId": "movie_id_here"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Event Added to Favorites"
+}
+```
+
+---
+
+### 12. Get Favorite Movies
+
+**POST** `/api/account/favorites`
+
+**Request Body:**
+
+```json
+{
+  "userId": "user_id_here"
+}
+```
+
+**Response:**
+
+Returns an array of movie objects:
+
+```json
+[
+  {
+    "_id": "6859a80fba86f37d59551264",
+    "title": "Spider-Man: No Way Home",
+    "overview": "Peter Parker is unmasked and no longer able to separate his normal life...",
+    "genres": ["Action", "Adventure", "Science Fiction"],
+    "rating": 8.3,
+    "language": "English",
+    "release": "2021-12-15T00:00:00.000Z",
+    "poster": "../../swifticket-storage/images/movies/6859a80fba86f37d59551264.jpg",
+    "__v": 0
+  }
+]
+```
+
+---
+
 ## Miscellaneous
 
-### 11. API Landing Page
+### 13. API Landing Page
 
 **GET** `/api`
 
@@ -216,7 +276,7 @@ Returns the API documentation as Markdown or HTML
 
 ---
 
-### 12. Server Root
+### 14. Server Root
 
 **GET** `/`
 

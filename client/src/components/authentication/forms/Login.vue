@@ -45,7 +45,7 @@ export default {
       }).then(res => {
         this.isWarning = false;
         this.$store.dispatch("auth/saveToken", res.data.token);
-        this.$router.push("/home");
+        this.$router.push("/events");
       }).catch(err => {
         this.warning = err.response.data.message;
         this.isWarning = true;
@@ -65,7 +65,7 @@ a {
   width: 90%;
   padding-right: 1rem;
   text-align: right;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   cursor: pointer;
 }
 

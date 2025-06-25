@@ -1,14 +1,13 @@
 <template>
   <div @click = "eventClicked" id = "card">
     <transition name = "fade">
-      <img v-show = "showImage" :src = "'http://localhost:3000/storage/images/' + currentID + '.jpg'">
+      <img v-show = "showImage" :src = "`${storageUrl}/${currentID}.jpg`">
     </transition>
     <div>
       <div class = "box">
-        <p>{{ event.title}}</p>
+        <p id = "rating">{{(event.rating) ? event.rating : "NaN"}} / 10</p>
         <p>{{event.language}}</p>
       </div>
-      <p id = "rating">{{event.rating}} / 10</p>
     </div>
   </div>
 </template>
@@ -25,6 +24,7 @@ export default{
     return {
       currentID: this.event._id,
       showImage: true,
+      storageUrl: process.env.VUE_APP_STORAGE_URL,
     }
   },
   methods: {
@@ -38,7 +38,7 @@ export default{
       setTimeout(() => {
         this.currentID = event._id;
         this.showImage = true;
-      }, 300);
+      }, 400);
     }
   }
 }
@@ -51,11 +51,19 @@ export default{
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 18.3%;
+  width: 15%;
   height: auto;
   margin: 1.2rem 0;
   border-radius: 1.5rem;
+  box-shadow: 0.05rem 0.05rem 0.2rem 0.01rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: box-shadow 1s ease,
+              transform 0.5s ease;
+}
+
+#card:hover {
+  transform: translateY(-3%) scale(102%);
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.05rem rgba(0, 0, 0, 0.45);
 }
 
 div {
@@ -66,25 +74,26 @@ div {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 50%;
+  height: 55%;
   justify-content: space-between;
 }
 
 img {
   width: 100%;
-  border-radius: 1.5rem;
+  border-radius: 1.5rem 1.5rem 0 0;
 }
 
 #rating {
-  background-color: #CBCBCB;
-  width: 20%;
+  width: 25%;
+  height: 80%;
   border-radius: 1rem;
   text-align: center;
 }
 
 p {
-  padding: 0 1rem;
-  font-size: 1.1rem;
+  padding: 0 0.8rem;
+  font-size: 1rem;
+  text-wrap: nowrap;
 }
 
 </style>

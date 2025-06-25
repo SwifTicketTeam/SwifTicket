@@ -1,11 +1,11 @@
 <template>
   <div id = "auth">
+    <CardView @isUserTypeChanged = "changeUserType"></CardView>
     <transition name = "fade" mode = "out-in">
       <keep-alive>
         <component :is = "authMode" @isUserTypeChanged = "changeUserType"></component>
       </keep-alive>
     </transition>
-    <CardView @isUserTypeChanged = "changeUserType"></CardView>
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default{
   },
   created() {
     if (this.$store.getters['auth/isAuthenticated']) {
-      this.$router.push("/home");
+      this.$router.push("/events");
     }
   },
 };

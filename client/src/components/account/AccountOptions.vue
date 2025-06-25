@@ -60,11 +60,11 @@ li {
 }
 
 li:hover {
-  background-color: #CCC;
+  background-color: #EEE;
 }
 
 .selected, .selected:hover {
-  background-color: #BBB;
+  background-color: #DDD;
   border-radius: 3rem;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
 }

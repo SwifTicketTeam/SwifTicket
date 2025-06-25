@@ -1,4 +1,5 @@
 const Movie = require('../models/Movie')
+const UserDetails = require('../models/UserDetails')
 
 // Get Movies
 module.exports.getMovies = async (req, res) => {
@@ -36,6 +37,52 @@ module.exports.getMovies = async (req, res) => {
     } catch(err) {
         return res.status(400).send({
             message: "Invalid Queries!"
+        })
+    }
+}
+
+// Add to Favorites
+module.exports.addFavorites = async (req, res) => {
+    try {
+        const {userId, movieId} = req.body;
+        const userDetail = await UserDetails.updateOne({_id: userId}, {
+            $push: {movieFavorites: movieId}
+        });
+        if (!userDetail.matchedCount) {
+            return res.status(400).send({
+                message: "Invalid User or Movie ID"
+            })
+        } else {
+            return res.status(200).send({
+                message: `Event Added to Favorites`
+            })
+        }
+    } catch (err) {
+        return res.status(400).send({
+            message: "Invalid User or Movie ID"
+        })
+    }
+}
+
+// Get Favorites
+module.exports.getFavorites = async (req, res) => {
+    try {
+        const {userId} = req.body;
+        const userDetail = await UserDetails.find({_id: userId}).populate("movieFavorites")
+        if (!userDetail.length) {
+            return res.status(400).send({
+                message: "Invalid User or Movie ID"
+            })
+        } else {
+            return res.status(200).send({
+                message: `Ticket Added to Favorites`,
+                events: userDetail[0].movieFavorites,
+            })
+        }
+
+    } catch (err) {
+        return res.status(400).send({
+            message: "Invalid User ID"
         })
     }
 }

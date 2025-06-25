@@ -23,7 +23,7 @@ All notable changes to this project are documented here.
 ### Phase 2 – API Testing and Backend Server Integration
 
 - Developed backend with Node.js and Express.js
-- Connected frontend using Axios for `/` and `/home` routes
+- Connected frontend using Axios for `/` and `/events` routes
 - Integrated Postman for API testing using real server endpoints
 - Removed mock API; tested with actual backend functionality
 - Configured MongoDB Atlas with Mongoose
@@ -160,4 +160,16 @@ All notable changes to this project are documented here.
 - Added initial **Theatre Schema** to support scalable layout and screen mapping
   - Basic layout with rows and seat types
   - Simplified structure for testing and future seat selection logic
+---
+
+## [v0.2] – June 25, 2025
+
+### Phase 9 – UI Overhaul and Favorites System
+
+- Overhauled the UI with refreshed styling and a new logo
+- Replaced the "My Account" button with a profile icon
+- Removed "Virtual" genre from movie filters for a cleaner experience
+- Enabled favorite selection on movie cards
+- Added a new **Favorites** tab under the Account section
+  - Favorites are **fetched on open** but not rendered in the UI yet
 ---

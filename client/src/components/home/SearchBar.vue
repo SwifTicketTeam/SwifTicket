@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <input type = "text" v-model = "search" placeholder = "SwifTicket it — Your Ticket to fun starts here!">
-    <button v-for = "(genre, index) in genres" :key = "index" @click = "selectGenre(genre)" :class = "{selected : selectedGenres.includes(genre)}">{{genre}}</button>
+  <div id = "component">
+    <input type = "text" v-model = "search" placeholder = "SwifTicket it —> Your Ticket to fun starts here!">
+    <div id = "genres">
+      <button v-for = "(genre, index) in genres" :key = "index" @click = "selectGenre(genre)" :class = "{selected : selectedGenres.includes(genre)}">{{genre}}</button>
+    </div>
   </div>
 </template>
 
@@ -14,7 +16,7 @@ export default {
   data() {
     return {
       search: "",
-      genres: ["Action", "Comedy", "Romance", "Sci-Fi", "Horror", "Crime", "Drama", "Family"],
+      genres: ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Fantasy", "Family", "Horror", "History", "Music", "Mystery", "Romance", "Sci-Fi", "Thriller", "TV Show", "War", "Western"],
       selectedGenres: [],
     }
   },
@@ -47,21 +49,35 @@ export default {
 
 <style scoped>
 
-div {
+#component {
+  display: flex;
+  flex-direction: column;
+}
+
+#genres {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  width: 90%;
+  margin: 2rem 0 1.5rem 0;
+  overflow-x: auto;
+  align-self: center;
+}
+
+#genres::-webkit-scrollbar {
+  display: none;
 }
 
 input {
-  border-radius: 1.5rem;
-  width: 50%;
-  height: 3.5rem;
+  border-radius: 3rem;
+  width: 30%;
+  height: 3rem;
   padding: 0 1rem;
-  font-size: 1.4rem;
-  font-family: 'Lora', serif;
-  background-color: #EFEFEF;
-  border: 0.15rem solid black;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  font-family: 'Poppins', serif;
+  box-shadow: -0.01rem 0.01rem 0.1rem 0.03rem rgba(0, 0, 0, 0.25);
+  border: 0.01rem solid #000;
+  align-self: flex-end;
 }
 
 input:focus {
@@ -72,31 +88,27 @@ input:focus {
 button {
   width: auto;
   height: 80%;
-  padding: 0.5rem 1.5rem;
-  margin: 0 0.5rem;
+  padding: 0.5rem 1.3rem;
+  margin: 0.5rem 1.3rem 0 0;
   text-wrap: nowrap;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-family: 'Poppins', sans-serif;
-  background-color: #FFD586;
-  border-radius: 0.8rem;
-  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.1rem solid black;
+  background-color: inherit;
+  border-radius: 0.4rem;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease,
-  border-radius 0.3s ease;
+  transition: background-color 0.5s ease,
+  border-radius 0.5s ease;
 }
 
 button:hover {
+  background-color: rgba(255, 201, 77, 0.7);
+  border-radius: 1rem;
+}
+
+.selected, .selected:hover {
   background-color: #FFC94D;
-  border-radius: 2rem;
-}
-
-.selected {
-  background-color: #FF9898;
-}
-
-.selected:hover {
-  background-color: #FF9898;
+  border-radius: 1rem;
 }
 
 </style>

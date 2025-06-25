@@ -1,9 +1,8 @@
 <template>
   <div id = "card">
     <img src = "../../assets/swifticket-logo.png" class = "no-select">
-    <p>Welcome to <strong>SwifTicket</strong> — your all-in-one platform for discovering, booking, and managing tickets to the events you love. Whether it’s a blockbuster movie, a local concert, a live sports match, or a weekend workshop, SwifTicket brings them all to your fingertips with speed and simplicity. Join thousands of users who trust us for a smoother, faster, and smarter ticketing experience.</p>
     <h3>{{ (isNewUser) ? 'Already have a SwifTicket account? Log in to continue booking your favorite events.' : 'New to SwifTicket? Create an account to start your event journey.' }}</h3>
-    <button @click.stop = "isUserTypeChanged" class = "no-select">{{ (isNewUser) ? 'Log In' : 'Register Now' }}</button>
+    <button @click.stop = "isUserTypeChanged" class = "no-select">{{ (isNewUser) ? 'LOG IN' : 'REGISTER NOW' }}</button>
   </div>
 </template>
 
@@ -35,12 +34,11 @@ export default {
   justify-content: center;
   text-align: center;
   width: 48%;
-  height: 95%;
-  margin: 0 1rem;
-  background: linear-gradient(#CFD2CF, #FA9494);
-  box-shadow: -0.75rem 0.5rem 0.8rem 0.05rem rgba(0, 0, 0, 0.25);
+  height: 90%;
+  margin: 0 3rem;
+  background-color: #FFF;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
   border-radius: 2rem;
-  border: 0.15rem solid black;
 }
 
 img {
@@ -53,19 +51,21 @@ h3 {
 }
 
 h3, p {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
+  font-weight: normal;
+  margin-bottom: 5rem;
   padding: 0 1.5rem 1rem 1.5rem;
 }
 
 button {
-  width: 20%;
-  height: 6%;
-  font-size: 1.2rem;
+  width: 25%;
+  height: 7%;
+  font-size: 1.3rem;
   font-family: 'Poppins', sans-serif;
-  background-color: #FFD586;
+  background-color: rgba(240, 128, 128, 0.55);
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border-radius: 0.8rem;
-  border: 0.1rem solid black;
+  border-radius: 0.6rem;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s ease,
               border-radius 0.3s ease;

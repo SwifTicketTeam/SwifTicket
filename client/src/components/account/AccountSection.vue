@@ -9,13 +9,15 @@ import {eventBus} from "@/main";
 import Profile from "./options/Profile.vue"
 import MyTickets from "./options/MyTickets.vue"
 import Security from "./options/Security.vue"
+import Favorites from "./options/Favorites.vue"
 
 export default {
   name: "AccountSection",
   components: {
     Profile,
     MyTickets,
-    Security
+    Security,
+    Favorites,
   },
   data() {
     return {

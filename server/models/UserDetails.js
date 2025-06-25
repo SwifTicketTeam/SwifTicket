@@ -11,12 +11,12 @@ const userDetailSchema = new Schema({
         type: String,
         default: '',
     },
-    tickets: {
-        type: [{type: Schema.Types.ObjectId, ref: "swifticket-events"}],
+    movieTickets: {
+        type: [{type: Schema.Types.ObjectId, ref: "Movie"}],
         default: [],
     },
-    favorites: {
-        type: [{type: Schema.Types.ObjectId, ref: "swifticket-events"}],
+    movieFavorites: {
+        type: [{type: Schema.Types.ObjectId, ref: "Movie"}],
         default: [],
     }
 })

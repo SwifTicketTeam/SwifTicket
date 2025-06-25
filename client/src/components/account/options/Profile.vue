@@ -135,7 +135,6 @@ export default {
   },
   watch: {
     bio() {
-      console.log("Bio")
       if (this.bio !== this.$store.state.account.bio) {
         this.$refs.saveBio.style.opacity = "1";
       } else {
@@ -179,7 +178,7 @@ p {
   flex-direction: column;
   width: 50%;
   height: 85%;
-  margin-left: 2rem;
+  margin: 0 auto;
 }
 
 #bio span {
@@ -191,12 +190,12 @@ p {
   font-size: 1.2rem;
   font-family: 'Poppins', sans-serif;
   padding: 2.5%;
-  background-color: #EEE;
+  background-color: #FFF;
   width: 94%;
   height: 10.5rem;
   border: none;
-  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border-radius: 0.8rem;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.01rem rgba(0, 0, 0, 0.2);
+  border-radius: 0.6rem;
   resize: none;
 }
 
@@ -210,8 +209,8 @@ p {
 
 #bioButton {
   opacity: 0;
-  width: 21.6%;
-  height: 13%;
+  width: 19%;
+  height: 14%;
   margin: 0 0 4.2rem 0;
   align-self: flex-end;
 }
@@ -256,22 +255,30 @@ img {
 }
 
 .fields label {
-  width: 22.4%;
+  width: 23.2%;
 }
 
 .field {
   width: 48.8%;
   height: 3.25rem;
   margin: 0 0.5rem;
-  background-color: #EEE;
+  background-color: #FFF;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.01rem rgba(0, 0, 0, 0.2);
 }
 
 button {
-  margin: 0.2rem 0;
-  width: 23%;
-  height: auto;
-  transition: border-radius 0.25s ease,
+  margin: 0;
+  font-size: 1.3rem;
+  width: 20%;
+  height: 100%;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.01rem rgba(0, 0, 0, 0.2);
+  transition: border-radius 0.5s ease,
+              background-color 0.5s ease,
               opacity 0.5s ease;
+}
+
+button:hover {
+  border-radius: 1.2rem;
 }
 
 </style>
