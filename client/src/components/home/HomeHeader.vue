@@ -1,7 +1,7 @@
 <template>
   <header>
     <div>
-      <img src = "../../assets/swifticket-logo.png" class = "no-select">
+      <img src = "../../assets/swifticket-logo.png" class = "no-select" @click = "toHome">
       <ul>
         <li @click = "selectTicketClass(ticketClass)" v-for = "(ticketClass, index) in ticketClasses" :key = "index" :class = "{selected : selectedTicketClass === ticketClass}" class = "no-select">{{ ticketClass }}</li>
       </ul>
@@ -24,13 +24,18 @@ export default{
       this.$router.push("/account");
     },
     selectTicketClass(ticketClass) {
-      this.selectedTicketClass = ticketClass;
+      if (ticketClass !== this.selectedTicketClass) this.selectedTicketClass = ticketClass;
+      this.toHome();
+    },
+    toHome() {
+      if(this.$route.path !== "/events") this.$router.push("/events");
     }
   }
 }
 </script>
 
 <style src = "../../styles/headers.css" scoped></style>
+<style scoped src = "../../styles/button.css"></style>
 
 <style scoped>
 

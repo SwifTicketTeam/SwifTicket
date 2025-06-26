@@ -11,13 +11,19 @@ const userDetailSchema = new Schema({
         type: String,
         default: '',
     },
-    movieTickets: {
-        type: [{type: Schema.Types.ObjectId, ref: "Movie"}],
-        default: [],
+    tickets: {
+        movies: [{
+            type: Schema.Types.ObjectId,
+            ref: "Movie",
+            default: []
+        }]
     },
-    movieFavorites: {
-        type: [{type: Schema.Types.ObjectId, ref: "Movie"}],
-        default: [],
+    favorites: {
+        movies: [{
+            type: Schema.Types.ObjectId,
+            ref: "Movie",
+            default: []
+        }]
     }
 })
 

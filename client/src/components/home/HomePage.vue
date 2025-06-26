@@ -32,10 +32,18 @@ export default{
     if (!this.$store.getters['auth/isAuthenticated']) {
       this.$router.push("/");
     }
-    eventBus.$on("eventClicked", (evt) => {
-      this.isComponent = (this.isComponent === "EventsList") ? "Event" : "EventsList";
+    eventBus.$on("backClicked", (evt) => {
+      this.isComponent = "EventsList";
       this.evt = evt
     });
+    eventBus.$on("toFavorites", (evt) => {
+      this.isComponent = "Event";
+      this.evt = evt
+    });
+    eventBus.$on("toEvents", (evt) => {
+      this.isComponent = "Event";
+      this.evt = evt
+    })
   },
 };
 

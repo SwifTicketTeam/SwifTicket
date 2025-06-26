@@ -1,1 +1,0 @@
-const cities = ["Chennai", "Mumbai"]

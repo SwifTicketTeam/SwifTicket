@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style src = "../../../styles/forms.css" scoped></style>
+<style scoped src = "../../../styles/button.css"></style>
 
 <style scoped>
 

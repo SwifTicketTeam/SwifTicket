@@ -13,7 +13,7 @@ export default{
   name: "AccountOptions",
   data() {
     return {
-      options: ["Profile", "My Tickets", "Favorites", "Transaction History", "Security"],
+      options: ["Profile", "My Tickets", "My Favorites", "Transaction History", "Security"],
       selectedOption: "Profile",
     }
   },
@@ -27,7 +27,7 @@ export default{
   methods: {
     selectOption(option) {
       this.selectedOption = option;
-      eventBus.$emit("select-option", option);
+      eventBus.$emit("select-option", option.split(' ')[option.split(' ').length - 1]);
     }
   }
 };

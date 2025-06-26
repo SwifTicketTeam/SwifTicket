@@ -1,20 +1,55 @@
-# SwifTicket API – Official Documentation
-
-All endpoints are prefixed with:
-
-```
-
-http://localhost:3000
-
-````
+# SwifTicket API Documentation
 
 ---
 
-## Authentication & Session Routes
+## API Routes
 
-### 1. Register a New User
+``` 
 
-**POST** `/api/auth/register`
+GET     /                                 → Server root
+GET     /api                              → API landing/documentation page
+
+POST    /api/auth/register                → Register new user
+POST    /api/auth/login                   → Login
+GET     /api/auth/verified                → Verify email by token
+POST    /api/auth/forgot-password         → Request password reset
+POST    /api/auth/reset-password          → Reset password
+POST    /api/auth/jwt                     → Validate JWT session
+
+POST    /api/uploads/images/users/\\:userid → Upload profile photo of user
+GET     /api/uploads/images/users/\\:userid → Fetch profile photo of user
+PUT     /api/account/users/:userid        → Modify user information
+
+GET     /api/events/movies                → Retrieve list of movies
+POST    /api/account/favorites            → Retrieve list of favorite movies
+POST    /api/events/movies/users/favorites → Check if movie is in favorites
+PUT     /api/events/movies/users/favorites → Add/Remove movie from favorites
+
+```
+
+---
+## API Endpoint Documentation
+
+---
+### Root
+
+### GET `/`
+
+Returns the server status or welcome message.
+
+---
+### API Landing
+
+### GET `/api`
+
+Returns the API landing documentation in Markdown or HTML format.
+
+---
+## Authentication
+
+### POST `/api/auth/register`
+
+Registers a new user.
 
 **Request Body:**
 
@@ -24,44 +59,37 @@ http://localhost:3000
   "email": "john@example.com",
   "password": "your_password"
 }
-````
+```
 
 ---
+### POST `/api/auth/login`
 
-### 2. Login
-
-**POST** `/api/auth/login`
+Logs in the user.
 
 **Request Body:**
 
 ```json
 {
-  "email": "john@example.com",
-  "password": "your_password"
+"email": "john@example.com",
+"password": "your_password"
 }
 ```
-
 ---
 
-### 3. Email Verification
+### GET `/api/auth/verified`
 
-**GET** `/api/auth/verified`
-**Headers:**
-
-```
-Authorization: Bearer <token>
-```
+Verifies email with token.
 
 **Behavior:**
 
-* Redirects to login page if token is valid and verified
-* Redirects to verification error page if token is invalid or expired
+* Redirects to login if token is valid and verified
+* Redirects to error page if token is invalid or expired
 
 ---
 
-### 4. Forgot Password
+### POST `/api/auth/forgot-password`
 
-**POST** `/api/auth/forgot-password`
+Triggers password reset by email.
 
 **Request Body:**
 
@@ -73,9 +101,9 @@ Authorization: Bearer <token>
 
 ---
 
-### 5. Reset Password
+### POST `/api/auth/reset-password`
 
-**POST** `/api/auth/reset-password`
+Resets password using supplied token.
 
 **Request Body:**
 
@@ -88,9 +116,9 @@ Authorization: Bearer <token>
 
 ---
 
-### 6. Session Verification
+### POST `/api/auth/jwt`
 
-**POST** `/api/auth/jwt`
+Verifies JWT token and provides user session information.
 
 **Request Body:**
 
@@ -103,23 +131,23 @@ Authorization: Bearer <token>
 **Response:**
 
 ```json
-{
-  "username": "john_doe",
+{"}
+"username": "john_doe",
   "email": "john@example.com",
   "role": "user"
 }
-```
 
 ---
 
-## User Profile & Account
+## Profile Photo
 
-### 7. Upload Profile Photo
+### POST `/api/uploads/images/users/:userid`
 
-**POST** `/api/uploads/images/users/:userid`
+Uploads a profile photo.
+
 **FormData:**
 
-* `userProfilePhoto`: image file (`.jpg`, `.jpeg`, `.png`)
+* `userProfilePhoto`: image file (.jpg, .jpeg, .png)
 * `token`: JWT token
 
 **Response:**
@@ -132,19 +160,19 @@ Authorization: Bearer <token>
 
 ---
 
-### 8. Get Profile Photo
+### GET `/api/uploads/images/users/:userid`
 
-**GET** `/api/uploads/images/users/:userid`
-
-**Response:**
-Returns the profile photo as an image blob (`image/*` MIME type)
+Retrieves the user's profile photo (image/* MIME type).
 
 ---
 
-### 9. Change User Details
+## Account Management
 
-**PUT** `/api/account/users/:userid`
-**Request Body (any or all fields optional):**
+### PUT `/api/account/users/:userid`
+
+Updates user details.
+
+**Request Body:**
 
 ```json
 {
@@ -153,11 +181,6 @@ Returns the profile photo as an image blob (`image/*` MIME type)
   "bio": "updated bio"
 }
 ```
-
-**Behavior:**
-
-* Only fields that differ from existing values are updated
-* If `email` is changed, a verification email is sent instead of immediate change
 
 **Response:**
 
@@ -169,48 +192,52 @@ Returns the profile photo as an image blob (`image/*` MIME type)
 
 ---
 
-## Events & Movie Search
+## Movie Listing
 
-### 10. Get Movie List
+### GET `/api/events/movies`
 
-**GET** `/api/events/movies`
+Returns a list of movies with optional filtering.
 
 **Query Parameters:**
 
-* `search`: optional string to match title (partial, case-insensitive)
-* `genre`: optional comma-separated genre string
+* `search`: optional title search string
+* `genre`: optional comma-separated list of genres
 
 **Example:**
 
 ```
-/api/events/movies?search=spider&genre=Action,Adventure
+/api/events/movies?search=batman&genre=Action,Adventure
+```
+
+---
+
+## Favorites System
+
+### POST `/api/account/favorites`
+
+Retrieves the list of a user's favorite movies.
+
+**Request Body:**
+
+```json
+{
+  "userId": "user_id_here"
+}
 ```
 
 **Response:**
 
 ```json
-[
-  {
-    "_id": "movieid123",
-    "title": "Spider-Man: No Way Home",
-    "genres": ["Action", "Adventure"],
-    "poster": "server/storage/images/movieid123.jpg"
-  },
-  ...
-]
+{
+  "message": "Ticket Added to Favorites"
+}
 ```
-
-**Behavior:**
-
-* Filters movies by title match and/or genre
-* Uses MongoDB for optimized query performance
-* Poster image path refers to static storage
 
 ---
 
-### 11. Add to Favorites
+### POST `/api/events/movies/users/favorites`
 
-**POST** `/api/events/movies/favorites`
+Determines if a movie is a favorite for a specific user.
 
 **Request Body:**
 
@@ -225,62 +252,31 @@ Returns the profile photo as an image blob (`image/*` MIME type)
 
 ```json
 {
-  "message": "Event Added to Favorites"
+  "isFavorite": true
 }
 ```
 
 ---
 
-### 12. Get Favorite Movies
+### PUT `/api/events/movies/users/favorites`
 
-**POST** `/api/account/favorites`
+Adds or removes a movie from a user's favorites.
 
 **Request Body:**
 
 ```json
 {
-  "userId": "user_id_here"
+  "userId": "user_id_here",
+  "movieId": "movie_id_here"
 }
 ```
 
 **Response:**
 
-Returns an array of movie objects:
-
 ```json
-[
-  {
-    "_id": "6859a80fba86f37d59551264",
-    "title": "Spider-Man: No Way Home",
-    "overview": "Peter Parker is unmasked and no longer able to separate his normal life...",
-    "genres": ["Action", "Adventure", "Science Fiction"],
-    "rating": 8.3,
-    "language": "English",
-    "release": "2021-12-15T00:00:00.000Z",
-    "poster": "../../swifticket-storage/images/movies/6859a80fba86f37d59551264.jpg",
-    "__v": 0
-  }
-]
+{
+  "message": "Event Updated to Favorites"
+}
 ```
-
----
-
-## Miscellaneous
-
-### 13. API Landing Page
-
-**GET** `/api`
-
-**Behavior:**
-Returns the API documentation as Markdown or HTML
-
----
-
-### 14. Server Root
-
-**GET** `/`
-
-**Behavior:**
-Returns server status or welcome message
 
 ---

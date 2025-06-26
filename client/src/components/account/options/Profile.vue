@@ -8,11 +8,6 @@
         </label>
         <p :class = "{isWarn : isWarn}">{{ warning }}</p>
       </div>
-      <div id = "bio">
-        <span class = "no-select">ABOUT ME</span>
-        <textarea v-model = "bio" spellcheck="false" autocomplete = "off"></textarea>
-      </div>
-      <button id = "bioButton" @click.prevent = "saveBio" ref = "saveBio" class = "no-select">SAVE BIO</button>
     </div>
     <div id = "about">
       <div class = "fields">
@@ -123,25 +118,7 @@ export default {
         this.$refs.email.readOnly = false;
       }
     },
-    saveBio() {
-      this.$store.dispatch("account/setBio", this.bio)
-      this.$refs.saveBio.style.opacity = "0";
-      axios.put(process.env.VUE_APP_SERVER + '/api/account/users/' + this.uID, {
-        bio: this.$store.state.account.bio,
-      }).then(() => {
-      }).catch(() => {
-      });
-    },
   },
-  watch: {
-    bio() {
-      if (this.bio !== this.$store.state.account.bio) {
-        this.$refs.saveBio.style.opacity = "1";
-      } else {
-        this.$refs.saveBio.style.opacity = "0";
-      }
-    }
-  }
 }
 </script>
 
@@ -158,6 +135,8 @@ export default {
 .first {
   display: flex;
   flex-direction: row;
+  width: 100%;
+  justify-content: center;
   align-items: center;
 }
 
@@ -171,48 +150,6 @@ p {
   height: 1rem;
   font-size: 1rem;
   justify-self: center;
-}
-
-#bio {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 85%;
-  margin: 0 auto;
-}
-
-#bio span {
-  margin: 0 0 0.5rem 0.05rem;
-  font-size: 1.6rem;
-}
-
-#bio textarea{
-  font-size: 1.2rem;
-  font-family: 'Poppins', sans-serif;
-  padding: 2.5%;
-  background-color: #FFF;
-  width: 94%;
-  height: 10.5rem;
-  border: none;
-  box-shadow: 0.01rem 0.01rem 0.5rem 0.01rem rgba(0, 0, 0, 0.2);
-  border-radius: 0.6rem;
-  resize: none;
-}
-
-#bio textarea:focus{
-  outline: none;
-}
-
-#bio textarea::-webkit-scrollbar {
-  display: none;
-}
-
-#bioButton {
-  opacity: 0;
-  width: 19%;
-  height: 14%;
-  margin: 0 0 4.2rem 0;
-  align-self: flex-end;
 }
 
 #profile-picture {
@@ -272,13 +209,13 @@ button {
   width: 20%;
   height: 100%;
   box-shadow: 0.01rem 0.01rem 0.5rem 0.01rem rgba(0, 0, 0, 0.2);
-  transition: border-radius 0.5s ease,
-              background-color 0.5s ease,
-              opacity 0.5s ease;
+  transition: border-radius 0.3s ease,
+              background-color 0.3s ease,
+              opacity 0.3s ease;
 }
 
 button:hover {
-  border-radius: 1.2rem;
+  border-radius: 1.4rem;
 }
 
 </style>

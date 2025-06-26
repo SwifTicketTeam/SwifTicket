@@ -10,6 +10,9 @@
           <h3>|</h3>
           <h3>{{evt.rating}} / 10</h3>
         </div>
+        <div>
+          <span class = "date" v-for = "(date, index) in dates" :key = index v-html = "date"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -17,23 +20,29 @@
 
 <script>
 import HomeHeader from "@/components/home/HomeHeader.vue";
+import {eventBus} from "@/main";
 export default {
   name: "BookingTickets",
   components: {HomeHeader},
   data() {
     return {
-      evt: {
-        _id: "6859aa60ba86f37d59553012",
-        title: "Thunderball",
-        overview: "A criminal organization has obtained two nuclear bombs and are asking for a 100 million pound ransom in the form of diamonds in seven days or they will use the weapons. The secret service sends James Bond to the Bahamas to once again save the world.",
-        genres: [ "Adventure", "Action", "Thriller" ],
-        rating: 6.6,
-        language: "English",
-        release: "1965-12-11T00:00:00.000Z",
-        poster: "../../swifticket-storage/images/movies/6859aa60ba86f37d59553012.jpg",
-        __v: 0
-      },
+      evt: {},
       storageUrl: process.env.VUE_APP_STORAGE_URL,
+      dates: [this.getDate(0), this.getDate(1), this.getDate(2), this.getDate(3), this.getDate(4)],
+    }
+  },
+  created() {
+    setTimeout(() => {if (!this.evt.length) this.$router.push("/events")}, 1000)
+    eventBus.$on("book", (event) => {
+      this.$set(this, 'evt', event);
+    });
+  },
+  methods: {
+    getDate(increment) {
+      const now = new Date(Date.now() + increment * 24 * 60 * 60 * 1000);
+      const day = now.getDate()
+      const month = now.toLocaleString('default', { month: 'long' })
+      return `${day}<br>${month.toUpperCase()}`
     }
   },
 }
@@ -44,24 +53,42 @@ export default {
 <style scoped>
 
 #eventHeader{
-  padding: 0.7rem;
+  padding: 0.7rem 0.7rem 0 0.7rem;
   margin-top: 12vh;
   width: 100%;
-  border-bottom: 0.1rem solid #000;
+  height: 20vh;
 }
 
 #eventInfo {
   display: flex;
+  height: 100%;
   flex-direction: column;
+  justify-content: flex-end;
 }
 
 img {
   width: min(8%, 8vw);
   height: auto;
-  margin: 0 1rem 0 4rem;
+  margin-left: 4rem;
   box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
   cursor: pointer;
+}
+
+.date {
+  text-align: center;
+  margin: 1rem 1rem 0 1rem;
+  padding: 0.7rem;
+  background-color: rgba(240, 128, 128, 0.75);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease,
+              border-radius 0.3s ease;
+}
+
+.date:hover {
+  background-color: #FFC94D;
+  border-radius: 0.8rem;
 }
 
 h1, h3 {
@@ -72,7 +99,10 @@ h1, h3 {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  text-wrap: wrap;
+  width: 25vw;
+  text-align: center;
 }
 
 h3 {

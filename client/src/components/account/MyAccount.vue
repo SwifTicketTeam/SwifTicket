@@ -42,5 +42,6 @@ export default{
   margin-top: 12vh;
   width: 100%;
   height: auto;
+  flex: 0 0 auto;
 }
 </style>

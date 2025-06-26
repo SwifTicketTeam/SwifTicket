@@ -32,62 +32,62 @@ All notable changes to this project are documented here.
 
 ### Phase 3 – Database and Authentication
 
-- Designed `User` schema with validation (username, email, password)
-- Applied password hashing via `bcrypt`
-- Implemented JWT-based authentication for login
-- Tokens stored in **Vuex and localStorage** (not cookies)
-- Handled duplicate email errors using MongoDB unique indexing
-- Completed full registration and login flow
+- Implemented `User` schema with validation (username, email, password)
+- Hashed passwords using `bcrypt`
+- JWT-based authentication for login implemented
+- Tokens persisted in **Vuex and localStorage** (not cookies)
+- Duplicate email errors handled using MongoDB unique indexing
+- Full registration and login flow completed
 
 ---
-
 ## [Beta Extended v0.0] – June 19, 2025
 
 ### Phase 4 – JWT Session Management, Email Messaging, and Forgot Password (In Progress)
 
-- JWT-based session creation completed
-- Nodemailer integration for sending:
-  - Welcome emails after registration
-  - Password reset emails via secure link
-- Reset password form UI and endpoint routing setup started
-- Initial version of forgot password functionality implemented
-- Link generation logic added
+- JWT-based session creation done
+- Integration of Nodemailer for sending:
+  - Welcome emails upon registration
+  - Password reset emails through secure link
+- Setup of reset password form UI and endpoint routing for it started
+- Basic version of forgot password feature implemented
+- Generation of link logic added
 - Placeholder logic for password update on reset route
 
 ---
 
 ## [v0.0] – June 20, 2025
 
-### Phase 4 – Forgot Password Completed and Bug Fixes
+### Phase 4 – Forgot Password Done and Bug Fixes
 
-- Completed the full **Forgot Password** flow:
-  - Verified user email
+- Finished the complete **Forgot Password** workflow:
+  - Confirmed user email
   - Sent password reset email with secure reset link
-  - Reset link now includes **JWT token with expiry** for security
-  - Password updated on confirmation via reset page
-- Used `jwt.verify()` to validate and extract token payload
-- Improved server response and error messaging for invalid/expired tokens
-- Resolved token decoding bugs and refined reset-password route logic
-- Finalized form and messaging for successful password change
+  - Reset link now contains **JWT token with expiry** for safety
+  - Password updated on confirmation through reset page
+- Utilized `jwt.verify()` to validate and extract token payload
+- Enhanced server response and error messaging for invalid/expired tokens
+- Fixed token decoding bugs and streamlined reset-password route logic
+- Completed form and messaging for successful password change
 
 ---
 
-## [Pre Beta v0.1] – June 21, 2025
-*Note: OAuth and Role-Based Route Protection have been postponed. Route Protection is on hold until vendor/admin page structures are defined.*
+## [Pre Beta v0.1] – 21 June, 2025
+> **Note**:
+> OAuth and Role-Based Route Protection have been delayed. Route Protection is pending vendor/admin page structures definition.
 
 ### Phase 5 – Events Page Layout, Session Verification, and Visual Enhancements
 
-- Added official SwifTicket logo for Branding
-- Fixed bugs related to the login system for more reliable authentication flow
-- Implemented `Events` page layout with a structured header and a search bar
-- Introduced JWT session verification on each login
-  - Sent verified user details (username, email, and role) to Vuex state
-  - Maintains session state as long as token is valid
-- Redirected authenticated users to the `Events` page after login
-- Added a `Dashboard` button to the `Events` page for easy navigation
-- Created a `verification-error` page to gracefully handle failed email token verification attempts
-  - Prevents backend `/verify` route from hanging or looping
-- Improved responsive design and readability across all pages by refining text scaling and layout
+- Included official SwifTicket logo for Branding
+- Bugs in the login system fixed for more trustworthy authentication flow
+- Implemented `Events` page structure with a structured header and a search bar
+- Added JWT session validation on every login
+  - Sent validated user information (username, email, and role) to Vuex state
+  - Keeps session state as token is valid
+- Redirected logged-in authenticated users to the `Events` page
+- Added a `Dashboard` button on the `Events` page for quick access
+- Developed a `verification-error` page to smoothly catch invalid email token verification attempts
+  - Avoids backend `/verify` route hanging or looping
+- Enhanced responsive design and legibility on all pages by streamlining text scaling and layout
 
 ---
 
@@ -95,81 +95,99 @@ All notable changes to this project are documented here.
 
 ### Phase 6 – My Account Tab, Transitions, and Movie Page Routing
 
-- Introduced `My Account` tab featuring:
+- Added `My Account` tab with:
   - Profile
   - Transaction History
-  - My Tickets
-  - Favorites
-  - Security
-  - Conditional options:
-    - User: "Become a Vendor"
-    - Vendor: "Manage Events"
-- Added authentication re-verification before page rendering and route changes for enhanced security
-- Introduced global transition fade effects during rerouting
-- Created `/event` route triggered by clicking on an event card
-  - Includes a back button to return to Events List
-- Built Profile display with:
-  - Profile picture (Will not retain on leaving the My Account Tab)
+- My Tickets
+- Favorites
+- Security
+- Conditional options:
+  - User: "Become a Vendor"
+  - Vendor: "Manage Events"
+- Added authentication re-verification prior to page loading and route switching for added security
+- Added global transition fade effects on rerouting
+- Added `/event` route activated by clicking on an event card
+- Has a back button to go back to Events List
+- Constructed Profile display with:
+  - Profile image (Won't persist on exiting the My Account Tab)
   - Username
   - Email address
 
-*Note:* Versioning continues from Beta as features are now stable. Next release may begin OAuth and Vendor Panel integrations.
+*Note:* Versioning is still continued from Beta since now features are stable. Subsequent release can start OAuth and Vendor Panel integrations.
 
 ## [Beta Extended v0.1] – June 23, 2025
 
 ### Phase 6 Extended – Storage, Persistence, API Docs, and Restructure
 
-- Integrated **Storage** to persist files across sessions and devices
-- Profile photo is now **retained across page refreshes, sessions, and devices**
-- Restructured project’s **file/folder organization** for clarity and scalability
-- Added an **API documentation page** detailing all backend routes and their usage
-- Revised several `GET` and `POST` API endpoints for consistency and RESTful standards
+- Added **Storage** to store files between sessions and devices
+- Profile picture is now **remembered between page refreshes, sessions, and devices**
+- Project's **file/folder structure** was reorganized for ease of use and scalability
+- Included an **API documentation page** describing all backend routes and how they should be used
+- Updated various `GET` and `POST` API endpoints for consistency and RESTful principles
 
 ## [Beta Polished v0.1] – June 24, 2025
 
 ### Phase 7 – Profile Enhancement & Movie Dataset Integration
 
 - Polished Profile Picture support:
-  - Handled errors gracefully (upload failures, invalid formats, etc.)
-  - Retained uploaded image across sessions and devices
+  - Gracefully handled errors (upload errors, invalid formats, etc.)
+  - Stored uploaded image across sessions and devices
 
 - Expanded Profile Info:
-  - Added display for Bio, Role, and UID
-  - Enabled input editing for Username and Bio
+  - Included display for Bio, Role, and UID
+  - Enabled editing for input of Username and Bio
 
 - Events Page Upgrade:
-  - Integrated with **Pablinho Movie Dataset**
-  - Downloaded all **9,826 movie posters** into local storage
-  - Populated MongoDB with movie data and linked poster references
+- Implemented with **Pablinho Movie Dataset**
+  - Imported all **9,826 movie posters** to local storage
+  - Inserted movie data and referenced poster in MongoDB
 
 ## [v0.1] – June 24, 2025
 
 ### Phase 8 – Discovery Engine Activation, Search, Filter & Dynamic Routing
 
-- Home Page now dynamically displays movies from MongoDB dataset
-- Implemented dynamic routing for each movie to its own detail page:
-  - Includes working Back button
-  - "Book Now" and "Favorite" buttons added (currently non-functional)
-- Introduced Debounced Search:
-  - Input delay of 400ms before triggering API
-  - Prevents excessive server requests and improves performance
+- Home Page now dynamically shows movies from MongoDB dataset
+- Added dynamic routing for each movie to its own detail page:
+- Adds working Back button
+- "Book Now" and "Favorite" buttons implemented (temporarily non-functional)
+- Added Debounced Search:
+  - Delays input by 400ms before sending API
+  - Avoids spamming the server with requests and enhances speed
 - Added Genre Filters:
-  - Supports multi-select genre-based filtering of movies
+  - Allows multi-select genre-based filtering of films
 - Added Logout Functionality:
-  - Clears session and resets application state
-- Added initial **Theatre Schema** to support scalable layout and screen mapping
-  - Basic layout with rows and seat types
-  - Simplified structure for testing and future seat selection logic
+  - Removes session and resets application state
+- Added first **Theatre Schema** to enable scalable layout and screen mapping
+  - Simple layout with rows and seat types
+  - Streamlined structure for future testing and seat selection logic
 ---
 
 ## [v0.2] – June 25, 2025
 
 ### Phase 9 – UI Overhaul and Favorites System
 
-- Overhauled the UI with refreshed styling and a new logo
-- Replaced the "My Account" button with a profile icon
-- Removed "Virtual" genre from movie filters for a cleaner experience
-- Enabled favorite selection on movie cards
-- Added a new **Favorites** tab under the Account section
-  - Favorites are **fetched on open** but not rendered in the UI yet
+- Refurbished the UI with updated styling and new logo
+- Replaced "My Account" button with profile icon
+- Removed "Virtual" genre from film filters for a purer experience
+- Allowed favoriting from movie cards
+- Introduced a new **Favorites** tab within the Account section
+  - Favorites are **loaded upon open** but not yet rendered in the UI
+---
+
+## [Pre Beta v0.3] – June 26, 2025
+
+### Phase 10 – Ticket Booking Foundations & City Support
+
+- Introduced **Favorites rendering** in the UI within the Account section
+- Included **Add/Remove Favorite** buttons on every movie card (user-specific)
+- Developed **basic booking outline** under the `/booking` route
+- Included UI for **Add Theatres** through Manage Events
+- Developed new **City Schema** to facilitate multi-city venue storage
+- Updated the `UserDetails` schema to accommodate favorite movie tracking and role improvements
+- Included `keep-alive` in Express routes for enhanced session handling and performance
+- Refactored API routes for maintainability and scalability enhancements
+
+> **Note:**
+> _v0.3 will finalize the foundation of the ticket booking system and implement fully operational, user-defined Favorites functionality._
+
 ---

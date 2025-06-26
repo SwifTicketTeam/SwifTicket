@@ -1,6 +1,6 @@
 # SwifTicket – Universal Ticketing Platform
 
-SwifTicket is a full-stack universal ticket booking platform developed using Vue.js, Node.js, and MongoDB. It provides seamless user authentication, profile management, event browsing, and movie discovery features. The platform is backed by a real-world movie dataset and optimized for responsiveness with debounced search, genre filtering, and dynamic routing.
+SwifTicket is a complete-stack universal ticket reservation platform built with Vue.js, Node.js, and MongoDB. It offers intuitive user authentication, profile, event browsing, and movie discovery functionality. The platform is supported by a real-world dataset of movies and optimized for responsiveness with debounced search, genre filtering, and dynamic routing.
 
 ---
 
@@ -16,6 +16,7 @@ SwifTicket is a full-stack universal ticket booking platform developed using Vue
 - Phase 7: Profile Enhancement & Movie Dataset Integration
 - Phase 8: Search, Filter & Dynamic Routing
 - Phase 9: UI Overhaul and Favorites System
+- Phase 10: Ticket Booking Foundation and City Support
 
 ---
 
@@ -23,38 +24,46 @@ SwifTicket is a full-stack universal ticket booking platform developed using Vue
 
 ### Frontend Features
 
-* Redesigned UI layout and navigation structure in Phase 9.
-* Responsive interfaces for login, registration, dashboard, and profile
+* Refactored UI layout and navigation structure
+* Responsive login, registration, dashboard, and profile interfaces
 * Dynamic routing with route guards and animated page transitions
-* Global state management using Vuex for authentication and session persistence
-* Organized multi-page structure: `/`, `/home`, `/account`, `/event`, `/reset-password`, and more
-* Editable profile section with support for profile image uploads, bio, username updates, and logout
-* Favorites system: movies can be favorited and fetched from server
+* Global state management with Vuex for authentication and session persistence
+* Multi-page structured organization: `/`, `/home`, `/account`, `/event`, `/reset-password`, etc.
+* Editable profile section with profile picture upload support, bio, username change, and logout
+* Favorites system: movies are favorited and retrieved from server
+* Add/Remove Favorite buttons for every movie with visual state feedback
+* Manage Events tab added for vendors to add theatres
+* Basic ticket booking route `/booking` added with outline UI
 
 ### Backend & API Features
 
-* Modular Express server handling authentication, user data, and image uploads
-* MongoDB integration using Mongoose with well-defined schemas and validations
-* JWT-based authentication system for secure session handling
-* Integrated email verification and password reset flows using Nodemailer
-* Persistent image uploads with static serving for profile pictures and movie posters
-* API documentation route providing details of all available endpoints
-* Favorites API route to retrieve user-specific movie data
+* Modular Express server for authentication, user data, and image uploads
+* MongoDB integration with Mongoose using proper schemas and validations
+* JWT-based authentication system for secure session management
+* Integrated email verification and password reset streams with Nodemailer
+* Persistent image uploads with static serving for profile images and movie posters
+* API documentation route giving information about all available endpoints
+* Favorites API routes to fetch and update user-specific movie information
+* City schema added to manage theatres by locations
+* Keep-alive support on routes for better session performance
 
 ### Events & Movies Section
 
-* Linked real-world movie dataset (9,800+ movies) to events system
-* Posters downloaded and stored locally with reference mapping in MongoDB
-* Live search bar with debounced input to reduce request load
-* Multi-select genre filter system to refine movie listings
-* Dedicated dynamic pages for each movie with routing and placeholder actions
+* Associated real-world movie database (9,800+ movies) with events system
+* Posters fetched and stored locally with reference mapping in MongoDB
+* Live search bar with debounced input to keep request load low
+* Multi-select genre filter system to filter movie listings
+* Separate dynamic pages for each movie with routing and actions
+* Favorite status is dynamically checked and rendered for every user
 
 ### User Experience & Design
 
-* Polished UI with icon-based navigation and updated logo
-* Favorites Tab added under My Account for personalized access
-* Conditional UI behavior based on user roles (User or Vendor)
-* Modular component design and organized folder structure for maintainability
+* Cleaned-up UI with navigation by icons and new logo
+* Favorites Tab under My Account for user-specific access
+* User role-dependent UI behavior (User or Vendor)
+* Modular component-based design and folder organizational structure for easy maintenance
+* "My Account" button replaced with a neater profile icon
+* Favorites now displayed on open and fully rendered within the interface
 
 ---
 

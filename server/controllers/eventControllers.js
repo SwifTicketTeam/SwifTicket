@@ -41,23 +41,51 @@ module.exports.getMovies = async (req, res) => {
     }
 }
 
-// Add to Favorites
+// Check Favorites
+module.exports.checkFavorites = async (req, res) => {
+    try {
+        const {userId, movieId} = req.body;
+        const user = await UserDetails.findById(userId);
+        if (!user) {
+            return res.status(400).send({
+                message: "Invalid User or Movie ID"
+            })
+        } else {
+            if (user.favorites.movies.includes(movieId)) {
+                return res.status(200).send(true)
+            } else {
+                return res.status(200).send(false)
+            }
+        }
+    } catch (err) {
+        return res.status(400).send({
+            message: "Invalid User or Movie ID"
+        })
+    }
+}
+
+// Update Favorites
 module.exports.addFavorites = async (req, res) => {
     try {
         const {userId, movieId} = req.body;
-        const userDetail = await UserDetails.updateOne({_id: userId}, {
-            $push: {movieFavorites: movieId}
-        });
+        const user = await UserDetails.findById(userId);
+        const userDetail = await UserDetails.updateOne(
+            { _id: userId },
+            user.favorites.movies.includes(movieId)
+                ? { $pull: { 'favorites.movies': movieId } }
+                : { $addToSet: { 'favorites.movies': movieId } }
+        );
         if (!userDetail.matchedCount) {
             return res.status(400).send({
                 message: "Invalid User or Movie ID"
             })
         } else {
             return res.status(200).send({
-                message: `Event Added to Favorites`
+                message: `Event Updated to Favorites`
             })
         }
     } catch (err) {
+        console.log(err);
         return res.status(400).send({
             message: "Invalid User or Movie ID"
         })
@@ -68,7 +96,7 @@ module.exports.addFavorites = async (req, res) => {
 module.exports.getFavorites = async (req, res) => {
     try {
         const {userId} = req.body;
-        const userDetail = await UserDetails.find({_id: userId}).populate("movieFavorites")
+        const userDetail = await UserDetails.find({_id: userId}).populate("favorites.movies")
         if (!userDetail.length) {
             return res.status(400).send({
                 message: "Invalid User or Movie ID"
@@ -76,7 +104,7 @@ module.exports.getFavorites = async (req, res) => {
         } else {
             return res.status(200).send({
                 message: `Ticket Added to Favorites`,
-                events: userDetail[0].movieFavorites,
+                movies: userDetail[0].favorites.movies,
             })
         }
 

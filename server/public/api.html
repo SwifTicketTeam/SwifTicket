@@ -2,182 +2,250 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SwifTicket API Documentation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 960px;
-            margin: auto;
+            font-family: "Segoe UI", sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
             padding: 2rem;
             line-height: 1.6;
         }
-        h1, h2 {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4px;
+
+        h1 {
+            background: rgba(240, 128, 128, 0.75);
+            color: #000000;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 2rem;
         }
-        code, pre {
-            background: #f2f2f2;
-            padding: 0.25rem 0.5rem;
+
+        h2 {
+            background: #FFC94D;
+            color: #000000;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            margin-top: 2.5rem;
+            font-size: 1.5rem;
+        }
+
+        h3, h4 {
+            color: #000000;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            border-left: 5px solid rgba(240, 128, 128, 0.75);
+            padding-left: 0.8rem;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+        }
+
+        pre {
+            background: rgba(240, 128, 128, 0.75);
+            color: #000000;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 0.95rem;
+        }
+
+        code {
+            background: #FFC94D;
+            color: #000000;
+            padding: 0.25rem 0.4rem;
             border-radius: 4px;
             font-family: monospace;
         }
-        pre {
-            padding: 1rem;
-            overflow-x: auto;
+
+        ul {
+            padding-left: 1.5rem;
         }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: #FFC94D;
+            margin: 2rem 0;
+        }
+
+        a {
+            color: rgba(240, 128, 128, 0.75);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         section {
             margin-bottom: 2rem;
         }
     </style>
 </head>
 <body>
-<h1>SwifTicket API – Official Documentation</h1>
 
-<p><strong>Base URL:</strong> <code>http://localhost:3000</code></p>
+<h1>SwifTicket API Documentation</h1>
+
+<h2>API Routes</h2>
+<pre>
+GET     /                                 → Server root
+GET     /api                              → API landing/documentation page
+
+POST    /api/auth/register                → Register new user
+POST    /api/auth/login                   → Login
+GET     /api/auth/verified                → Verify email by token
+POST    /api/auth/forgot-password         → Request password reset
+POST    /api/auth/reset-password          → Reset password
+POST    /api/auth/jwt                     → Validate JWT session
+
+POST    /api/uploads/images/users/:userid → Upload profile photo of user
+GET     /api/uploads/images/users/:userid → Fetch profile photo of user
+PUT     /api/account/users/:userid        → Modify user information
+
+GET     /api/events/movies                → Retrieve list of movies
+POST    /api/account/favorites            → Retrieve list of favorite movies
+POST    /api/events/movies/users/favorites → Check if movie is in favorites
+PUT     /api/events/movies/users/favorites → Add/Remove movie from favorites
+</pre>
+
+<h2>API Endpoint Documentation</h2>
 
 <section>
-    <h2>Authentication & Session Routes</h2>
+    <h3>Root</h3>
+    <h4>GET `/`</h4>
+    <p>Returns the server status or welcome message.</p>
+</section>
 
-    <h3>1. Register a New User</h3>
-    <p><strong>POST</strong> <code>/api/auth/register</code></p>
-    <pre>{
+<section>
+    <h3>API Landing</h3>
+    <h4>GET `/api`</h4>
+    <p>Returns the API landing documentation in Markdown or HTML format.</p>
+</section>
+
+<h2>Authentication</h2>
+
+<h4>POST `/api/auth/register`</h4>
+<p>Registers a new user.</p>
+<pre>{
   "username": "john_doe",
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
 
-    <h3>2. Login</h3>
-    <p><strong>POST</strong> <code>/api/auth/login</code></p>
-    <pre>{
+<h4>POST `/api/auth/login`</h4>
+<p>Logs in the user.</p>
+<pre>{
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
 
-    <h3>3. Email Verification</h3>
-    <p><strong>GET</strong> <code>/api/auth/verified</code></p>
-    <p><strong>Headers:</strong> <code>Authorization: Bearer &lt;token&gt;</code></p>
+<h4>GET `/api/auth/verified`</h4>
+<p>Verifies email with token.</p>
+<ul>
+    <li>Redirects to login if token is valid and verified</li>
+    <li>Redirects to error page if token is invalid or expired</li>
+</ul>
 
-    <h3>4. Forgot Password</h3>
-    <p><strong>POST</strong> <code>/api/auth/forgot-password</code></p>
-    <pre>{
+<h4>POST `/api/auth/forgot-password`</h4>
+<p>Triggers password reset by email.</p>
+<pre>{
   "email": "john@example.com"
 }</pre>
 
-    <h3>5. Reset Password</h3>
-    <p><strong>POST</strong> <code>/api/auth/reset-password</code></p>
-    <pre>{
+<h4>POST `/api/auth/reset-password`</h4>
+<p>Resets password using supplied token.</p>
+<pre>{
   "password": "new_password",
   "token": "reset_token"
 }</pre>
 
-    <h3>6. Session Verification</h3>
-    <p><strong>POST</strong> <code>/api/auth/jwt</code></p>
-    <pre>{
+<h4>POST `/api/auth/jwt`</h4>
+<p>Verifies JWT token and provides user session information.</p>
+<pre>{
   "token": "jwt_token_here"
 }</pre>
-    <p><strong>Response:</strong></p>
-    <pre>{
+<p><strong>Response:</strong></p>
+<pre>{
   "username": "john_doe",
   "email": "john@example.com",
   "role": "user"
 }</pre>
-</section>
 
-<section>
-    <h2>User Profile & Account</h2>
+<h2>Profile Photo</h2>
 
-    <h3>7. Upload Profile Photo</h3>
-    <p><strong>POST</strong> <code>/api/uploads/images/users/:userid</code></p>
-    <p><strong>FormData:</strong> <code>userProfilePhoto</code> (image file), <code>token</code> (JWT)</p>
-    <pre>{
+<h4>POST `/api/uploads/images/users/:userid`</h4>
+<p>Uploads a profile photo.</p>
+<ul>
+    <li><code>userProfilePhoto</code>: image file (.jpg, .jpeg, .png)</li>
+    <li><code>token</code>: JWT token</li>
+</ul>
+<pre>{
   "message": "Profile Photo Uploaded Successfully"
 }</pre>
 
-    <h3>8. Get Profile Photo</h3>
-    <p><strong>GET</strong> <code>/api/uploads/images/users/:userid</code></p>
-    <p>Returns the profile photo as image blob</p>
+<h4>GET `/api/uploads/images/users/:userid`</h4>
+<p>Retrieves the user's profile photo (image/* MIME type).</p>
 
-    <h3>9. Change User Details</h3>
-    <p><strong>PUT</strong> <code>/api/account/users/:userid</code></p>
-    <pre>{
+<h2>Account Management</h2>
+
+<h4>PUT `/api/account/users/:userid`</h4>
+<p>Updates user details.</p>
+<pre>{
   "username": "new_username",
   "email": "new_email",
   "bio": "updated bio"
 }</pre>
-    <p><strong>Response:</strong></p>
-    <pre>{
+<pre>{
   "message": "User details updated successfully"
 }</pre>
-</section>
 
-<section>
-    <h2>Events & Movies</h2>
+<h2>Movie Listing</h2>
 
-    <h3>10. Get Movies</h3>
-    <p><strong>GET</strong> <code>/api/events/movies</code></p>
-    <p><strong>Query Parameters:</strong></p>
-    <ul>
-        <li><code>search</code>: optional string</li>
-        <li><code>genre</code>: optional comma-separated genre string</li>
-    </ul>
-    <p><strong>Example:</strong> <code>/api/events/movies?search=spider&genre=Action,Adventure</code></p>
-    <p><strong>Response:</strong></p>
-    <pre>[
-  {
-    "_id": "movieid123",
-    "title": "Spider-Man: No Way Home",
-    "genres": ["Action", "Adventure"],
-    "poster": "server/storage/images/movieid123.jpg"
-  }
-]</pre>
+<h4>GET `/api/events/movies`</h4>
+<p>Returns a list of movies with optional filtering.</p>
+<ul>
+    <li><code>search</code>: optional title search string</li>
+    <li><code>genre</code>: optional comma-separated list of genres</li>
+</ul>
+<pre>/api/events/movies?search=batman&amp;genre=Action,Adventure</pre>
 
-    <h3>12. Add to Favorites</h3>
-    <p><strong>POST</strong> <code>/api/events/movies/favorites</code></p>
-    <p><strong>Request Body:</strong></p>
-    <pre><code>{
+<h2>Favorites System</h2>
+
+<h4>POST `/api/account/favorites`</h4>
+<p>Retrieves the list of a user's favorite movies.</p>
+<pre>{
+  "userId": "user_id_here"
+}</pre>
+<pre>{
+  "message": "Ticket Added to Favorites"
+}</pre>
+
+<h4>POST `/api/events/movies/users/favorites`</h4>
+<p>Determines if a movie is a favorite for a specific user.</p>
+<pre>{
   "userId": "user_id_here",
   "movieId": "movie_id_here"
-}</code></pre>
-    <p><strong>Response:</strong></p>
-    <pre><code>{
-  "message": "Event Added to Favorites"
-}</code></pre>
+}</pre>
+<pre>{
+  "isFavorite": true
+}</pre>
 
-    <h3>13. Get Favorite Movies</h3>
-    <p><strong>POST</strong> <code>/api/account/favorites</code></p>
-    <p><strong>Request Body:</strong></p>
-    <pre><code>{
-  "userId": "user_id_here"
-}</code></pre>
-    <p><strong>Response:</strong> Returns an array of movie objects:</p>
-    <pre><code>[
-  {
-    "_id": "6859a80fba86f37d59551264",
-    "title": "Spider-Man: No Way Home",
-    "overview": "Peter Parker is unmasked and no longer able to separate his normal life...",
-    "genres": ["Action", "Adventure", "Science Fiction"],
-    "rating": 8.3,
-    "language": "English",
-    "release": "2021-12-15T00:00:00.000Z",
-    "poster": "../../swifticket-storage/images/movies/6859a80fba86f37d59551264.jpg",
-    "__v": 0
-  }
-]</code></pre>
-
-</section>
-
-<section>
-    <h2>Miscellaneous</h2>
-
-    <h3>13. API Landing Page</h3>
-    <p><strong>GET</strong> <code>/api</code></p>
-    <p>Returns this documentation</p>
-
-    <h3>14. Server Root</h3>
-    <p><strong>GET</strong> <code>/</code></p>
-    <p>Displays server status or homepage</p>
-</section>
+<h4>PUT `/api/events/movies/users/favorites`</h4>
+<p>Adds or removes a movie from a user's favorites.</p>
+<pre>{
+  "userId": "user_id_here",
+  "movieId": "movie_id_here"
+}</pre>
+<pre>{
+  "message": "Event Updated to Favorites"
+}</pre>
 
 </body>
 </html>

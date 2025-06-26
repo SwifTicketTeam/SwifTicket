@@ -27,7 +27,7 @@ function delay(ms) {
     return new Promise((res) => setTimeout(res, ms));
 }
 
-const csvPath = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/csv/9000plus.csv');
+const csvPath = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/csv/movies.csv');
 fs.createReadStream(csvPath)
     .pipe(csv())
     .on('data', (data) => movies.push(data))

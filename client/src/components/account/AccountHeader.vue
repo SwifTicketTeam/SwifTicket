@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import {eventBus} from "@/main";
+
 export default{
   name: "AccountHeader",
   data() {
@@ -15,12 +17,14 @@ export default{
   methods: {
     home() {
       this.$router.push("/events");
+      eventBus.$emit("backClicked");
     },
   }
 }
 </script>
 
 <style src = "../../styles/headers.css" scoped></style>
+<style scoped src = "../../styles/button.css"></style>
 
 <style scoped>
 
@@ -41,7 +45,7 @@ button {
 }
 
 button:hover {
-  border-radius: 1rem;
+  border-radius: 1.3rem;
 }
 
 </style>

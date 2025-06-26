@@ -6,8 +6,11 @@ const router = express.Router();
 // Get Movies
 router.get('/api/events/movies', controller.getMovies);
 
-// Add to Favorites (Movies)
-router.post('/api/events/movies/favorites', controller.addFavorites)
+// Check Favorites
+router.post('/api/events/movies/users/favorites', controller.checkFavorites)
+
+// Update Favorites (Movies)
+router.put('/api/events/movies/users/favorites', controller.addFavorites)
 
 // Get Favorites
 router.post('/api/account/favorites', controller.getFavorites)

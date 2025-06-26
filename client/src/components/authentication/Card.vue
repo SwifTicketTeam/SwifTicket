@@ -24,6 +24,7 @@ export default {
 }
 </script>
 
+<style scoped src = "../../styles/button.css"></style>
 
 <style scoped>
 
@@ -60,20 +61,7 @@ h3, p {
 button {
   width: 25%;
   height: 7%;
-  font-size: 1.3rem;
-  font-family: 'Poppins', sans-serif;
-  background-color: rgba(240, 128, 128, 0.55);
-  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border-radius: 0.6rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease,
-              border-radius 0.3s ease;
-}
-
-button:hover {
-  background-color: #FFC94D;
-  border-radius: 1.5rem;
+  margin-top: 0;
 }
 
 </style>

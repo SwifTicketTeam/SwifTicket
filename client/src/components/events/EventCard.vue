@@ -29,7 +29,13 @@ export default{
   },
   methods: {
     eventClicked(){
-      eventBus.$emit("eventClicked", this.event);
+      if (this.$route.path === "/events") {
+        eventBus.$emit("toEvents", this.event);
+      }
+      else if (this.$route.path === '/account') {
+        eventBus.$emit("toFavorites", this.event);
+        this.$router.push("/events");
+      }
     },
   },
   watch: {
@@ -55,15 +61,15 @@ export default{
   height: auto;
   margin: 1.2rem 0;
   border-radius: 1.5rem;
-  box-shadow: 0.05rem 0.05rem 0.2rem 0.01rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0.01rem 0.01rem 0.2rem 0.3rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: box-shadow 1s ease,
               transform 0.5s ease;
 }
 
 #card:hover {
-  transform: translateY(-3%) scale(102%);
-  box-shadow: 0.01rem 0.01rem 0.5rem 0.05rem rgba(0, 0, 0, 0.45);
+  transform: translateY(-4%) scale(105%);
+  box-shadow: 0.01rem 0.01rem 0.6rem 0.05rem rgba(0, 0, 0, 0.45);
 }
 
 div {

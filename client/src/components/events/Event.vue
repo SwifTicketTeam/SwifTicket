@@ -2,7 +2,7 @@
   <div id = "event">
     <div>
       <div id = "mini-header">
-        <button @click = "eventClicked" id = "back">BACK</button>
+        <button @click = "backClicked" id = "back">BACK</button>
       </div>
     </div>
     <div id = "section">
@@ -10,7 +10,8 @@
       <div id = "info">
         <div class = "mini-section">
           <h1 id = "title">{{evt.title.toUpperCase()}}</h1>
-          <button id = "fav" @click = "addFavorites"></button>
+          <transition name = "fade">
+          <button class = "fav" @click = "updateFavorites">{{ isFavorite ? "Remove from Favorites" : "Add to Favorites"}}</button></transition>
         </div>
         <p>{{evt.overview}}</p>
         <br>
@@ -45,25 +46,52 @@ export default {
   data() {
     return {
       storageUrl: process.env.VUE_APP_STORAGE_URL,
+      isFavorite: false,
+      toFavorites: false,
     }
   },
+  created() {
+    eventBus.$on("toEvents", () => {
+      this.toFavorites = false;
+    });
+    eventBus.$on("toFavorites", () => {
+      this.toFavorites = true;
+    });
+    this.checkFavorites()
+  },
+  activated() {
+    this.checkFavorites()
+  },
   methods: {
-    eventClicked() {
-      eventBus.$emit("eventClicked");
+    backClicked() {
+      if (!this.toFavorites) eventBus.$emit("backClicked");
+      else this.$router.push("/account");
     },
     getDate(date) {
       return `${date.getDate().toString().padStart(2, '0')} - ${String(date.getMonth() + 1).padStart(2, '0')} - ${date.getFullYear()}`;
     },
     book() {
-      sessionStorage.setItem("event", JSON.stringify(this.evt));
-      this.$router.push("/booking");
+      eventBus.$emit("book", this.evt);
+      setTimeout(() => {
+        this.$router.push("/booking");
+      }, 10);
     },
-    addFavorites() {
-      axios.post(`${process.env.VUE_APP_SERVER}/api/events/movies/favorites`, {
+    updateFavorites() {
+      axios.put(`${process.env.VUE_APP_SERVER}/api/events/movies/users/favorites`, {
+        userId: this.$store.state.auth.UID,
+        movieId: this.evt._id,
+      }).then(() => {
+        this.isFavorite = !this.isFavorite;
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    checkFavorites() {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/events/movies/users/favorites`, {
         userId: this.$store.state.auth.UID,
         movieId: this.evt._id,
       }).then((res) => {
-        console.log(res);
+        this.isFavorite = res.data
       }).catch((err) => {
         console.log(err);
       })
@@ -72,6 +100,7 @@ export default {
 };
 </script>
 
+<style scoped src = "../../styles/button.css"></style>
 <style scoped>
 
 #event {
@@ -103,39 +132,35 @@ export default {
 }
 
 .mini-section {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   margin-bottom: 2rem;
 }
 
 #title {
-  margin: 0 auto;
+  position: absolute;
+  font-size: 1.8rem;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-#fav {
-  margin: 1rem 1rem 1rem 0;
+.fav {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  width: 20%;
 }
+
+
 
 button {
   height: 3rem;
   padding: 0 1.5rem;
   text-wrap: nowrap;
-  font-size: 1.3rem;
-  font-family: 'Poppins', sans-serif;
-  background-color: #FFD586;
-  border-radius: 0.6rem;
-  box-shadow: 0.01rem 0.01rem 0.5rem 0.02rem rgba(0, 0, 0, 0.2);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease,
-  border-radius 0.3s ease;
-  opacity: 0.85;
-}
-
-button:hover {
-  background-color: #FFC94D;
-  border-radius: 1.3rem;
+  margin: 1.3rem 0 0 0;
 }
 
 img {
