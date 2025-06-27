@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     getFavorites () {
-      axios.post(`${process.env.VUE_APP_SERVER}/api/account/favorites`, {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/account/movies/favorites`, {
         userId: this.$store.state.auth.UID,
       }).then((res) => {
         this.events = res.data.movies;
@@ -59,7 +59,7 @@ export default {
 
 h2 {
   font-size: 1.6rem;
-  margin-bottom: 1.5rem;
+  margin: 2rem 0.1rem 0 0;
 }
 
 </style>

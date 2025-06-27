@@ -13,7 +13,7 @@ export default{
   name: "AccountOptions",
   data() {
     return {
-      options: ["Profile", "My Tickets", "My Favorites", "Transaction History", "Security"],
+      options: ["Profile", "My Tickets", "My Favorites", "Transaction History"],
       selectedOption: "Profile",
     }
   },
@@ -29,7 +29,7 @@ export default{
       this.selectedOption = option;
       eventBus.$emit("select-option", option.split(' ')[option.split(' ').length - 1]);
     }
-  }
+  },
 };
 
 </script>
@@ -51,10 +51,10 @@ li {
   list-style-type: none;
   font-size: 1.4rem;
   padding: 2.5rem 1rem;
-  margin: 0 1rem 0.8rem 1rem;
+  margin: 0 1rem 1.2rem 1rem;
   border-radius: 1rem;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.1rem solid #000;
+  border: 0.1rem solid #CCC;
   transition: background-color 0.3s ease,
               border-radius 0.3s ease;
 }

@@ -1,21 +1,46 @@
 <template>
   <div>
     <div id = "theatre-management">
-      <h2>MY THEATRES</h2>
-      <button>ADD THEATRE</button>
+      <h2 class = "no-select">MY THEATRES</h2>
+      <button @click = "newTheatre" class = "no-select">{{(isComponent === "MyTheatres") ? "ADD NEW THEATRE" : "MANAGE THEATRES"}}</button>
     </div>
-    <AddTheatre></AddTheatre>
+    <transition name = "fade" mode = "out-in">
+      <component :is = "isComponent" :theatre = "theatre"></component>
+    </transition>
   </div>
 </template>
 
 <script>
-import AddTheatre from "./manage-events/AddTheatre.vue";
+import AddTheatre from "@/components/account/manage-events/AddTheatre.vue";
+import MyTheatres from "@/components/account/manage-events/MyTheatres.vue";
+import {eventBus} from "@/main";
+import ManageTheatre from "@/components/account/manage-events/ManageTheatre.vue";
 
 export default {
   name: "ManageEvents",
   components: {
-    AddTheatre
+    AddTheatre,
+    MyTheatres,
+    ManageTheatre
   },
+  data() {
+    return{
+      isComponent: "MyTheatres",
+      theatre: "",
+    }
+  },
+  created() {
+    eventBus.$on("manageTheatre", (theatre) => {
+      this.isComponent = "ManageTheatre";
+      this.theatre = theatre;
+    });
+  },
+  methods: {
+    newTheatre() {
+      this.isComponent = (this.isComponent === "MyTheatres") ? "AddTheatre" : "MyTheatres";
+    },
+
+  }
 }
 </script>
 
@@ -32,11 +57,12 @@ export default {
 
 h2 {
   font-size: 1.6rem;
-  margin: 0 0 1rem 0.5rem;
+  margin: 0 1.2rem;
 }
 
 button {
-  width: 15%;
+  font-size: 1.3rem;
+  width: 20%;
   padding: 0.4rem 1rem;
 }
 

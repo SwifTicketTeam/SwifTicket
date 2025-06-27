@@ -1,91 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>SwifTicket API Documentation</title>
     <style>
         body {
-            font-family: "Segoe UI", sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: white;
+            color: black;
             padding: 2rem;
             line-height: 1.6;
         }
 
+        h1, h2, h3 {
+            color: rgba(240, 128, 128, 0.75);
+        }
+
         h1 {
-            background: rgba(240, 128, 128, 0.75);
-            color: #000000;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 2rem;
+            font-size: 2.4rem;
+            border-bottom: 3px solid #FFC94D;
+            padding-bottom: 0.3rem;
         }
 
         h2 {
-            background: #FFC94D;
-            color: #000000;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            margin-top: 2.5rem;
-            font-size: 1.5rem;
-        }
-
-        h3, h4 {
-            color: #000000;
             margin-top: 2rem;
+            font-size: 1.8rem;
+            border-left: 5px solid #FFC94D;
+            padding-left: 0.75rem;
         }
 
         h3 {
-            font-size: 1.25rem;
-            border-left: 5px solid rgba(240, 128, 128, 0.75);
-            padding-left: 0.8rem;
+            font-size: 1.4rem;
+            margin-top: 1.2rem;
         }
 
-        h4 {
-            font-size: 1.1rem;
-        }
-
-        pre {
-            background: rgba(240, 128, 128, 0.75);
-            color: #000000;
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-family: Consolas, monospace;
-            font-size: 0.95rem;
-        }
-
-        code {
-            background: #FFC94D;
-            color: #000000;
-            padding: 0.25rem 0.4rem;
-            border-radius: 4px;
+        code, pre {
+            background-color: #f8f8f8;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            display: block;
+            white-space: pre-wrap;
             font-family: monospace;
         }
 
         ul {
-            padding-left: 1.5rem;
+            margin-left: 1.5rem;
         }
 
-        hr {
-            border: none;
-            height: 2px;
-            background: #FFC94D;
-            margin: 2rem 0;
+        .section {
+            border: 2px solid #FFC94D;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
         }
 
-        a {
-            color: rgba(240, 128, 128, 0.75);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        section {
-            margin-bottom: 2rem;
+        .subsection {
+            margin-top: 1.2rem;
         }
     </style>
 </head>
@@ -93,159 +63,173 @@
 
 <h1>SwifTicket API Documentation</h1>
 
-<h2>API Routes</h2>
-<pre>
-GET     /                                 → Server root
-GET     /api                              → API landing/documentation page
+<div class="section">
+    <h2>API Routes</h2>
+    <pre>
+GET     /                                      → Server root
+GET     /api                                   → API landing/documentation page
+POST    /api/auth/register                     → Register new user
+POST    /api/auth/login                        → Login
+GET     /api/auth/verified                     → Email verification through token
+POST    /api/auth/forgot-password              → Forgot password request
+POST    /api/auth/reset-password               → Reset password
+POST    /api/auth/jwt                          → Validate JWT session
+POST    /api/uploads/images/users/:userid      → Upload user profile photo
+GET     /api/uploads/images/users/:userid      → Get user profile picture
+PUT     /api/account/users/:userid             → Edit user information
+GET     /api/events/movies                     → Get movie list (with filters)
+POST    /api/events/movies/users/favorites     → Whether movie is in favorites
+PUT     /api/account/movies/favorites          → Add or Remove movie from favorites
+POST    /api/account/movies/favorites          → Get all favorite movies
+POST    /api/account/theatres/create           → Create a theatre (VR-only)
+POST    /api/account/theatres/get              → Get all theatres by vendor
+    </pre>
+</div>
 
-POST    /api/auth/register                → Register new user
-POST    /api/auth/login                   → Login
-GET     /api/auth/verified                → Verify email by token
-POST    /api/auth/forgot-password         → Request password reset
-POST    /api/auth/reset-password          → Reset password
-POST    /api/auth/jwt                     → Validate JWT session
+<div class="section">
+    <h2>Endpoint Details</h2>
 
-POST    /api/uploads/images/users/:userid → Upload profile photo of user
-GET     /api/uploads/images/users/:userid → Fetch profile photo of user
-PUT     /api/account/users/:userid        → Modify user information
+    <div class="subsection">
+        <h3>GET /</h3>
+        <p>Returns the server status or welcome message.</p>
+    </div>
 
-GET     /api/events/movies                → Retrieve list of movies
-POST    /api/account/favorites            → Retrieve list of favorite movies
-POST    /api/events/movies/users/favorites → Check if movie is in favorites
-PUT     /api/events/movies/users/favorites → Add/Remove movie from favorites
-</pre>
+    <div class="subsection">
+        <h3>GET /api</h3>
+        <p>Returns the API landing documentation in Markdown or HTML format.</p>
+    </div>
 
-<h2>API Endpoint Documentation</h2>
+    <h2>Authentication</h2>
 
-<section>
-    <h3>Root</h3>
-    <h4>GET `/`</h4>
-    <p>Returns the server status or welcome message.</p>
-</section>
-
-<section>
-    <h3>API Landing</h3>
-    <h4>GET `/api`</h4>
-    <p>Returns the API landing documentation in Markdown or HTML format.</p>
-</section>
-
-<h2>Authentication</h2>
-
-<h4>POST `/api/auth/register`</h4>
-<p>Registers a new user.</p>
-<pre>{
+    <div class="subsection">
+        <h3>POST /api/auth/register</h3>
+        <pre>{
   "username": "john_doe",
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
+    </div>
 
-<h4>POST `/api/auth/login`</h4>
-<p>Logs in the user.</p>
-<pre>{
+    <div class="subsection">
+        <h3>POST /api/auth/login</h3>
+        <pre>{
   "email": "john@example.com",
   "password": "your_password"
 }</pre>
+    </div>
 
-<h4>GET `/api/auth/verified`</h4>
-<p>Verifies email with token.</p>
-<ul>
-    <li>Redirects to login if token is valid and verified</li>
-    <li>Redirects to error page if token is invalid or expired</li>
-</ul>
+    <div class="subsection">
+        <h3>GET /api/auth/verified?token=</h3>
+        <p>Redirects to login if token is valid and verified.<br> Redirects to error if invalid or expired.</p>
+    </div>
 
-<h4>POST `/api/auth/forgot-password`</h4>
-<p>Triggers password reset by email.</p>
-<pre>{
+    <div class="subsection">
+        <h3>POST /api/auth/forgot-password</h3>
+        <pre>{
   "email": "john@example.com"
 }</pre>
+    </div>
 
-<h4>POST `/api/auth/reset-password`</h4>
-<p>Resets password using supplied token.</p>
-<pre>{
+    <div class="subsection">
+        <h3>POST /api/auth/reset-password</h3>
+        <pre>{
   "password": "new_password",
   "token": "reset_token"
 }</pre>
+    </div>
 
-<h4>POST `/api/auth/jwt`</h4>
-<p>Verifies JWT token and provides user session information.</p>
-<pre>{
+    <div class="subsection">
+        <h3>POST /api/auth/jwt</h3>
+        <pre>{
   "token": "jwt_token_here"
 }</pre>
-<p><strong>Response:</strong></p>
-<pre>{
+        <p><strong>Response:</strong></p>
+        <pre>{
   "username": "john_doe",
   "email": "john@example.com",
   "role": "user"
 }</pre>
+    </div>
 
-<h2>Profile Photo</h2>
+    <h2>Profile Photos</h2>
 
-<h4>POST `/api/uploads/images/users/:userid`</h4>
-<p>Uploads a profile photo.</p>
-<ul>
-    <li><code>userProfilePhoto</code>: image file (.jpg, .jpeg, .png)</li>
-    <li><code>token</code>: JWT token</li>
-</ul>
-<pre>{
-  "message": "Profile Photo Uploaded Successfully"
-}</pre>
+    <div class="subsection">
+        <h3>POST /api/uploads/images/users/:userid</h3>
+        <p>Upload with FormData:</p>
+        <ul>
+            <li><code>userProfilePhoto</code>: image (.jpg, .jpeg, .png)</li>
+            <li><code>token</code>: JWT</li>
+        </ul>
+    </div>
 
-<h4>GET `/api/uploads/images/users/:userid`</h4>
-<p>Retrieves the user's profile photo (image/* MIME type).</p>
+    <div class="subsection">
+        <h3>GET /api/uploads/images/users/:userid</h3>
+        <p>Returns image with <code>image/*</code> MIME type.</p>
+    </div>
 
-<h2>Account Management</h2>
+    <h2>Account Management</h2>
 
-<h4>PUT `/api/account/users/:userid`</h4>
-<p>Updates user details.</p>
-<pre>{
+    <div class="subsection">
+        <h3>PUT /api/account/users/:userid</h3>
+        <pre>{
   "username": "new_username",
   "email": "new_email",
   "bio": "updated bio"
 }</pre>
-<pre>{
-  "message": "User details updated successfully"
-}</pre>
+    </div>
 
-<h2>Movie Listing</h2>
+    <h2>Movies</h2>
 
-<h4>GET `/api/events/movies`</h4>
-<p>Returns a list of movies with optional filtering.</p>
-<ul>
-    <li><code>search</code>: optional title search string</li>
-    <li><code>genre</code>: optional comma-separated list of genres</li>
-</ul>
-<pre>/api/events/movies?search=batman&amp;genre=Action,Adventure</pre>
+    <div class="subsection">
+        <h3>GET /api/events/movies</h3>
+        <p>Query: <code>?search=&lt;title&gt;&genre=Action,Comedy</code></p>
+    </div>
 
-<h2>Favorites System</h2>
+    <h2>Favorites</h2>
 
-<h4>POST `/api/account/favorites`</h4>
-<p>Retrieves the list of a user's favorite movies.</p>
-<pre>{
-  "userId": "user_id_here"
+    <div class="subsection">
+        <h3>POST /api/events/movies/users/favorites</h3>
+        <pre>{
+  "userId": "user_id",
+  "movieId": "movie_id"
 }</pre>
-<pre>{
-  "message": "Ticket Added to Favorites"
-}</pre>
+        <p><strong>Response:</strong> <code>true</code> or <code>false</code></p>
+    </div>
 
-<h4>POST `/api/events/movies/users/favorites`</h4>
-<p>Determines if a movie is a favorite for a specific user.</p>
-<pre>{
-  "userId": "user_id_here",
-  "movieId": "movie_id_here"
+    <div class="subsection">
+        <h3>PUT /api/account/movies/favorites</h3>
+        <pre>{
+  "userId": "user_id",
+  "movieId": "movie_id"
 }</pre>
-<pre>{
-  "isFavorite": true
-}</pre>
+    </div>
 
-<h4>PUT `/api/events/movies/users/favorites`</h4>
-<p>Adds or removes a movie from a user's favorites.</p>
-<pre>{
-  "userId": "user_id_here",
-  "movieId": "movie_id_here"
+    <div class="subsection">
+        <h3>POST /api/account/movies/favorites</h3>
+        <pre>{
+  "userId": "user_id"
 }</pre>
-<pre>{
-  "message": "Event Updated to Favorites"
+        <p><strong>Returns list of favorite movies.</strong></p>
+    </div>
+
+    <h2>Vendor – Theatres</h2>
+
+    <div class="subsection">
+        <h3>POST /api/account/theatres/create</h3>
+        <pre>{
+  "vendor": "vendor_id",
+  "city": "city_name",
+  "name": "theatre_name"
 }</pre>
+    </div>
+
+    <div class="subsection">
+        <h3>POST /api/account/theatres/get</h3>
+        <pre>{
+  "vendor": "vendor_id"
+}</pre>
+    </div>
+</div>
 
 </body>
 </html>

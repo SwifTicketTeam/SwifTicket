@@ -1,0 +1,96 @@
+<template>
+  <div id = "myTheatres">
+    <div class = "theatre" v-for = "(theatre, index) in theatres" :key = "index">
+      <h3>{{theatre.name}}</h3>
+      <h4>{{theatre.city}}</h4>
+      <h4>Screens : {{theatre.screens.length}}</h4>
+      <button @click = "manageTheatre(theatre)" class = "no-select">MANAGE THEATRE</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import {eventBus} from "@/main";
+
+export default {
+  name: "MyTheatres",
+  data() {
+    return {
+      theatres: [],
+    }
+  },
+  created () {
+    this.getMyTheatres();
+  },
+  activated () {
+    this.getMyTheatres();
+  },
+  methods: {
+    getMyTheatres () {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/get`, {
+        vendor: this.$store.state.auth.UID
+      }).then((res) => {
+        this.theatres = res.data.theatres;
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    manageTheatre(theatre) {
+      eventBus.$emit("manageTheatre", theatre);
+    }
+  }
+}
+</script>
+
+<style scoped src = "../../../styles/button.css"></style>
+<style scoped>
+
+#myTheatres {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 1.5rem;
+  width: 100%;
+  height: auto;
+  overflow-y: auto;
+}
+
+#myTheatres::-webkit-scrollbar {
+  display: none;
+}
+
+.theatre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 19.5%;
+  height: 23vh;
+  border-radius: 1.5rem;
+  padding: 0 1rem;
+  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
+  border: 0.1rem solid #CCC;
+}
+
+.theatre h3 {
+  height: 5vh;
+  font-size: 1.2rem;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+
+.theatre h4 {
+  font-size: 1rem;
+  font-weight: normal;
+  text-align: center;
+  margin-top: 0;
+}
+
+button {
+  width: 90%;
+  height: 18%;
+  margin: 1rem 0 0 0;
+}
+
+</style>

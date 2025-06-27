@@ -4,7 +4,7 @@ button {
     font-family: 'Poppins', sans-serif;
     background-color: rgba(240, 128, 128, 0.75);
     border-radius: 0.6rem;
-    box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease,

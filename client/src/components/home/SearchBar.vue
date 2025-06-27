@@ -76,7 +76,7 @@ input {
   font-size: 1.1rem;
   font-family: 'Poppins', serif;
   box-shadow: -0.01rem 0.01rem 0.1rem 0.03rem rgba(0, 0, 0, 0.25);
-  border: 0.01rem solid #000;
+  border: 0.01rem solid #CCC;
   align-self: flex-end;
 }
 

@@ -1,66 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>SwifTicket – Universal Ticketing Platform</title>
     <style>
         body {
-            font-family: "Segoe UI", sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: white;
+            color: black;
             padding: 2rem;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3 {
+            color: rgba(240, 128, 128, 0.75);
         }
 
         h1 {
-            background: rgba(240, 128, 128, 0.75);
-            color: #000000;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 2rem;
+            font-size: 2.4rem;
+            border-bottom: 3px solid #FFC94D;
+            padding-bottom: 0.3rem;
         }
 
         h2 {
-            background: #FFC94D;
-            color: #000000;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            margin-top: 2.5rem;
-            font-size: 1.5rem;
+            margin-top: 2rem;
+            font-size: 1.8rem;
+            border-left: 5px solid #FFC94D;
+            padding-left: 0.75rem;
         }
 
         h3 {
-            font-size: 1.2rem;
-            border-left: 5px solid rgba(240, 128, 128, 0.75);
-            padding-left: 0.8rem;
-            margin-top: 1.5rem;
+            font-size: 1.4rem;
+            margin-top: 1.2rem;
         }
 
         ul {
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
+            margin-left: 1.5rem;
         }
 
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
-        section {
-            margin-bottom: 2rem;
+        code {
+            background-color: #f0f0f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
         }
 
-        p {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        hr {
-            border: none;
-            height: 2px;
-            background: #FFC94D;
-            margin: 2rem 0;
+        .section {
+            border: 2px solid #FFC94D;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
         }
     </style>
 </head>
@@ -69,101 +62,103 @@
 <h1>SwifTicket – Universal Ticketing Platform</h1>
 
 <p>
-    SwifTicket is a complete-stack universal ticket reservation platform built with Vue.js, Node.js, and MongoDB.
-    It offers intuitive user authentication, profile, event browsing, and movie discovery functionality.
-    The platform is supported by a real-world dataset of movies and optimized for responsiveness with debounced search, genre filtering, and dynamic routing.
+    SwifTicket is a full-stack universal ticket booking platform developed using Vue.js, Node.js, and MongoDB. It provides simple user authentication, profile management, event surfing, and movie discovery features. The platform is backed by a real-world movie dataset and optimized for responsiveness with debounced search, genre filtering, and dynamic routing.
 </p>
 
-<h2>Project Roadmap</h2>
-<ul>
-    <li>Phase 1: Frontend Development</li>
-    <li>Phase 2: API Integration and Backend Server Setup</li>
-    <li>Phase 3: Database and Custom Authentication</li>
-    <li>Phase 4: JWT Session Management and Email Messaging</li>
-    <li>Phase 5: Events Page Layout and Session Verification</li>
-    <li>Phase 6: My Account Tabs and Movie Page Routing</li>
-    <li>Phase 6 Extended: Persistent Storage and API Docs</li>
-    <li>Phase 7: Profile Enhancement & Movie Dataset Integration</li>
-    <li>Phase 8: Search, Filter & Dynamic Routing</li>
-    <li>Phase 9: UI Overhaul and Favorites System</li>
-    <li>Phase 10: Ticket Booking Foundation and City Support</li>
-</ul>
+<div class="section">
+    <h2>Project Roadmap</h2>
+    <ul>
+        <li>Phase 1: Frontend Development</li>
+        <li>Phase 2: API Integration and Backend Server Setup</li>
+        <li>Phase 3: Database and Custom Authentication</li>
+        <li>Phase 4: JWT Session Management and Email Messaging</li>
+        <li>Phase 5: Events Page Layout and Session Verification</li>
+        <li>Phase 6: My Account Tabs and Movie Page Routing</li>
+        <li>Phase 6 Extended: Persistent Storage and API Docs</li>
+        <li>Phase 7: Profile Improvement & Movie Dataset Integration</li>
+        <li>Phase 8: Search, Filtering & Dynamic Routing</li>
+        <li>Phase 9: UI Redesign and Favorites System</li>
+        <li>Phase 10: Ticket Booking Base and City Support</li>
+        <li>Phase 11: Vendor Panel and Theatre Management</li>
+    </ul>
+</div>
 
-<h2>Project Overview</h2>
+<div class="section">
+    <h2>Project Overview</h2>
 
-<h3>Frontend Features</h3>
-<ul>
-    <li>Refactored UI layout and navigation structure</li>
-    <li>Responsive login, registration, dashboard, and profile interfaces</li>
-    <li>Dynamic routing with route guards and animated page transitions</li>
-    <li>Global state management with Vuex for authentication and session persistence</li>
-    <li>Multi-page structured organization: <code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/reset-password</code>, etc.</li>
-    <li>Editable profile section with profile picture upload support, bio, username change, and logout</li>
-    <li>Favorites system: movies are favorited and retrieved from server</li>
-    <li>Add/Remove Favorite buttons for every movie with visual state feedback</li>
-    <li>Manage Events tab added for vendors to add theatres</li>
-    <li>Basic ticket booking route <code>/booking</code> added with outline UI</li>
-</ul>
+    <h3>Frontend Features</h3>
+    <ul>
+        <li>Complete redesign of UI layout and navigation structure</li>
+        <li>Responsive interfaces: login, registration, dashboard, and profile</li>
+        <li>Vue Router with dynamic routes, animated transitions, and route guards</li>
+        <li>Vuex state management for session persistance</li>
+        <li>Modular page layout including: <code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/reset-password</code>, <code>/showtime</code>, etc.</li>
+        <li>Profile editor with username, bio update, profile photo upload, and logout</li>
+        <li><strong>Favorites system</strong> with Add/Remove buttons per movie and full render in "My Favorites" tab</li>
+        <li><strong>Vendor-exclusive views</strong>: "My Theatres" Dashboard</li>
+        <li><strong>Theatre management</strong> with individual theatre pages</li>
+        <li>UI for screen design with row/column seat grid and gap selector</li>
+    </ul>
 
-<h3>Backend & API Features</h3>
-<ul>
-    <li>Modular Express server for authentication, user data, and image uploads</li>
-    <li>MongoDB integration with Mongoose using proper schemas and validations</li>
-    <li>JWT-based authentication system for secure session management</li>
-    <li>Integrated email verification and password reset streams with Nodemailer</li>
-    <li>Persistent image uploads with static serving for profile images and movie posters</li>
-    <li>API documentation route giving information about all available endpoints</li>
-    <li>Favorites API routes to fetch and update user-specific movie information</li>
-    <li>City schema added to manage theatres by locations</li>
-    <li>Keep-alive support on routes for better session performance</li>
-</ul>
+    <h3>Backend & API Features</h3>
+    <ul>
+        <li>Modular Express server and routing with controllers</li>
+        <li>MongoDB with Mongoose, including schemas for Users, Cities, Theatres, Movies</li>
+        <li>JWT-based auth and role management (user, vendor)</li>
+        <li>Nodemailer-based email verification and password reset sequence</li>
+        <li>Persistent image uploads for user profiles and movie posters</li>
+        <li>City Schema with nested Theatre and Screen structure</li>
+        <li>Enhanced query filtering and performance for films with title/genre search</li>
+    </ul>
 
-<h3>Events & Movies Section</h3>
-<ul>
-    <li>Associated real-world movie database (9,800+ movies) with events system</li>
-    <li>Posters fetched and stored locally with reference mapping in MongoDB</li>
-    <li>Live search bar with debounced input to keep request load low</li>
-    <li>Multi-select genre filter system to filter movie listings</li>
-    <li>Separate dynamic pages for each movie with routing and actions</li>
-    <li>Favorite status is dynamically checked and rendered for every user</li>
-</ul>
+    <h3>Events & Movies Section</h3>
+    <ul>
+        <li>Real-world dataset of 9,800+ film entries</li>
+        <li>Poster references stored and resolved to local storage</li>
+        <li>Genre filter with multi-select enabled</li>
+        <li>Debounced search input to limit backend load</li>
+        <li>Dynamic movie details page by ID</li>
+        <li>Displays if film is a favorite (checks dynamically per user)</li>
+    </ul>
 
-<h3>User Experience & Design</h3>
-<ul>
-    <li>Cleaned-up UI with navigation by icons and new logo</li>
-    <li>Favorites Tab under My Account for user-specific access</li>
-    <li>User role-dependent UI behavior (User or Vendor)</li>
-    <li>Modular component-based design and folder organizational structure for easy maintenance</li>
-    <li>"My Account" button replaced with a neater profile icon</li>
-    <li>Favorites now displayed on open and fully rendered within the interface</li>
-</ul>
+    <h3>User Experience & Design</h3>
+    <ul>
+        <li>Simple and icon-based navbar</li>
+        <li>Replaced "My Account" text with profile icon</li>
+        <li>Live favorite system with toggle and visual feedback</li>
+        <li>Responsive design with clear typography</li>
+        <li>Vendor-specific views only accessible to authenticated vendors</li>
+        <li>Planned vendor support for dynamic seat configurations per theatre/screen</li>
+    </ul>
+</div>
 
-<h2>Tech Stack</h2>
+<div class="section">
+    <h2>Tech Stack</h2>
+    <h3>Frontend</h3>
+    <ul>
+        <li>Vue.js 2</li>
+        <li>Vuex</li>
+        <li>Vue Router</li>
+        <li>Axios</li>
+    </ul>
 
-<h3>Frontend</h3>
-<ul>
-    <li>Vue.js 2</li>
-    <li>Vuex (State Management)</li>
-    <li>Vue Router</li>
-    <li>Axios</li>
-</ul>
+    <h3>Backend</h3>
+    <ul>
+        <li>Node.js</li>
+        <li>Express.js</li>
+        <li>Mongoose</li>
+    </ul>
 
-<h3>Backend</h3>
-<ul>
-    <li>Node.js</li>
-    <li>Express.js</li>
-    <li>Mongoose</li>
-</ul>
+    <h3>Database</h3>
+    <ul>
+        <li>MongoDB Compass / Atlas</li>
+    </ul>
 
-<h3>Database</h3>
-<ul>
-    <li>MongoDB Compass / MongoDB Atlas</li>
-</ul>
-
-<h3>Testing</h3>
-<ul>
-    <li>Postman (Manual API Testing)</li>
-</ul>
+    <h3>Testing</h3>
+    <ul>
+        <li>Postman (Manual API Testing)</li>
+    </ul>
+</div>
 
 </body>
 </html>

@@ -72,12 +72,9 @@ export default {
     },
     book() {
       eventBus.$emit("book", this.evt);
-      setTimeout(() => {
-        this.$router.push("/booking");
-      }, 10);
     },
     updateFavorites() {
-      axios.put(`${process.env.VUE_APP_SERVER}/api/events/movies/users/favorites`, {
+      axios.put(`${process.env.VUE_APP_SERVER}/api/account/movies/favorites`, {
         userId: this.$store.state.auth.UID,
         movieId: this.evt._id,
       }).then(() => {

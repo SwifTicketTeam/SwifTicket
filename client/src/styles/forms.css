@@ -48,7 +48,6 @@ p {
 
 .isWarn {
     opacity: 1;
-    transition: opacity 0.4s ease;
 }
 
 button {

@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const Routes = require('./routes/Routes');
 const authenticationRoutes = require('./routes/authenticationRoutes');
 const accountRoutes = require('./routes/accountRoutes');
-const eventRoutes = require('./routes/eventRoutes')
+const movieRoutes = require('./routes/movieRoutes');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -36,5 +36,5 @@ mongoose.connect(dbURI)
 // Routes
 app.use(authenticationRoutes);
 app.use(accountRoutes);
-app.use(eventRoutes)
+app.use(movieRoutes);
 app.use(Routes);

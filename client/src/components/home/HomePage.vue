@@ -43,7 +43,13 @@ export default{
     eventBus.$on("toEvents", (evt) => {
       this.isComponent = "Event";
       this.evt = evt
-    })
+    });
+    eventBus.$on('book', (evt) => {
+      this.$router.push("/booking/movies");
+      setTimeout(() => {
+        eventBus.$emit("bookMovie", evt);
+      }, 600);
+    });
   },
 };
 

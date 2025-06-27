@@ -51,7 +51,7 @@ const CitySchema = new Schema({
         required: true,
         unique: true
     },
-    movies: {
+    theatres: {
       type: [TheatreSchema],
         default: []
     },

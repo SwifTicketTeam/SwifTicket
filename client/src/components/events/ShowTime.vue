@@ -1,7 +1,7 @@
 <template>
   <div>
     <HomeHeader></HomeHeader>
-    <div id = "eventHeader">
+    <div id = "eventHeader" v-if = "!isLoading">
       <img :src = "`${storageUrl}/${evt._id}.jpg`">
       <div id = "eventInfo">
         <h1>{{evt.title.toUpperCase()}}</h1>
@@ -22,19 +22,20 @@
 import HomeHeader from "@/components/home/HomeHeader.vue";
 import {eventBus} from "@/main";
 export default {
-  name: "BookingTickets",
+  name: "ShowTime",
   components: {HomeHeader},
   data() {
     return {
       evt: {},
       storageUrl: process.env.VUE_APP_STORAGE_URL,
       dates: [this.getDate(0), this.getDate(1), this.getDate(2), this.getDate(3), this.getDate(4)],
+      isLoading: true,
     }
   },
   created() {
-    setTimeout(() => {if (!this.evt.length) this.$router.push("/events")}, 1000)
-    eventBus.$on("book", (event) => {
-      this.$set(this, 'evt', event);
+    eventBus.$on("bookMovie", (event) => {
+      this.evt = event;
+      this.isLoading = false;
     });
   },
   methods: {
@@ -45,6 +46,9 @@ export default {
       return `${day}<br>${month.toUpperCase()}`
     }
   },
+  activated() {
+    this.isLoading = true;
+  }
 }
 </script>
 

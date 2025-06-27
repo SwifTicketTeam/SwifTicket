@@ -1,5 +1,31 @@
-const Movie = require('../models/Movie')
-const UserDetails = require('../models/UserDetails')
+const City = require('../models/City');
+const User = require('../models/User');
+const UserDetails = require('../models/UserDetails');
+const Movie = require('../models/Movie');
+const mongoose = require('mongoose');
+
+// Get Favorites
+module.exports.getFavorites = async (req, res) => {
+    try {
+        const {userId} = req.body;
+        const userDetail = await UserDetails.find({_id: userId}).populate("favorites.movies")
+        if (!userDetail.length) {
+            return res.status(400).send({
+                message: "Invalid User or Movie ID"
+            })
+        } else {
+            return res.status(200).send({
+                message: `Ticket Added to Favorites`,
+                movies: userDetail[0].favorites.movies,
+            })
+        }
+
+    } catch (err) {
+        return res.status(400).send({
+            message: "Invalid User ID"
+        })
+    }
+}
 
 // Get Movies
 module.exports.getMovies = async (req, res) => {
@@ -65,7 +91,7 @@ module.exports.checkFavorites = async (req, res) => {
 }
 
 // Update Favorites
-module.exports.addFavorites = async (req, res) => {
+module.exports.updateFavorites = async (req, res) => {
     try {
         const {userId, movieId} = req.body;
         const user = await UserDetails.findById(userId);
@@ -92,25 +118,87 @@ module.exports.addFavorites = async (req, res) => {
     }
 }
 
-// Get Favorites
-module.exports.getFavorites = async (req, res) => {
+// Create Theatres
+module.exports.createTheatre = async (req, res) => {
+    const {vendor, city, name} = req.body;
     try {
-        const {userId} = req.body;
-        const userDetail = await UserDetails.find({_id: userId}).populate("favorites.movies")
-        if (!userDetail.length) {
+        const vendorCheck = await User.findOne({
+            _id: vendor,
+            role: 'vendor'
+        });
+
+        if (!vendorCheck) {
             return res.status(400).send({
-                message: "Invalid User or Movie ID"
-            })
-        } else {
-            return res.status(200).send({
-                message: `Ticket Added to Favorites`,
-                movies: userDetail[0].favorites.movies,
+                message: "Invalid Vendor ID"
             })
         }
 
+        const cityCheck = await City.findOne({
+            city: city
+        })
+
+        if(!cityCheck) {
+            await City.create({
+                city: city,
+                theatres: [{
+                    vendor: vendor,
+                    name: name
+                }]
+            });
+            return res.status(200).send({
+                message: `New City with Theatre Added`
+            })
+        } else if (!cityCheck.theatres.some(theatre => theatre.name.trim().toLowerCase() === name.trim().toLowerCase())) {
+            await City.updateOne({city: city}, {
+                $push: {
+                    theatres: {
+                        vendor: vendor,
+                        name: name,
+                    }
+                }
+            });
+            return res.status(200).send({
+                message: `New Theatre added to ${city}`
+            })
+        } else {
+            return res.status(400).send({
+                message: `Theatre already exists in ${city}`
+            })
+        }
     } catch (err) {
         return res.status(400).send({
-            message: "Invalid User ID"
+            message: `No City or Name Provided`
+        })
+    }
+}
+
+// Get Theatres
+module.exports.getTheatres = async (req, res) => {
+    let {vendor} = req.body;
+    vendor = new mongoose.Types.ObjectId(vendor);
+    try {
+        const cities = await City.aggregate([
+            {$match : {'theatres.vendor': vendor} },
+            {$unwind: "$theatres"},
+            {
+                $replaceWith: {
+                    $mergeObjects: [
+                        "$theatres",
+                        { city: "$city" }
+                    ]
+                }
+            }
+        ]);
+
+        if (cities.length) return res.status(200).send({
+            theatres: cities
+        });
+        else return res.status(400).send({
+            message: `No Theatres for ${vendor}`
+        });
+    } catch (err) {
+        return res.status(400).send({
+            message: `Invalid Vendor ID`
         })
     }
 }

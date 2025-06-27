@@ -162,7 +162,7 @@ All notable changes to this project are documented here.
   - Streamlined structure for future testing and seat selection logic
 ---
 
-## [v0.2] – June 25, 2025
+## [v0.2] – June 26, 2025
 
 ### Phase 9 – UI Overhaul and Favorites System
 
@@ -174,7 +174,7 @@ All notable changes to this project are documented here.
   - Favorites are **loaded upon open** but not yet rendered in the UI
 ---
 
-## [Pre Beta v0.3] – June 26, 2025
+## [Pre Beta v0.3] – June 27, 2025
 
 ### Phase 10 – Ticket Booking Foundations & City Support
 
@@ -189,5 +189,26 @@ All notable changes to this project are documented here.
 
 > **Note:**
 > _v0.3 will finalize the foundation of the ticket booking system and implement fully operational, user-defined Favorites functionality._
+
+---
+
+## [Beta v0.3] – June 28, 2025
+
+### Phase 10 – Vendor Panel & Theatre Management
+
+- Implemented **vendor-exclusive** functionality:
+  - Added **My Theatres** tab and an **Add Theatre** button requesting City and Theatre Name
+  - Built **Manage Theatres** panel displaying all theatres belonging to the logged-in vendor
+- Integrated per-theatre UI with placeholder for **existing screens view**
+- Added **Screen Adding UI**:
+- Vendors can title the screen and assign rows/columns
+- Manual gap selection or whole rows/columns are supported
+- (Note: Backend logic for seat layout and screen saving still to be implemented)
+- Renamed `/booking` route to more intuitive `/showtime`
+- Updated route styling: changed all input borders from `#000` to `#CCC`
+
+---
+
+> Note: This step lays the foundation for vendor-side management and opens the door to dynamic seat layout logic in future updates._
 
 ---

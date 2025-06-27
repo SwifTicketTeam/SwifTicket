@@ -61,7 +61,7 @@ export default{
   height: auto;
   margin: 1.2rem 0;
   border-radius: 1.5rem;
-  box-shadow: 0.01rem 0.01rem 0.2rem 0.3rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0.01rem 0.01rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: box-shadow 1s ease,
               transform 0.5s ease;

@@ -29,6 +29,7 @@
         <input class = "field" v-model = "role" type = "text" name = "role" id = "role" spellcheck="false" autocomplete = "off" readonly>
       </div>
     </div>
+    <button @click = "logout" id = "logout">LOGOUT</button>
   </div>
 </template>
 
@@ -118,12 +119,17 @@ export default {
         this.$refs.email.readOnly = false;
       }
     },
-  },
+
+    logout() {
+      this.$store.dispatch('auth/deleteToken');
+      this.$router.push({ path: "/" });
+    }
+  }
 }
 </script>
 
 <style scoped src = "@/styles/forms.css"></style>
-
+<style scoped src = "@/styles/button.css"></style>
 <style scoped>
 
 #section {
@@ -216,6 +222,12 @@ button {
 
 button:hover {
   border-radius: 1.4rem;
+}
+
+#logout {
+  width: 12%;
+  height: 6%;
+  margin: 1rem auto;
 }
 
 </style>
