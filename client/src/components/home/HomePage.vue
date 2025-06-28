@@ -36,7 +36,7 @@ export default{
       this.isComponent = "EventsList";
       this.evt = evt
     });
-    eventBus.$on("toFavorites", (evt) => {
+    eventBus.$on("toAccount", (evt) => {
       this.isComponent = "Event";
       this.evt = evt
     });
@@ -45,7 +45,7 @@ export default{
       this.evt = evt
     });
     eventBus.$on('book', (evt) => {
-      this.$router.push("/booking/movies");
+      this.$router.push("/showtime");
       setTimeout(() => {
         eventBus.$emit("bookMovie", evt);
       }, 600);

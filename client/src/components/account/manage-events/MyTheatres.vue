@@ -90,6 +90,7 @@ export default {
 button {
   width: 90%;
   height: 18%;
+  font-size: 1.2rem;
   margin: 1rem 0 0 0;
 }
 

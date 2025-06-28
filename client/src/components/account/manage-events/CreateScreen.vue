@@ -8,37 +8,67 @@
       <label>COLUMNS</label>
       <input type="number" v-model="columns">
     </div>
+    <div id="ForNote">
+      <h2>NOTE:</h2>
+      <p id="note">
+        <br><strong>Theatre Layout Creation Guide:</strong>
+        <br><br>
+        <strong>Rows & Columns:</strong>
+        <br>
+        - Each row is labeled with a letter (A, B, C...) and each seat is numbered (1, 2, 3...).<br>
+        - Seat IDs will follow the format like "B4", "C10".
+        <br><br>
+        <strong>Creating Gaps:</strong>
+        <br>
+        - To remove an entire row, click the row label. It will be considered a walking lane.<br>
+        - To remove individual seats, click on them. Those seats will be excluded from layout.<br>
+        - Use arrow buttons at the ends of rows to indicate vertical aisle gaps in that column.
+        <br><br>
+        <strong>Live Layout Update:</strong>
+        <br>
+        - No preview step required. The layout updates automatically as you make changes.
+        <br><br>
+      </p>
+    </div>
+
     <p>{{warning}}</p>
-    <div id = "layout">
+    <div id = "layout" v-if = "!isRefresh">
       <div id = "screen">
         <span>SCREEN</span>
         <div id = "ScreenLine"></div>
       </div>
       <div class = "row">
-        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event, index)">{{seat}}</div>
+        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1)">▼</div>
       </div>
-      <div v-for = "(row, index) in parseInt(rows)" :key = index class ="row">
-        <div class = "RowNumber no-select" @click = "toggleRow($event)">{{numbersToLetters(row)}}</div>
-        <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = index class ="seat no-select" @click = "toggleGap($event)"></button>
-        <div class = "RowNumber no-select" @click = "toggleRow($event)">{{numbersToLetters(row)}}</div>
+      <div v-for = "(row, index) in parseInt(rows)" :key = index class = "row">
+        <div class = "RowNumber no-select" @click = "toggleRow($event.target)">{{numbersToLetters(rows - row + 1)}}</div>
+        <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select" @click = "toggleGap($event.target)">{{seat}}</button>
+        <div class = "RowNumber no-select" @click = "toggleRow($event.target)">{{numbersToLetters(rows - row + 1)}}</div>
       </div>
       <div class = "row">
-        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event, index)"  >{{seat}}</div>
+        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1 )"  >▲</div>
       </div>
-      <button id = "create" @click = "createScreen">CREATE SCREEN</button>
+      <button id = "create" @click = "createScreen($event.target)">CREATE SCREEN</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "CreateScreen",
+  props: {
+    city: String,
+    theatre: String,
+  },
   data() {
     return {
       ScreenName: "",
       rows: 10,
       columns: 10,
-      warning: "Rows and Columns should be at least 1",
+      warning: "",
+      isRefresh: false,
     }
   },
   methods: {
@@ -52,50 +82,106 @@ export default {
       }
       return letters;
     },
-    toggleGap(event) {
-      if (event.target.classList.contains("isGap")) event.target.classList.remove("isGap");
-      else event.target.classList.add("isGap");
+    toggleGap(el) {
+      if (el.classList.contains("isGap")) el.classList.remove("isGap");
+      else el.classList.add("isGap");
+      this.calculateLayout(el);
     },
-    toggleRow(event) {
-      const seats = event.target.parentElement.querySelectorAll("button");
-      if (event.target.classList.contains("isGap")) {
-        event.target.classList.remove("isGap");
+    toggleRow(el) {
+      const seats = el.parentElement.querySelectorAll(".seat");
+      if (el.classList.contains("isRGap")) {
+        el.classList.remove("isRGap");
         seats.forEach(seat => {
           seat.classList.remove("isGap");
         })
       }
       else {
-        event.target.classList.add("isGap");
+        el.classList.add("isRGap");
         seats.forEach(seat => {
           seat.classList.add("isGap");
         })
       }
+      this.calculateLayout(el);
     },
-    toggleColumn(event, index) {
-      const seats = event.target.parentElement.parentElement.querySelectorAll("button");
-      if (event.target.classList.contains("isGap")) {
-        event.target.classList.remove("isGap");
+    toggleColumn(el, index) {
+      const seats = el.parentElement.parentElement.querySelectorAll(".seat");
+      if (el.classList.contains("isCGap")) {
+        el.classList.remove("isCGap");
         seats.forEach(seat => {
-          if (seat.dataset.id === index.toString()) {
+          if (seat.dataset.id.split(', ')[1]  === index.toString()) {
             seat.classList.remove("isGap");
           }
         })
       }
       else {
-        event.target.classList.add("isGap");
+        el.classList.add("isCGap");
         seats.forEach(seat => {
-          if (seat.dataset.id === index.toString()) {
+          if (seat.dataset.id.split(', ')[1] === index.toString()) {
             seat.classList.add("isGap");
           }
         })
       }
+      this.calculateLayout(el);
     },
-    createScreen() {
+    calculateLayout(el) {
+      const rows = Array.from(el.parentElement.parentElement.querySelectorAll(".row")).reverse();
+      let RowNumber = 1;
+      rows.forEach(row => {
+        const seats = row.querySelectorAll(".seat");
+
+        if (seats.length === 0) return;
+
+        let SeatNumber = 1
+        seats.forEach(seat => {
+          if (!seat.classList.contains("isGap")) {
+            seat.textContent = SeatNumber;
+            SeatNumber++;
+          }
+        });
+        if (!(SeatNumber === 1)) {
+          const RowNumbers = row.querySelectorAll("div");
+          RowNumbers.forEach(RowHeader => {
+            RowHeader.textContent = this.numbersToLetters(RowNumber);
+          })
+          RowNumber++;
+        } else {
+          const RowNumbers = row.querySelectorAll("div");
+          RowNumbers.forEach(RowHeader => {
+            RowHeader.textContent = "";
+          })
+        }
+      })
+    },
+    createScreen(el) {
       if (this.rows < 1 || this.columns < 1) {
         this.warning = "Rows and Columns should be at least 1";
       } else {
         this.warning = "";
+        const seatsEl = el.parentElement.querySelectorAll(".seat");
+        let seats = [];
+        seatsEl.forEach(seatEl => {
+          seats.push([...seatEl.dataset.id.split(', '), seatEl.classList.contains("isGap")]);
+        });
+        axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screens/create`, {
+          city: this.city,
+          theatre: this.theatre,
+          name: this.ScreenName,
+          seats: seats,
+        }).then(() => {
+          this.$emit("updatedScreen");
+          this.warning = "";
+        }).catch((err) => {
+          this.warning = err.response.data.message;
+        });
       }
+    }
+  },
+  watch: {
+    rows() {
+      this.isRefresh = true;
+      setTimeout(() => {
+        this.isRefresh = false;
+      }, 10);
     }
   }
 }
@@ -138,11 +224,29 @@ input:focus {
   outline: none;
 }
 
+#ForNote {
+  border-radius: 1rem;
+  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
+  border: 0.1rem solid #CCC;
+  margin: 0 0 1rem 0;
+}
+
+h2 {
+  margin: 1rem 1rem 0 1rem;
+}
+
+#note {
+  color: black;
+  height: 22rem;
+  margin: 0 1rem 1rem 1rem;
+  text-wrap: wrap;
+  text-align: left;
+}
+
 p {
-  width: 100%;
   height: 2rem;
-  text-align: center;
   color: red;
+  text-align: center;
 }
 
 #layout {
@@ -194,7 +298,7 @@ p {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   height: 1rem;
   text-align: center;
 }
@@ -202,6 +306,7 @@ p {
 .seat {
   width: 2rem;
   height: 2rem;
+  font-size: 0.9rem;
   background-color: #EEE;
   border-radius: 0.5rem;
   box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.05);
@@ -216,21 +321,21 @@ p {
 }
 
 .isGap, .isGap:hover {
-  background-color: inherit;
-  border: 0 solid #FFF;
-  box-shadow: none;
+  opacity: 0;
 }
 
-#create {
-  padding: 0.4rem 1rem;
+#create{
+  padding: 0.6rem 1.2rem;
+  font-size: 1.2rem;
 }
 
 button {
   padding: 0;
   margin: 0.5rem;
   transition: background-color 0.35s ease,
-              border 0.35s ease,
-              box-shadow 0.35s ease;
+              opacity 0.35s ease,
+              box-shadow 0.35s ease,
+              border-radius 0.35s ease;
 }
 
 

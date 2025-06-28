@@ -5,7 +5,7 @@
       <button @click = "newTheatre" class = "no-select">{{(isComponent === "MyTheatres") ? "ADD NEW THEATRE" : "MANAGE THEATRES"}}</button>
     </div>
     <transition name = "fade" mode = "out-in">
-      <component :is = "isComponent" :theatre = "theatre"></component>
+      <component :is = "isComponent" :theatre = "theatre" @addedTheatre = "newTheatre"></component>
     </transition>
   </div>
 </template>
@@ -61,8 +61,8 @@ h2 {
 }
 
 button {
-  font-size: 1.3rem;
-  width: 20%;
+  font-size: 1.2rem;
+  width: 18%;
   padding: 0.4rem 1rem;
 }
 

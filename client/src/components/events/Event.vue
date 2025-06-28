@@ -11,7 +11,7 @@
         <div class = "mini-section">
           <h1 id = "title">{{evt.title.toUpperCase()}}</h1>
           <transition name = "fade">
-          <button class = "fav" @click = "updateFavorites">{{ isFavorite ? "Remove from Favorites" : "Add to Favorites"}}</button></transition>
+          <button class = "fav" @click = "updateFavorites">{{ isFavorite ? "REMOVE FROM FAVORITES" : "ADD TO FAVORITES"}}</button></transition>
         </div>
         <p>{{evt.overview}}</p>
         <br>
@@ -54,7 +54,7 @@ export default {
     eventBus.$on("toEvents", () => {
       this.toFavorites = false;
     });
-    eventBus.$on("toFavorites", () => {
+    eventBus.$on("toAccount", () => {
       this.toFavorites = true;
     });
     this.checkFavorites()
@@ -155,7 +155,7 @@ export default {
 
 button {
   height: 3rem;
-  padding: 0 1.5rem;
+  padding: 0 1.3rem;
   text-wrap: nowrap;
   margin: 1.3rem 0 0 0;
 }
