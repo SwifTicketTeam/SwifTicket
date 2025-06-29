@@ -27,7 +27,7 @@
         </div>
         <div class = "line-box last">
           <p>RATING : {{evt.rating}} / 10</p>
-          <button class = "no-select" @click = "book">BOOK NOW</button>
+          <button class = "no-select" @click = "book" v-if = "evt.is_screening">BOOK NOW</button>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@ import {eventBus} from "@/main";
 import axios from "axios";
 
 export default {
-  name: "EventInfo",
+  name: "MovieInfo",
   props: {
     evt: Object,
   },
@@ -97,7 +97,7 @@ export default {
 };
 </script>
 
-<style scoped src = "../../styles/button.css"></style>
+<style scoped src = "../../../styles/button.css"></style>
 <style scoped>
 
 #event {

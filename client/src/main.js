@@ -39,7 +39,6 @@ export const authenticate = async () => {
         } catch (err) {
             console.log("No Tokens to be Deleted.")
         }
-
     });
 }
 

@@ -3,7 +3,7 @@
     <h1 class = "no-select">{{theatre.name}}</h1>
     <h2 class = "no-select">{{theatre.city}}</h2>
     <div id = "screens">
-      <Screen v-for = "(Screen, index) in screens" :key = "index" :theatre = theatre :Screen = Screen @updatedScreen = "getScreens"></Screen>
+      <Screen v-for = "Screen in screens" :key = "Screen.name" :theatre = theatre :Screen = Screen @updatedScreen = "getScreens"></Screen>
       <button @click = "createScreen" ref = "createScreen" class = "no-select">ADD SCREEN</button>
       <CreateScreen v-if = "isCreate" :theatre = "theatre.name" :city = "theatre.city" @updatedScreen = "createScreen"></CreateScreen>
     </div>
@@ -50,7 +50,7 @@ export default {
       }).then((res) => {
         this.screens = res.data.screens;
       }).catch((err) => {
-        console.log(err);
+        console.log(err)
       })
     }
   }

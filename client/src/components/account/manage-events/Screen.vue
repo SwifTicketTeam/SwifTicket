@@ -4,33 +4,61 @@
       <div id = "details">
         <h3 class = "no-select">{{editableScreen.name.toUpperCase()}}</h3>
         <h4 class = "no-select">CURRENT MOVIE : {{(!editableScreen.movie) ? "" : editableScreen.movie.title }}</h4>
-        <h4 class = "no-select">MOVIE STARTS AT : </h4>
+        <h4 class = "no-select">MOVIE STARTS AT : {{convertToDayDateTime(editableScreen.time)}}</h4>
       </div>
       <button @click = "editScreen" class = "no-select">{{ isEdit ? "BACK" : "EDIT SCREEN"}}</button>
     </div>
     <div v-if = "isEdit" id = "afterEdit" :class = "{preview : isPreview && isEdit}">
-      <input type = "text" placeholder = "Find Movies" v-model = "search">
+      <div class = "horizontalAlign">
+        <input type = "text" placeholder = "Find Movies" v-model = "search">
+        <ConfirmationModal :show = "isRemoveCurrentMovie" :message = "`Remove ${editableScreen?.movie?.title} from ${editableScreen.name}?`" @confirm = "RemoveMovie" @cancel = "() => {isRemoveCurrentMovie = false}"></ConfirmationModal>
+        <button @click = "confirmRemoveMovie">REMOVE CURRENT MOVIE</button>
+      </div>
       <div id = "movies">
-         <EventCardScreen @MovieChanged = "NewMovie" v-for = "(movie, index) in movies" :key = "index" :Theatre = theatre :Screen = "editableScreen" :movie = "movie"></EventCardScreen>
+         <EventCardScreen @MovieChanged = "NewMovie" :is-select = "true" v-for = "(movie, index) in movies" :key = "index" :movie = "movie" @selectMovie = "MovieSelected"></EventCardScreen>
       </div>
       <button id = "preview" @click = "previewLayout" class = "no-select">{{ isPreview ? "BACK" : "PREVIEW LAYOUT"}}</button>
-      <SeatLayout v-if = "isPreview" :layout = "Screen.layout"></SeatLayout>
-      <button v-if = "isPreview" id = "delete" @click = "deleteScreen" class = "no-select">DELETE SCREEN</button>
+      <MovieLayout v-if = "isPreview" :layout = "Screen.layout" :is-booking = false></MovieLayout>
+      <ConfirmationModal :show = "isDeleteShow" :message = "DeleteMessage" @confirm = "deleteScreen" @cancel = "() => {isDeleteShow = false}"></ConfirmationModal>
+      <button v-if = "isPreview" id = "delete" @click = "showConfirmationDelete" class = "no-select">DELETE SCREEN</button>
+    </div>
+    <div v-if = "isSelectedMovie" class = "overlay">
+      <div class = "modal">
+        <EventCardScreen @MovieChanged = "NewMovie" :is-select = "false" :movie = "selectedMovie"></EventCardScreen>
+        <div id = "selectDetails">
+          <h3>{{selectedMovie.title.toUpperCase()}}</h3>
+          <div class = "fields">
+            <label for = "MovieStartDate" class = "fieldLabel">DATE : </label>
+            <input type = "date" v-model = "selectedDate" class = "no-select" id = "MovieStartDate" :min = "new Date().toISOString().split('T')[0]">
+          </div>
+          <div class = "fields">
+            <label for = "MovieStartDate" class = "fieldLabel">TIME : </label>
+            <input type = "time" v-model = "selectedTime" step = "60" class = "no-select" id = "MovieStartTime" :min = "new Date().toISOString().split('T')[1].split('.')[0].slice(0, 5)">
+          </div>
+          <p>STARTS AT : {{formatDateTime(selectedDate, selectedTime)}}</p>
+          <div class = "fields">
+            <button @click = "NoScheduleMovie" class = "back">BACK</button>
+            <button @click = "scheduleMovie">SCHEDULE MOVIE</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import EventCardScreen from "./EventCardScreen.vue";
+import MovieCardScreen from "./MovieCardScreen.vue";
 import axios from "axios";
 import debounce from "lodash/debounce";
-import SeatLayout from "@/components/events/Layout.vue";
+import MovieLayout from "@/components/events/Movies/MovieLayout.vue";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 export default {
   name: "MovieScreen",
   components: {
-    SeatLayout,
-    EventCardScreen,
+    ConfirmationModal,
+    MovieLayout: MovieLayout,
+    EventCardScreen: MovieCardScreen,
   },
   props: {
     Screen: Object,
@@ -43,11 +71,26 @@ export default {
       search: "",
       editableScreen: {...this.Screen},
       isPreview: false,
+      isDeleteShow: false,
+      isDeleteConfirm: false,
+      DeleteMessage: "",
+      isSelectedMovie: false,
+      isRemoveCurrentMovie: false,
+      selectedMovie: {},
+      selectedDate: new Date().toISOString().split("T")[0],
+      selectedTime:new Date().toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }),
     }
   },
   created() {
     this.startSearch();
     this.debouncedSearch = debounce(this.startSearch, 400);
+
+    this.DeleteMessage = `Delete ${this.editableScreen.name.toUpperCase()}? This Action cannot be reversed.`;
   },
   methods: {
     editScreen() {
@@ -67,6 +110,9 @@ export default {
     previewLayout() {
       this.isPreview = !this.isPreview;
     },
+    showConfirmationDelete() {
+      this.isDeleteShow = true;
+    },
     deleteScreen() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screen/delete`, {
         city: this.theatre.city,
@@ -76,6 +122,67 @@ export default {
         this.$emit("updatedScreen");
       }).catch((err) => {
         console.log(err)
+      })
+      this.isDeleteShow = false;
+    },
+    MovieSelected(movie) {
+      this.isSelectedMovie = true
+      this.selectedMovie = movie;
+    },
+    NoScheduleMovie() {
+      this.isSelectedMovie = false;
+      this.selectedMovie = {};
+    },
+    scheduleMovie() {
+      this.isSelectedMovie = false;
+      axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/movie`, {
+        city: this.theatre.city,
+        TheatreName: this.theatre.name,
+        ScreenName: this.Screen.name,
+        movieID: this.selectedMovie._id,
+        movieTime: new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString(),
+      }).then(() => {
+        this.editableScreen.movie = this.selectedMovie;
+        this.editableScreen.time = new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString();
+        this.selectedMovie = {};
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    formatDateTime(date, time) {
+      return `${new Date(date).toLocaleDateString("en-GB", {weekday: "short", day: "2-digit", month: "short"})} | ${new Date(`1970-01-01T${time}:00`).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })}`;
+    },
+    convertToDayDateTime(ISOString) {
+      const TimeStr = new Date(ISOString).toLocaleString("en-US", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "Asia/Kolkata",
+      });
+
+      if (TimeStr !== "Invalid Date") return TimeStr;
+    },
+    confirmRemoveMovie() {
+      if (this.editableScreen.movie) this.isRemoveCurrentMovie = true;
+    },
+    RemoveMovie() {
+      axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/movie`, {
+        city: this.theatre.city,
+        TheatreName: this.theatre.name,
+        ScreenName: this.Screen.name,
+      }).then(() => {
+        this.isRemoveCurrentMovie = false;
+        this.editableScreen.movie = {};
+        this.editableScreen.time = "";
+      }).catch((err) => {
+        console.log(err);
       })
     }
   },
@@ -100,7 +207,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: height 1s ease;
+  transition: height 0.5s ease;
   overflow-x: hidden;
 }
 
@@ -109,11 +216,11 @@ export default {
 }
 
 #screen.edit {
-  height: 48rem;
+  height: 47rem;
 }
 
 #afterEdit {
-  height: 40rem;
+  min-height: 38rem;
 }
 
 #screen.preview {
@@ -141,8 +248,23 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 80%;
-  height: 8rem;
+  width: 90%;
+  height: 9rem;
+  margin-left: 0.8rem;
+}
+
+.horizontalAlign {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem;
+  height: 3rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.horizontalAlign button {
+  margin: 0;
+  width: 25%;
 }
 
 input {
@@ -150,7 +272,6 @@ input {
   width: 40%;
   height: 3rem;
   padding: 0 1rem;
-  margin: 1rem 0.5rem;
   font-size: 1.1rem;
   font-family: 'Poppins', serif;
   box-shadow: -0.01rem 0.01rem 0.1rem 0.03rem rgba(0, 0, 0, 0.25);
@@ -165,16 +286,17 @@ input:focus {
 h3 {
   font-size: 1.5rem;
   width: 30%;
+  margin-bottom: 0.4rem;
 }
 
 h4 {
-  margin: 0;
+  margin: 0 0 0.7rem 0;
   font-size: 1.1rem;
   font-weight: normal;
 }
 
 button {
-  width: 10rem;
+  width: 12rem;
   margin-top: 2.5rem;
   height: 3rem;
   font-size: 1.2rem;
@@ -183,14 +305,82 @@ button {
 
 #preview {
   width: 13rem;
-  margin-top: 0.2rem;
-  margin-left: 0.7rem;
+  margin: 0 0 0 0.7rem;
   padding: 0 1.2rem;
 }
 
 #delete {
   margin-left: 0;
   width: 18%;
+}
+
+.overlay {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.modal {
+  display: flex;
+  flex-direction: row;
+  background: white;
+  width: 40%;
+  padding: 1.2rem;
+  gap: 1rem;
+  border-radius: 0.8rem;
+  border: 0.15rem solid #CCC;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+}
+
+#selectDetails {
+  width: 80%;
+}
+
+#selectDetails p {
+  width: 100%;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.fields {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
+  width: 100%;
+  justify-content: center;
+}
+
+.fieldLabel {
+  font-size: 1.2rem;
+  width: 20%;
+}
+
+.modal h3 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.modal input {
+  width: 60%;
+}
+
+.fields button {
+  margin: 0 auto;
+  width: 45%;
+}
+
+.fields .back {
+  width: 20%;
 }
 
 </style>

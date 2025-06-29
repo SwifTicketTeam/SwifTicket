@@ -11,16 +11,16 @@
 
 <script>
 import HomeHeader from "./HomeHeader.vue"
-import EventsList from "../events/EventsList.vue"
-import Event from "../events/Event.vue";
+import MoviesList from "../events/Movies/MoviesList.vue"
+import Movie from "../events/Movies/Movie.vue";
 import {eventBus} from "@/main";
 
 export default{
   name: "HomePage",
   components: {
     HomeHeader,
-    EventsList,
-    Event,
+    EventsList: MoviesList,
+    Event: Movie,
   },
   data() {
     return{

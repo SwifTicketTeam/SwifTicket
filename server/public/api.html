@@ -5,57 +5,31 @@
     <title>SwifTicket API Documentation</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: white;
-            color: black;
-            padding: 2rem;
+            font-family: sans-serif;
             line-height: 1.6;
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #fffdfc;
+            color: #222;
         }
-
         h1, h2, h3 {
-            color: rgba(240, 128, 128, 0.75);
+            color: #a94442;
         }
-
-        h1 {
-            font-size: 2.4rem;
-            border-bottom: 3px solid #FFC94D;
-            padding-bottom: 0.3rem;
+        pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-left: 4px solid #ffc94d;
+            overflow-x: auto;
         }
-
-        h2 {
-            margin-top: 2rem;
-            font-size: 1.8rem;
-            border-left: 5px solid #FFC94D;
-            padding-left: 0.75rem;
+        code {
+            background: #f8f8f8;
+            padding: 2px 6px;
         }
-
-        h3 {
-            font-size: 1.4rem;
-            margin-top: 1.2rem;
-        }
-
-        code, pre {
-            background-color: #f8f8f8;
-            padding: 0.3rem 0.6rem;
-            border-radius: 5px;
-            display: block;
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-
-        ul {
-            margin-left: 1.5rem;
-        }
-
-        .section {
-            border: 2px solid #FFC94D;
-            border-radius: 10px;
-            padding: 1rem 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .subsection {
-            margin-top: 1.2rem;
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 2rem 0;
         }
     </style>
 </head>
@@ -63,173 +37,215 @@
 
 <h1>SwifTicket API Documentation</h1>
 
-<div class="section">
-    <h2>API Routes</h2>
-    <pre>
-GET     /                                      → Server root
-GET     /api                                   → API landing/documentation page
-POST    /api/auth/register                     → Register new user
-POST    /api/auth/login                        → Login
-GET     /api/auth/verified                     → Email verification through token
-POST    /api/auth/forgot-password              → Forgot password request
-POST    /api/auth/reset-password               → Reset password
-POST    /api/auth/jwt                          → Validate JWT session
-POST    /api/uploads/images/users/:userid      → Upload user profile photo
-GET     /api/uploads/images/users/:userid      → Get user profile picture
-PUT     /api/account/users/:userid             → Edit user information
-GET     /api/events/movies                     → Get movie list (with filters)
-POST    /api/events/movies/users/favorites     → Whether movie is in favorites
-PUT     /api/account/movies/favorites          → Add or Remove movie from favorites
-POST    /api/account/movies/favorites          → Get all favorite movies
-POST    /api/account/theatres/create           → Create a theatre (VR-only)
-POST    /api/account/theatres/get              → Get all theatres by vendor
-    </pre>
-</div>
+<hr>
 
-<div class="section">
-    <h2>Endpoint Details</h2>
+<h2>API Routes</h2>
+<pre><code>GET     /                                         → Server root
+GET     /api                                     → API landing/documentation page
 
-    <div class="subsection">
-        <h3>GET /</h3>
-        <p>Returns the server status or welcome message.</p>
-    </div>
+POST    /api/auth/register                       → Register new user
+POST    /api/auth/login                          → Login
+GET     /api/auth/verified                       → Email verification through token
+POST    /api/auth/forgot-password                → Forgot password request
+POST    /api/auth/reset-password                 → Reset password
+POST    /api/auth/jwt                            → Validate JWT session
 
-    <div class="subsection">
-        <h3>GET /api</h3>
-        <p>Returns the API landing documentation in Markdown or HTML format.</p>
-    </div>
+POST    /api/uploads/images/users/:userid        → Upload user profile photo
+GET     /api/uploads/images/users/:userid        → Get user profile picture
+PUT     /api/account/users/:userid               → Edit user information
 
-    <h2>Authentication</h2>
+GET     /api/events/movies                       → Get movie list (with filters)
+POST    /api/events/movies/screens               → Get screens showing a specific movie
+POST    /api/events/movies/users/favorites       → Whether movie is in favorites
+PUT     /api/account/movies/favorites            → Add or Remove movie from favorites
+POST    /api/account/movies/favorites            → Get all favorite movies
 
-    <div class="subsection">
-        <h3>POST /api/auth/register</h3>
-        <pre>{
+POST    /api/account/theatres/create             → Create a theatre (vendor only)
+POST    /api/account/theatres/get                → Get all theatres by vendor
+
+POST    /api/account/theatres/screens/create     → Create a screen under a theatre
+POST    /api/account/theatres/screens/get        → Get all screens under a theatre
+POST    /api/account/theatres/screen/delete      → Delete a screen
+
+GET     /api/account/theatres/movies             → Get list of movies for vendor selection
+POST    /api/account/theatres/movie              → Assign a movie and showtime to a screen
+</code></pre>
+
+<hr>
+
+<h2>API Endpoint Documentation</h2>
+
+<h3>GET /</h3>
+<p>Returns the server status or welcome message.</p>
+
+<h3>GET /api</h3>
+<p>Returns the API documentation in Markdown or HTML format.</p>
+
+<hr>
+
+<h2>Authentication</h2>
+
+<h3>POST /api/auth/register</h3>
+<p>Registers a new user.</p>
+<pre><code>{
   "username": "john_doe",
   "email": "john@example.com",
   "password": "your_password"
-}</pre>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>POST /api/auth/login</h3>
-        <pre>{
+<h3>POST /api/auth/login</h3>
+<p>Logs in the user.</p>
+<pre><code>{
   "email": "john@example.com",
   "password": "your_password"
-}</pre>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>GET /api/auth/verified?token=</h3>
-        <p>Redirects to login if token is valid and verified.<br> Redirects to error if invalid or expired.</p>
-    </div>
+<h3>GET /api/auth/verified?token=</h3>
+<p>Validates email verification token.</p>
 
-    <div class="subsection">
-        <h3>POST /api/auth/forgot-password</h3>
-        <pre>{
+<h3>POST /api/auth/forgot-password</h3>
+<p>Sends password reset email.</p>
+<pre><code>{
   "email": "john@example.com"
-}</pre>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>POST /api/auth/reset-password</h3>
-        <pre>{
+<h3>POST /api/auth/reset-password</h3>
+<p>Resets user password with a valid token.</p>
+<pre><code>{
   "password": "new_password",
   "token": "reset_token"
-}</pre>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>POST /api/auth/jwt</h3>
-        <pre>{
+<h3>POST /api/auth/jwt</h3>
+<p>Validates JWT token and returns session info.</p>
+<pre><code>{
   "token": "jwt_token_here"
-}</pre>
-        <p><strong>Response:</strong></p>
-        <pre>{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "role": "user"
-}</pre>
-    </div>
+}</code></pre>
 
-    <h2>Profile Photos</h2>
+<hr>
 
-    <div class="subsection">
-        <h3>POST /api/uploads/images/users/:userid</h3>
-        <p>Upload with FormData:</p>
-        <ul>
-            <li><code>userProfilePhoto</code>: image (.jpg, .jpeg, .png)</li>
-            <li><code>token</code>: JWT</li>
-        </ul>
-    </div>
+<h2>Profile Management</h2>
 
-    <div class="subsection">
-        <h3>GET /api/uploads/images/users/:userid</h3>
-        <p>Returns image with <code>image/*</code> MIME type.</p>
-    </div>
+<h3>POST /api/uploads/images/users/:userid</h3>
+<p>Uploads user profile photo (multipart form).</p>
 
-    <h2>Account Management</h2>
+<h3>GET /api/uploads/images/users/:userid</h3>
+<p>Returns user profile image (image MIME type).</p>
 
-    <div class="subsection">
-        <h3>PUT /api/account/users/:userid</h3>
-        <pre>{
-  "username": "new_username",
+<h3>PUT /api/account/users/:userid</h3>
+<p>Updates user info.</p>
+<pre><code>{
+  "username": "new_name",
   "email": "new_email",
   "bio": "updated bio"
-}</pre>
-    </div>
+}</code></pre>
 
-    <h2>Movies</h2>
+<hr>
 
-    <div class="subsection">
-        <h3>GET /api/events/movies</h3>
-        <p>Query: <code>?search=&lt;title&gt;&genre=Action,Comedy</code></p>
-    </div>
+<h2>Movies</h2>
 
-    <h2>Favorites</h2>
+<h3>GET /api/events/movies</h3>
+<p>Returns list of movies with optional filters.</p>
+<ul>
+    <li><code>search</code>: movie title</li>
+    <li><code>genre</code>: comma-separated genres</li>
+</ul>
 
-    <div class="subsection">
-        <h3>POST /api/events/movies/users/favorites</h3>
-        <pre>{
+<h3>POST /api/events/movies/screens</h3>
+<p>Returns screens showing a specific movie on a date.</p>
+<pre><code>{
+  "movieId": "movie_id",
+  "date": "YYYY-MM-DD"
+}</code></pre>
+
+<hr>
+
+<h2>Favorites System</h2>
+
+<h3>POST /api/events/movies/users/favorites</h3>
+<p>Checks if a movie is in the user's favorites.</p>
+<pre><code>{
   "userId": "user_id",
   "movieId": "movie_id"
-}</pre>
-        <p><strong>Response:</strong> <code>true</code> or <code>false</code></p>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>PUT /api/account/movies/favorites</h3>
-        <pre>{
+<h3>PUT /api/account/movies/favorites</h3>
+<p>Adds or removes a movie from the user's favorites.</p>
+<pre><code>{
   "userId": "user_id",
   "movieId": "movie_id"
-}</pre>
-    </div>
+}</code></pre>
 
-    <div class="subsection">
-        <h3>POST /api/account/movies/favorites</h3>
-        <pre>{
+<h3>POST /api/account/movies/favorites</h3>
+<p>Fetches all favorite movies for a user.</p>
+<pre><code>{
   "userId": "user_id"
-}</pre>
-        <p><strong>Returns list of favorite movies.</strong></p>
-    </div>
+}</code></pre>
 
-    <h2>Vendor – Theatres</h2>
+<hr>
 
-    <div class="subsection">
-        <h3>POST /api/account/theatres/create</h3>
-        <pre>{
+<h2>Theatre Management (Vendor)</h2>
+
+<h3>POST /api/account/theatres/create</h3>
+<p>Creates a new theatre in a selected city.</p>
+<pre><code>{
   "vendor": "vendor_id",
-  "city": "city_name",
-  "name": "theatre_name"
-}</pre>
-    </div>
+  "city": "City Name",
+  "name": "Theatre Name"
+}</code></pre>
 
-    <div class="subsection">
-        <h3>POST /api/account/theatres/get</h3>
-        <pre>{
+<h3>POST /api/account/theatres/get</h3>
+<p>Returns all theatres owned by a vendor.</p>
+<pre><code>{
   "vendor": "vendor_id"
-}</pre>
-    </div>
-</div>
+}</code></pre>
+
+<hr>
+
+<h2>Screen Management (Vendor)</h2>
+
+<h3>POST /api/account/theatres/screens/create</h3>
+<p>Creates a screen layout under a theatre.</p>
+<pre><code>{
+  "city": "City Name",
+  "theatre": "Theatre Name",
+  "screenName": "Screen 1",
+  "rows": 6,
+  "cols": 12,
+  "gaps": [[1, 3], [4, 5]]
+}</code></pre>
+
+<h3>POST /api/account/theatres/screens/get</h3>
+<p>Gets all screens for a specific theatre.</p>
+<pre><code>{
+  "city": "City Name",
+  "theatre": "Theatre Name"
+}</code></pre>
+
+<h3>POST /api/account/theatres/screen/delete</h3>
+<p>Deletes a screen from a theatre.</p>
+<pre><code>{
+  "city": "City Name",
+  "theatre": "Theatre Name",
+  "screenName": "Screen 1"
+}</code></pre>
+
+<hr>
+
+<h2>Movie Assignment (Vendor)</h2>
+
+<h3>GET /api/account/theatres/movies</h3>
+<p>Returns movies available for vendor assignment.</p>
+
+<h3>POST /api/account/theatres/movie</h3>
+<p>Assigns a movie and showtime to a screen.</p>
+<pre><code>{
+  "city": "City Name",
+  "theatre": "Theatre Name",
+  "screenName": "Screen 1",
+  "movieId": "movie_id",
+  "time": "HH:MM"
+}</code></pre>
 
 </body>
 </html>

@@ -5,56 +5,60 @@
 ## API Routes
 
 ```
+GET     /                                         → Server root
+GET     /api                                     → API landing/documentation page
 
-GET     /                                      → Server root
-GET     /api                              → API landing/documentation page
+POST    /api/auth/register                       → Register new user
+POST    /api/auth/login                          → Login
+GET     /api/auth/verified                       → Email verification through token
+POST    /api/auth/forgot-password                → Forgot password request
+POST    /api/auth/reset-password                 → Reset password
+POST    /api/auth/jwt                            → Validate JWT session
 
-POST    /api/auth/register                     → Register new user
-POST    /api/auth/login                        → Login
-GET    /api/auth/verified                     → Email verification through token
-POST    /api/auth/forgot-password              → Forgot password request
-POST    /api/auth/reset-password               → Reset password
-POST    /api/auth/jwt                          → Validate JWT session
+POST    /api/uploads/images/users/:userid        → Upload user profile photo
+GET     /api/uploads/images/users/:userid        → Get user profile picture
+PUT     /api/account/users/:userid               → Edit user information
 
-POST    /api/uploads/images/users/\:userid      → Upload user profile photo
-GET     /api/uploads/images/users/\:userid          → Get user profile picture
-PUT     /api/account/users/\:userid                 → Edit user information
+GET     /api/events/movies                       → Get movie list (with filters)
+POST    /api/events/movies/screens               → Get screens showing a specific movie
+POST    /api/events/movies/users/favorites       → Whether movie is in favorites
+PUT     /api/account/movies/favorites            → Add or Remove movie from favorites
+POST    /api/account/movies/favorites            → Get all favorite movies
 
-GET     /api/events/movies                         → Get movie list (with filters)
-POST    /api/events/movies/users/favorites     → Whether movie is in favorites
-PUT     /api/account/movies/favorites          → Add or Remove movie from favorites
-POST    /api/account/movies/favorites          → Get all favorite movies
+POST    /api/account/theatres/create             → Create a theatre (vendor only)
+POST    /api/account/theatres/get                → Get all theatres by vendor
 
-POST    /api/account/theatres/create           → Create a theatre (VR-only)
-POST    /api/account/theatres/get              → Get all theatres by vendor
+POST    /api/account/theatres/screens/create     → Create a screen under a theatre
+POST    /api/account/theatres/screens/get        → Get all screens under a theatre
+POST    /api/account/theatres/screen/delete      → Delete a screen
 
-````
+GET     /api/account/theatres/movies             → Get list of movies for vendor selection
+POST    /api/account/theatres/movie              → Assign a movie and showtime to a screen
+```
 
 ---
+
 ## API Endpoint Documentation
----
 
 ---
-
 
 ### Root
-
 
 #### GET `/`
 
 Returns the server status or welcome message.
 
 ---
-### API Landing
 
+### API Landing
 
 #### GET `/api`
 
-Returns the API landing documentation in Markdown or HTML.
+Returns the API documentation in Markdown or HTML format.
 
 ---
+
 ## Authentication
----
 
 ---
 
@@ -91,16 +95,13 @@ Logs in the user.
 
 ### GET `/api/auth/verified?token=`
 
-**Behavior:**
-
-* Redirects to login if token is valid and verified
-* Redirects to error page if token is invalid or invalid
+Validates email verification token.
 
 ---
 
 ### POST `/api/auth/forgot-password`
 
-Triggers password reset email.
+Sends password reset email.
 
 **Request Body:**
 
@@ -114,7 +115,7 @@ Triggers password reset email.
 
 ### POST `/api/auth/reset-password`
 
-Resets password with a valid token.
+Resets user password with a valid token.
 
 **Request Body:**
 
@@ -129,7 +130,7 @@ Resets password with a valid token.
 
 ### POST `/api/auth/jwt`
 
-Verifies a JWT token and returns session information.
+Validates JWT token and returns session info.
 
 **Request Body:**
 
@@ -139,48 +140,26 @@ Verifies a JWT token and returns session information.
 }
 ```
 
-**Response:**
-
-```json
-{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "role": "user"
-}
-```
-
 ---
 
-## Profile Photos
+## Profile Management
 
 ---
 
 ### POST `/api/uploads/images/users/:userid`
 
-Uploads a profile image.
+Uploads user profile photo.
 
 **FormData:**
 
-* `userProfilePhoto`: Profile image file (`.jpg`, `.jpeg`, `.png`)
+* `userProfilePhoto`: image file
 * `token`: JWT token
-
-**Response:**
-
-```json
-{
-  "message": "Profile Photo Uploaded Successfully"
-}
-```
 
 ---
 
 ### GET `/api/uploads/images/users/:userid`
 
-Retrieves the user's profile image as `image/*` MIME type.
-
----
-
-## Account Management
+Returns user profile photo (image MIME type).
 
 ---
 
@@ -192,17 +171,9 @@ Updates user information.
 
 ```json
 {
-  "username": "new_username",
+  "username": "new_name",
   "email": "new_email",
   "bio": "updated bio"
-}
-```
-
-**Response:**
-
-```json
-{
-  "message": "User details updated successfully"
 }
 ```
 
@@ -214,74 +185,61 @@ Updates user information.
 
 ### GET `/api/events/movies`
 
-Returns list of movies with optional search and genre filtering.
+Returns list of movies with optional filtering.
 
 **Query Parameters:**
 
-* `search`: optional string to search by title
-* `genre`: optional comma-separated genres
-
-**Example:**
-
-```
-/api/events/movies?search=avengers&genre=Action,Adventure
-```
-
-**Behavior:**
-
-* Returns up to 60 movies by relevance
+* `search`: (optional) movie title
+* `genre`: (optional) comma-separated genres
 
 ---
 
-## Favorites
+### POST `/api/events/movies/screens`
+
+Returns all screens showing a specific movie on a selected date.
+
+**Request Body:**
+
+```json
+{
+  "movieId": "movie_id",
+  "date": "YYYY-MM-DD"
+}
+```
+
+---
+
+## Favorites System
 
 ---
 
 ### POST `/api/events/movies/users/favorites`
 
-Checks whether a movie is in the favorites list for a user.
+Checks if a movie is favorited by a user.
 
 **Request Body:**
 
 ```json
 {
-  "userId": "user_id_here",
-```
-"movieId": "movie_id_here"
+  "userId": "user_id",
+  "movieId": "movie_id"
 }
-
-**Response:**
-
-```json
-true
 ```
 
-or
-
-```json
-false
-```
+**Response:** `true` or `false`
 
 ---
 
 ### PUT `/api/account/movies/favorites`
 
-Adds or deletes a movie from favorites.
+Adds or removes a movie from user's favorites.
 
 **Request Body:**
 
 ```json
 {
-  "userId": "user_id_here",
-  "movieId": "movie_id_here"
-}
-```
-
-**Response:**
-
-```json
-{
-  "message": "Event Updated to Favorites"
+  "userId": "user_id",
+  "movieId": "movie_id"
 }
 ```
 
@@ -289,73 +247,33 @@ Adds or deletes a movie from favorites.
 
 ### POST `/api/account/movies/favorites`
 
-Retrieves all favorite movies of a user.
+Fetches all favorite movies for a user.
 
 **Request Body:**
 
 ```json
 {
-  "userId": "user_id_here"
+  "userId": "user_id"
 }
 ```
-
-**Response:**
-
-```json
-{
-  "message": "Ticket Added to Favorites",
-  "movies": [
-    {
-      "_id": "movie_id",
-      "title": "Movie Title",
-```
-"genres": ["Action", "Drama"],
-.
-}
-]
-
-}
 
 ---
 
-## Vendor – Theatres
+## Vendor: Theatre Management
 
 ---
 
 ### POST `/api/account/theatres/create`
 
-Creates a theatre entry for a vendor in a given city.
+Creates a theatre in a city.
 
 **Request Body:**
 
 ```json
 {
   "vendor": "vendor_id",
-  "city": "city_name",
-  "name": "theatre_name"
-}
-```
-
-**Response (Success – new city created):**
-
-```json
-{
-  "message": "New City with Theatre Added"
-}
-```
-
-**Response (Success – theatre added to existing city):**
-
-```json
-{"}}}
-"message": "New Theatre added to city_name"
-```
-
-**Response (Failure – duplicate theatre):**
-
-```json
-{
-  "message": "Theatre already exists in city_name"
+  "city": "City Name",
+  "name": "Theatre Name"
 }
 ```
 
@@ -363,7 +281,7 @@ Creates a theatre entry for a vendor in a given city.
 
 ### POST `/api/account/theatres/get`
 
-Returns all theatres owned by a specific vendor.
+Returns all theatres owned by a vendor.
 
 **Request Body:**
 
@@ -373,19 +291,85 @@ Returns all theatres owned by a specific vendor.
 }
 ```
 
-**Response:**
+---
+
+## Vendor: Screen Management
+
+---
+
+### POST `/api/account/theatres/screens/create`
+
+Creates a screen with seat layout under a theatre.
+
+**Request Body:**
 
 ```json
 {
-  "theatres": [
-    {
-      "name": "Theatre Name",
-      "city": "City",
-      "screens": []
-    },
-    .
-    }.
-  ]
+  "city": "city_name",
+  "theatre": "theatre_name",
+  "screenName": "Screen 1",
+  "rows": 6,
+  "cols": 12,
+  "gaps": [[1, 3], [4, 5]]
+}
+```
+
+---
+
+### POST `/api/account/theatres/screens/get`
+
+Returns all screens for a specific theatre and city.
+
+**Request Body:**
+
+```json
+{
+  "city": "city_name",
+  "theatre": "theatre_name"
+}
+```
+
+---
+
+### POST `/api/account/theatres/screen/delete`
+
+Deletes a screen.
+
+**Request Body:**
+
+```json
+{
+  "city": "city_name",
+  "theatre": "theatre_name",
+  "screenName": "Screen 1"
+}
+```
+
+---
+
+## Vendor: Movie Assignment
+
+---
+
+### GET `/api/account/theatres/movies`
+
+Returns movie list for selection (vendor use).
+
+---
+
+### POST `/api/account/theatres/movie`
+
+Assigns a movie with showtime to a screen.
+
+**Request Body:**
+
+```json
+{
+  "city": "city_name",
+  "theatre": "theatre_name",
+  "screenName": "Screen 1",
+  "movieId": "movie_id",
+  "time": "HH:MM"
 }
 ```
 

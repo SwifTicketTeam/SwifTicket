@@ -1,7 +1,7 @@
 <template>
   <div id = "client">
     <transition name = "fade" mode = "out-in">
-      <keep-alive>
+      <keep-alive :exclude = "['ShowTime']">
         <router-view></router-view>
       </keep-alive>
     </transition>

@@ -1,5 +1,5 @@
 <template>
-  <div id = "layout" ref = "layout">
+  <div id = "layout-root" ref = "layout">
     <div id = "screen">
       <span>SCREEN</span>
       <div id = "ScreenLine"></div>
@@ -9,7 +9,7 @@
     </div>
     <div v-for = "(row, index) in parseInt(rows)" :key = index class = "row">
       <div :data-id = "`${row}`" class = "RowNumber no-select"></div>
-      <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select">{{seat}}</button>
+      <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select" :class = "{isBook : isBooking}">{{seat}}</button>
       <div :data-id = "`${row}`" class = "RowNumber no-select"></div>
     </div>
     <div class = "row">
@@ -23,6 +23,7 @@ export default {
   name: "SeatLayout",
   props: {
     layout: Array,
+    isBooking: Boolean,
   },
   data() {
     return {
@@ -84,24 +85,23 @@ export default {
 
 <style scoped>
 
-#layout {
+#layout-root {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
-  flex: 1;
   width: auto;
   height: auto;
   gap: 2rem;
   padding: 1.5rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   border-radius: 1rem;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
   border: 0.1rem solid #CCC;
   overflow: auto;
 }
 
-#layout::-webkit-scrollbar {
+#layout-root::-webkit-scrollbar {
   display: none;
 }
 
@@ -145,6 +145,15 @@ export default {
   border-radius: 0.5rem;
   box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.05);
   border: 0.1rem solid #CCC;
+}
+
+.isBook {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.isBook:hover {
+  background-color: #BBB;
 }
 
 .isGap{

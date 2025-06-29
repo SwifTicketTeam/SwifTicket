@@ -162,7 +162,7 @@ All notable changes to this project are documented here.
   - Streamlined structure for future testing and seat selection logic
 ---
 
-## [v0.2] – June 26, 2025
+## [v0.2] – June 25, 2025
 
 ### Phase 9 – UI Overhaul and Favorites System
 
@@ -212,3 +212,47 @@ All notable changes to this project are documented here.
 > Note: This step lays the foundation for vendor-side management and opens the door to dynamic seat layout logic in future updates._
 
 ---
+
+## [v0.3] - June 29, 2025
+
+### Phase 11 - Vendor Management & Screen System Launched
+- Vendor-specific city selector to create theatres
+- Support for multiple cities included in database for hosting more events
+- Backend to create screens with stored layout data saved in the database
+- Dynamic visualization of seats when creating screens, with row/column and gap options
+- Option to see all screens for each theatre in the vendor dashboard
+- Implemented MovieCard system for vendors to allocate movies to their cinemas
+- Updates movie assignment immediately after the selection
+- Preview Layout component developed:
+  - Utilized to display and emulate saved screen layout from database
+  - Can be reused in the future for preview and real-time parsing of layout
+- Delete screen option without confirmation handling
+
+---
+
+> Note: Showtime scheduling, screen-time mapping, and seat reservation flow will be implemented in version next.  
+Version `v0.4` and its sub-versions will finish up the entire ticket booking flow from timing, seat locking to payment integration.
+
+---
+
+## [Beta v0.4] - June 30, 2025
+
+### Phase 12 - Showtime Selection, Booking UI & Layout Improvements
+- Vendors are able to choose a time while selecting movies for their screens
+- "Currently Showing" label introduced for live movies, separated visually in `/events`
+- Vendors are able to delete the movie currently showing on a screen with warning
+- New movie assignment workflow introduced with validation and new UI
+- Structure of booking screen included with:
+- Title of movie and five dates that are selectable (today + subsequent 6 days)
+  - Screens grouped by theatre under chosen date and movie
+  - Each screen shows its respective showtime
+- Layout piece now shows the screen name and details over the seat grid
+- Delete screen functionality now has confirmation handling to prevent unwanted deletions
+- Booking UI added:
+  - Screens and layouts are selectable
+- "Book Now" and true ticket reservation logic to be implemented
+
+---
+
+> Note: Movie queuing and full seat reservation flow will be completed in `v0.4.x` patches.
+Booking feature like seat selection, lock, and confirmation is being actively developed.

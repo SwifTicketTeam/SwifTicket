@@ -1,5 +1,6 @@
 <template>
   <div @click = "eventClicked" id = "card">
+    <span v-if = "event.is_screening" class = "above">CURRENTLY SHOWING</span>
     <transition name = "fade">
       <img v-show = "showImage" :src = "`${storageUrl}/${currentID}.jpg`">
     </transition>
@@ -53,6 +54,7 @@ export default{
 <style scoped>
 
 #card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -68,8 +70,22 @@ export default{
 }
 
 #card:hover {
-  transform: translateY(-4%) scale(105%);
+  transform: translateY(-4%) scale(1.05);
   box-shadow: 0.01rem 0.01rem 0.6rem 0.05rem rgba(0, 0, 0, 0.45);
+}
+
+.above {
+  position: absolute;
+  border-radius: 1.5rem 0 1.5rem 0;
+  width: 70%;
+  height: 4%;
+  padding: 0.6rem;
+  font-size: 1.05rem;
+  border: 0.05rem solid #000;
+  box-shadow: 0.01rem 0.01rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1);
+  background-color: rgba(240, 128, 128, 0.85);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 div {

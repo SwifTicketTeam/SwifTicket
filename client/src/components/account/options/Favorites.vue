@@ -9,11 +9,11 @@
 
 <script>
 import axios from "axios";
-import EventCard from "@/components/events/EventCard.vue";
+import MovieCard from "@/components/events/Movies/MovieCard.vue";
 
 export default {
   name: "MyFavorites",
-  components: {EventCard},
+  components: {EventCard: MovieCard},
   data() {
     return {
       events: {},

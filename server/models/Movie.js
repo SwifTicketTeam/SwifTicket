@@ -29,9 +29,9 @@ const movieSchema = new Schema({
         type: String,
         default: ''
     },
-    isScreening: {
+    is_screening: {
         type: Boolean,
-        default: false
+        default: false,
     },
 })
 

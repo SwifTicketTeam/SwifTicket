@@ -3,7 +3,7 @@ import MyAccount from "@/components/account/MyAccount.vue";
 import ResetPassword from "../components/authentication/forms/ResetPassword.vue";
 import HomePage from "../components/home/HomePage.vue";
 import VerificationError from "../components/authentication/VerificationError.vue";
-import ShowTime from "@/components/events/ShowTime.vue";
+import ShowTime from "@/components/events/Movies/ShowTime.vue";
 
 export default [
     {

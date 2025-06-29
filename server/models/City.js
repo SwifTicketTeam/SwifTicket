@@ -1,14 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// Seats
+const SeatSchema = new Schema({
+    number: {
+        type: Number,
+    },
+    isGap: {
+        type: Boolean,
+        default: false,
+    },
+    tier: {
+        type: String,
+        default: 'regular',
+    }
+})
+
 // Rows
 const RowSchema = new Schema({
     row: {
         type: String,
     },
-    seats: [{number: {
-            type: Number,
-        }}]
+    seat: [SeatSchema],
 }, { _id: false });
 
 // Screens
@@ -20,6 +33,11 @@ const ScreenSchema = new Schema({
     movie: {
         type: Schema.Types.ObjectId,
         ref: 'Movie',
+        default: null,
+    },
+    time: {
+      type: String,
+      default: "",
     },
     layout: {
         type: [RowSchema],

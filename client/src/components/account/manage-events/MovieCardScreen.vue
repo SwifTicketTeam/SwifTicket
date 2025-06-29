@@ -9,39 +9,29 @@
         <p>{{movie.language}}</p>
       </div>
     </div>
-    <button @click = "SelectMovie">SELECT MOVIE</button>
+    <button v-if = "isSelect" @click = "SelectMovie">SELECT MOVIE</button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "MovieCardScreen",
   props: {
     movie: Object,
-    Screen: Object,
-    Theatre: Object,
+    isSelect: Boolean,
   },
   data() {
     return {
       currentID: this.movie._id,
       showImage: true,
       storageUrl: process.env.VUE_APP_STORAGE_URL,
+      isSelectedMovie: false,
     }
   },
   methods: {
     SelectMovie() {
-      axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/movie`, {
-        city: this.Theatre.city,
-        TheatreName: this.Theatre.name,
-        ScreenName: this.Screen.name,
-        movieID: this.movie._id
-      }).then(() => {
-        this.$emit("MovieChanged", this.movie);
-      }).catch((err) => {
-        console.log(err);
-      })
+      this.isSelectedMovie = true;
+      this.$emit("selectMovie", this.movie);
     }
   },
   watch: {
@@ -64,7 +54,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 18%;
+  width: 13.3rem;
   height: auto;
   margin: 1.2rem 0;
   border-radius: 1.5rem;
