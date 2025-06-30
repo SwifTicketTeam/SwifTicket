@@ -4,10 +4,22 @@ const UserDetails = require('../models/UserDetails');
 const Movie = require('../models/Movie');
 const mongoose = require('mongoose');
 
+
+async function isScreeningCheck() {
+    await Movie.updateMany({
+            is_screening: true,
+            last_screening_time: { $lt: new Date().toISOString() }
+        }, {
+            $set: { is_screening: false, last_screening_time: "" }
+        }
+    );
+}
+
 // Get Favorites
 module.exports.getFavorites = async (req, res) => {
     try {
         const {userId} = req.body;
+        await isScreeningCheck();
         const userDetail = await UserDetails.findById(userId).populate("favorites.movies")
         if (!userDetail) {
             return res.status(400).send({
@@ -47,10 +59,12 @@ module.exports.getMovies = async (req, res) => {
             query.genres = { $all: genres };
         }
 
+        await isScreeningCheck();
         const screening_movies = await Movie.find({
             ...query,
             is_screening: true,
         }).limit(movieLimit);
+
 
         let movies;
         const newMovieLimit = movieLimit - screening_movies.length - 6 + screening_movies.length % 6;
@@ -284,6 +298,22 @@ module.exports.getScreens = async (req, res) => {
     }
 
     try {
+        await City.updateOne(
+            {
+                city: city,
+                'theatres.name': theatre,
+            },
+            {$set: {
+                    'theatres.$[t].screens.$[s].time': "",
+                    'theatres.$[t].screens.$[s].price': 0,
+                    'theatres.$[t].screens.$[s].movie': null,
+                }
+            }, {
+                arrayFilters: [
+                    { 't.name': theatre },
+                    { 's.time': { $lt: new Date().toISOString() } }
+                ]});
+
         const cityData = await City.findOne(
             { city: city, "theatres.name": theatre },
             { "theatres.$": 1 }
@@ -294,6 +324,7 @@ module.exports.getScreens = async (req, res) => {
                 message: "Theatre not found"
             });
         }
+
 
         const screens = await Promise.all(
             cityData.theatres[0].screens.map(async (screen) => {
@@ -311,6 +342,8 @@ module.exports.getScreens = async (req, res) => {
                 }
             })
         );
+
+        screens.sort((screen1, screen2) => screen1.time.localeCompare(screen2.time));
 
         if (!screens.length) {
             return res.status(200).send({
@@ -355,7 +388,7 @@ module.exports.getScreenMovies = async (req, res) => {
 
 // Set Movie for Screen
 module.exports.setScreenMovie = async (req, res) => {
-    const {city, TheatreName, ScreenName, movieID = null, movieTime = ""} = req.body;
+    const {city, TheatreName, ScreenName, movieID = null, moviePrice = 0, movieTime = ""} = req.body;
 
     try {
         const OldMovie = await City.aggregate([
@@ -383,7 +416,7 @@ module.exports.setScreenMovie = async (req, res) => {
             ]);
             if (!isStillScreened.length) {
                 await Movie.updateOne({_id: OldMovieID}, {
-                    $set: {is_screening: false}
+                    $set: {is_screening: false, last_screening_time: ""}
                 });
             }
         }
@@ -395,6 +428,7 @@ module.exports.setScreenMovie = async (req, res) => {
         }, {
             $set: {
                 "theatres.$[t].screens.$[s].movie": movieID,
+                "theatres.$[t].screens.$[s].price": moviePrice,
                 "theatres.$[t].screens.$[s].time": movieTime
             }
         }, {
@@ -410,9 +444,22 @@ module.exports.setScreenMovie = async (req, res) => {
             });
         }
 
-        await Movie.updateOne({_id: movieID}, {
-            $set: {is_screening: true}
-        });
+        await Movie.updateOne({ _id: movieID }, [
+            {$set: {
+                    is_screening: true,
+                    last_screening_time: {
+                        $cond: [
+                            {$or: [
+                                    { $eq: ["$last_screening_time", ""] },
+                                    { $lt: ["$last_screening_time", movieTime] }
+                                ]},
+                            movieTime,
+                            "$last_screening_time",
+                        ]
+                    }
+                }}
+        ]);
+
 
         return res.status(200).send({
             message: "Screen's Movie Updated Successfully",
@@ -462,7 +509,7 @@ module.exports.deleteScreen = async (req, res) => {
                 await Movie.updateOne({
                     _id: movieID
                 }, {
-                    $set: {is_screening: false}
+                    $set: {is_screening: false, last_screening_time: ""}
                 });
             }
         }
@@ -500,6 +547,7 @@ module.exports.getMovieScreens = async (req, res) => {
     let {movieID} = req.body;
     try {
         movieID = new mongoose.Types.ObjectId(movieID);
+
         const Screens = await City.aggregate([
             {$unwind: "$theatres"},
             {$project: {
@@ -510,7 +558,9 @@ module.exports.getMovieScreens = async (req, res) => {
                         $filter: {
                             input: "$theatres.screens",
                             as: "screens",
-                            cond: {$eq: ["$$screens.movie", movieID]}
+                            cond: { $and:
+                                [{$eq: ["$$screens.movie", movieID]}, {$gt: ["$$screens.time", new Date().toISOString()]}]
+                            }
                         }
                     }
             }},

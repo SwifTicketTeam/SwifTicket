@@ -2,16 +2,19 @@ button {
     margin: 1.5rem;
     font-size: 1.4rem;
     font-family: 'Poppins', sans-serif;
-    background-color: rgba(240, 128, 128, 0.75);
-    border-radius: 0.6rem;
+    background-color: rgb(233, 106, 106);
+    color: white;
+    border-radius: 0.4rem;
     box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease,
-                border-radius 0.3s ease;
+                border-radius 0.5s ease,
+                color 0.3s ease;
 }
 
 button:hover {
     background-color: #FFC94D;
-    border-radius: 1.5rem;
+    border-radius: 1.2rem;
+    color: black;
 }

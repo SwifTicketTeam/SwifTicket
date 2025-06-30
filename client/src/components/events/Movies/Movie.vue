@@ -71,7 +71,8 @@ export default {
       return `${date.getDate().toString().padStart(2, '0')} - ${String(date.getMonth() + 1).padStart(2, '0')} - ${date.getFullYear()}`;
     },
     book() {
-      eventBus.$emit("book", this.evt);
+      this.$store.dispatch("event/setEvent", this.evt);
+      this.$router.push("/showtime");
     },
     updateFavorites() {
       axios.put(`${process.env.VUE_APP_SERVER}/api/account/movies/favorites`, {

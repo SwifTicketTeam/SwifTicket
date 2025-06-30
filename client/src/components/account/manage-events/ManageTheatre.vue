@@ -76,10 +76,12 @@ export default {
 }
 
 h1 {
+  text-align: center;
   margin-bottom: 0;
 }
 
 h2 {
+  text-align: center;
   margin-top: 0;
   font-weight: normal;
 }

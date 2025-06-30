@@ -1,12 +1,12 @@
 <template>
   <div @click = "eventClicked" id = "card">
-    <span v-if = "event.is_screening" class = "above">CURRENTLY SHOWING</span>
+    <span v-if = "event.is_screening && !isFav" class = "above">CURRENTLY SHOWING</span>
     <transition name = "fade">
       <img v-show = "showImage" :src = "`${storageUrl}/${currentID}.jpg`">
     </transition>
     <div>
       <div class = "box">
-        <p id = "rating">{{(event.rating) ? event.rating : "NaN"}} / 10</p>
+        <p id = "rating"  v-if = "!isFav">{{(event.rating) ? event.rating : "NaN"}} / 10</p>
         <p>{{event.language}}</p>
       </div>
     </div>
@@ -26,7 +26,14 @@ export default{
       currentID: this.event._id,
       showImage: true,
       storageUrl: process.env.VUE_APP_STORAGE_URL,
+      isFav: false,
     }
+  },
+  created() {
+    this.isFav = this.$route.path === "/account";
+  },
+  activated() {
+    this.isFav = this.$route.path === "/account";
   },
   methods: {
     eventClicked(){
@@ -70,7 +77,7 @@ export default{
 }
 
 #card:hover {
-  transform: translateY(-4%) scale(1.05);
+  transform: translateY(-3.5%) scale(1.05);
   box-shadow: 0.01rem 0.01rem 0.6rem 0.05rem rgba(0, 0, 0, 0.45);
 }
 
@@ -79,11 +86,11 @@ export default{
   border-radius: 1.5rem 0 1.5rem 0;
   width: 70%;
   height: 4%;
+  text-align: center;
   padding: 0.6rem;
-  font-size: 1.05rem;
-  border: 0.05rem solid #000;
-  box-shadow: 0.01rem 0.01rem 0.2rem 0.05rem rgba(0, 0, 0, 0.1);
-  background-color: rgba(240, 128, 128, 0.85);
+  font-size: 0.95rem;
+  box-shadow: 0.02rem 0.02rem 0.4rem 0.1rem rgba(0, 0, 0, 0.25);
+  background-color: #FFC94D;
   will-change: transform;
   backface-visibility: hidden;
 }

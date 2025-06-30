@@ -92,9 +92,8 @@ button {
   margin: 0.5rem 1.3rem 0 0;
   text-wrap: nowrap;
   font-size: 1.3rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
   background-color: inherit;
-  border-radius: 0.6rem;
   border: none;
   cursor: pointer;
   transition: background-color 0.5s ease,
@@ -102,13 +101,14 @@ button {
 }
 
 button:hover {
-  background-color: rgba(255, 201, 77, 0.7);
-  border-radius: 0.6rem;
+  background-color: rgba(233, 106, 106, 0.6);
+  border-radius: 0.5rem;
 }
 
 .selected, .selected:hover {
-  background-color: #FFC94D;
+  background-color: rgb(233, 106, 106);
   border-radius: 1.5rem;
+  color: white;
 }
 
 </style>

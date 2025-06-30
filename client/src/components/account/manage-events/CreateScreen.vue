@@ -312,6 +312,7 @@ p {
   box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.05);
   border: 0.1rem solid #CCC;
   cursor: pointer;
+  color: black;
 }
 
 .seat:hover {

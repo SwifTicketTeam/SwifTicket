@@ -67,7 +67,7 @@ button:hover {
 }
 
 #no {
-  background-color: rgb(240, 128, 128);
+  background-color: rgb(233, 106, 106);
 }
 
 #no:hover {

@@ -65,7 +65,7 @@ li:hover {
 
 .selected, .selected:hover {
   background-color: #DDD;
-  border-radius: 3rem;
+  border-radius: 2rem;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.25);
 }
 

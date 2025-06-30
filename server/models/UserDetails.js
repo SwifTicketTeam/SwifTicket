@@ -12,10 +12,32 @@ const userDetailSchema = new Schema({
         default: '',
     },
     tickets: {
-        movies: [{
-            type: Schema.Types.ObjectId,
-            ref: "Movie",
-            default: []
+        type: [{
+            _id: {
+                type: String,
+                required: true,
+            },
+            movie: {
+                type: Schema.Types.ObjectId,
+                ref: "Movie",
+                default: []
+            },
+            theatre: {
+                type: String,
+                default: '',
+            },
+            screen: {
+                type: String,
+                default: '',
+            },
+            show: {
+                type: String,
+                default: '',
+            },
+            seats: {
+                type: [String],
+                default: [],
+            }
         }]
     },
     favorites: {

@@ -47,7 +47,7 @@ export default {
         this.$store.dispatch("auth/saveToken", res.data.token);
         this.$router.push("/events");
       }).catch(err => {
-        this.warning = err.response.data.message;
+        if (err.response?.data) this.warning = err.response.data.message;
         this.isWarning = true;
       })
     },

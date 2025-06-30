@@ -4,23 +4,17 @@
       <span>SCREEN</span>
       <div id = "ScreenLine"></div>
     </div>
-    <div class = "row">
-      <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select">▼</div>
-    </div>
     <div v-for = "(row, index) in parseInt(rows)" :key = index class = "row">
       <div :data-id = "`${row}`" class = "RowNumber no-select"></div>
-      <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select" :class = "{isBook : isBooking}">{{seat}}</button>
+      <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select" :class = "{isBook : isBooking}" @click = "selectSeat($event)">{{seat}}</button>
       <div :data-id = "`${row}`" class = "RowNumber no-select"></div>
-    </div>
-    <div class = "row">
-      <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select">▲</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SeatLayout",
+  name: "MovieLayout",
   props: {
     layout: Array,
     isBooking: Boolean,
@@ -29,11 +23,12 @@ export default {
     return {
       rows: 0,
       columns: 0,
+      selectedSeats: 0,
     }
   },
   created() {
     this.rows = this.layout.length;
-    this.columns = this.layout[0].seat.length;
+    this.columns = this.layout?.[0]?.seat.length;
   },
   mounted() {
     const seats = this.$refs.layout.querySelectorAll(".seat");
@@ -52,6 +47,7 @@ export default {
     for(const row of this.layout) {
       let ColNumber = 1
       for(const seat of row.seat) {
+        if (seat.isBooked && this.isBooking) seats[SeatNumber].classList.add("isBooked");
         if (seat.isGap) seats[SeatNumber].classList.add("isGap");
         else {
           seats[SeatNumber].textContent = ColNumber.toString();
@@ -79,6 +75,15 @@ export default {
       }
       return letters;
     },
+    selectSeat(event) {
+      if (!this.isBooking || this.selectedSeats > 4) return;
+      if (event.target.classList.contains("isSelected")) event.target.classList.remove("isSelected");
+      else event.target.classList.add("isSelected");
+      const RowValue = event.target.parentElement.querySelector(".RowNumber").innerText;
+      const ColumnValue = event.target.innerText
+      this.$emit('select', RowValue, ColumnValue);
+      this.selectedSeats++;
+    }
   }
 }
 </script>
@@ -144,7 +149,7 @@ export default {
   background-color: #EEE;
   border-radius: 0.5rem;
   box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.05);
-  border: 0.1rem solid #CCC;
+  border: none;
 }
 
 .isBook {
@@ -154,6 +159,17 @@ export default {
 
 .isBook:hover {
   background-color: #BBB;
+}
+
+.isBooked, .isBooked:hover {
+  background-color: #BBB;
+  color: #EEE;
+  cursor: initial;
+}
+
+.isSelected, .isSelected:hover {
+  background-color: mediumseagreen;
+  color: white;
 }
 
 .isGap{

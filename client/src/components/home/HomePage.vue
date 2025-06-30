@@ -44,12 +44,6 @@ export default{
       this.isComponent = "Event";
       this.evt = evt
     });
-    eventBus.$on('book', (evt) => {
-      this.$router.push("/showtime");
-      setTimeout(() => {
-        eventBus.$emit("bookMovie", evt);
-      }, 600);
-    });
   },
 };
 

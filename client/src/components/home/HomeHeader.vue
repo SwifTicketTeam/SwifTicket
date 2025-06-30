@@ -72,9 +72,9 @@ li:hover {
 }
 
 .selected, .selected:hover {
-  background-color: #FFC94D;
+  background-color: rgb(233, 106, 106);
   border-radius: 0.6rem;
-  box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.1);
+  color: white;
 }
 
 </style>

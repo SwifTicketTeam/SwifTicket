@@ -5,6 +5,7 @@
         <h3 class = "no-select">{{editableScreen.name.toUpperCase()}}</h3>
         <h4 class = "no-select">CURRENT MOVIE : {{(!editableScreen.movie) ? "" : editableScreen.movie.title }}</h4>
         <h4 class = "no-select">MOVIE STARTS AT : {{convertToDayDateTime(editableScreen.time)}}</h4>
+        <h4 class = "no-select">PRICE OF EACH TICKET : {{getSymbol()}}{{editableScreen.price}}</h4>
       </div>
       <button @click = "editScreen" class = "no-select">{{ isEdit ? "BACK" : "EDIT SCREEN"}}</button>
     </div>
@@ -34,6 +35,10 @@
           <div class = "fields">
             <label for = "MovieStartDate" class = "fieldLabel">TIME : </label>
             <input type = "time" v-model = "selectedTime" step = "60" class = "no-select" id = "MovieStartTime" :min = "new Date().toISOString().split('T')[1].split('.')[0].slice(0, 5)">
+          </div>
+          <div class = "fields">
+            <label for = "MovieStartDate" class = "fieldLabel">PRICE ({{getSymbol()}})</label>
+            <input type = "number" v-model = "seatPrice" min = 0 class = "no-select" id = "MovieTicketPrice" @input = "stopNegative">
           </div>
           <p>STARTS AT : {{formatDateTime(selectedDate, selectedTime)}}</p>
           <div class = "fields">
@@ -77,13 +82,14 @@ export default {
       isSelectedMovie: false,
       isRemoveCurrentMovie: false,
       selectedMovie: {},
-      selectedDate: new Date().toISOString().split("T")[0],
+      selectedDate: this.getLocalDateYYYYMMDD(),
       selectedTime:new Date().toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }),
+      seatPrice: 0,
     }
   },
   created() {
@@ -93,6 +99,10 @@ export default {
     this.DeleteMessage = `Delete ${this.editableScreen.name.toUpperCase()}? This Action cannot be reversed.`;
   },
   methods: {
+    getLocalDateYYYYMMDD() {
+      const Today = new Date();
+      return `${Today.getFullYear()}-${String(Today.getMonth() + 1).padStart(2, 0)}-${String(Today.getDate()).padStart(2, '0')}`;
+    },
     editScreen() {
       this.isEdit = !this.isEdit
     },
@@ -140,14 +150,43 @@ export default {
         TheatreName: this.theatre.name,
         ScreenName: this.Screen.name,
         movieID: this.selectedMovie._id,
+        moviePrice: parseFloat(this.seatPrice).toFixed(2),
         movieTime: new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString(),
       }).then(() => {
         this.editableScreen.movie = this.selectedMovie;
         this.editableScreen.time = new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString();
+        this.editableScreen.price = this.seatPrice;
         this.selectedMovie = {};
       }).catch((err) => {
         console.log(err);
       })
+    },
+    stopNegative() {
+      (this.seatPrice < 0) ? this.seatPrice = 0 : this.seatPrice;
+    },
+    getSymbol() {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const zoneToCurrency = {
+        "Asia/Kolkata": "INR",
+        "America/New_York": "USD",
+        "America/Los_Angeles": "USD",
+        "Europe/London": "GBP",
+        "Europe/Paris": "EUR",
+        "Asia/Tokyo": "JPY",
+        "Asia/Dubai": "AED",
+        "Australia/Sydney": "AUD",
+        "Africa/Johannesburg": "ZAR",
+        "America/Sao_Paulo": "BRL",
+        "Asia/Shanghai": "CNY",
+      };
+
+      const currency = zoneToCurrency[timeZone] || "INR";
+      return (0).toLocaleString(undefined, {
+        style: "currency",
+        currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).replace(/\d/g, '').trim();
     },
     formatDateTime(date, time) {
       return `${new Date(date).toLocaleDateString("en-GB", {weekday: "short", day: "2-digit", month: "short"})} | ${new Date(`1970-01-01T${time}:00`).toLocaleTimeString('en-US', {
@@ -181,6 +220,7 @@ export default {
         this.isRemoveCurrentMovie = false;
         this.editableScreen.movie = {};
         this.editableScreen.time = "";
+        this.editableScreen.price = 0;
       }).catch((err) => {
         console.log(err);
       })
@@ -286,12 +326,13 @@ input:focus {
 h3 {
   font-size: 1.5rem;
   width: 30%;
+  margin-top: 0.9rem;
   margin-bottom: 0.4rem;
 }
 
 h4 {
   margin: 0 0 0.7rem 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: normal;
 }
 

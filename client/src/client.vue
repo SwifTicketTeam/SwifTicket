@@ -32,7 +32,7 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   font-size: min(0.9vw, 1.5vh);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
 }
 html::-webkit-scrollbar {
   display: none;

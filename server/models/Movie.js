@@ -33,6 +33,10 @@ const movieSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    last_screening_time: {
+        type: String,
+        default: '',
+    }
 })
 
 const movie = mongoose.model("Movie", movieSchema, "swifticket-movies");

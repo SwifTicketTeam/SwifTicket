@@ -6,6 +6,7 @@ import AuthStore from '@/stores/AuthStore';
 import AccountStore from '@/stores/AccountStore';
 import Client from "./client.vue";
 import axios from "axios";
+import EventStore from "@/stores/EventStore";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     modules: {
         auth: AuthStore,
         account: AccountStore,
+        event: EventStore,
     }
 })
 

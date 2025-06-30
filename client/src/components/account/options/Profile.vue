@@ -11,10 +11,6 @@
     </div>
     <div id = "about">
       <div class = "fields">
-        <label for = "uID" class = "fieldLabel no-select">UID</label>
-        <span class = "field">{{this.uID}}</span>
-      </div>
-      <div class = "fields">
         <label for = "userName" class = "fieldLabel no-select">USERNAME</label>
         <input class = "field" v-model = "username" type = "text" name = "userName" id = "userName" ref = "name" spellcheck="false" autocomplete = "off" readonly>
         <button @click.prevent = "saveName" ref = "saveName" class = "no-select">EDIT USERNAME</button>
@@ -210,7 +206,7 @@ img {
 }
 
 button {
-  margin: 0;
+  margin: 0 0 0 0.5rem;
   font-size: 1.3rem;
   width: 20%;
   height: 100%;

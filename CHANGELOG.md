@@ -71,7 +71,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Pre Beta v0.1] – 21 June, 2025
+## [Pre Beta v0.1] – June 21, 2025
 > **Note**:
 > OAuth and Role-Based Route Protection have been delayed. Route Protection is pending vendor/admin page structures definition.
 
@@ -254,5 +254,19 @@ Version `v0.4` and its sub-versions will finish up the entire ticket booking flo
 
 ---
 
-> Note: Movie queuing and full seat reservation flow will be completed in `v0.4.x` patches.
+> Note: Movie queuing and full seat reservation flow will be completed in `v0.4`.
 Booking feature like seat selection, lock, and confirmation is being actively developed.
+
+## [Beta Extended v0.4] - July 1, 2025
+
+### Phase 12 – Seat Booking, Stripe Payments, and Ticket Generation
+- Seat choice and unchoice completed with interactive layout
+- "Book Now" now directs to Stripe-enabled payment checkout
+- Summary page displays chosen seats, timing, and price prior to payment
+- Automatic refresh for "Currently Showing" movies according to vendor assignments
+- Stripe integration with redirection to ticket summary and QR generation after payment
+- Ticket QR code shown after successful payment
+- Booking page UI revised with salmon red theme and light text
+- Bugs in screen rendering and seat management conflicts fixed
+
+> Note: Booked tickets are not yet persisted in the database.

@@ -1,12 +1,12 @@
 <template>
   <div id = "box">
     <SearchBar @movies = "getMovies"></SearchBar>
-    <h2>Currently Showing</h2>
+    <h2>CURRENTLY SHOWING</h2>
     <div class = "DiscoverList">
       <MovieCard v-for = "(event, index) in screening_movies" :key = "index" :event = "event"></MovieCard>
     </div>
     <br><br>
-    <h2>Discover New Movies</h2>
+    <h2>DISCOVER NEW MOVIES</h2>
     <div class = "DiscoverList">
       <MovieCard v-for = "(event, index) in movies" :key = "index" :event = "event"></MovieCard>
     </div>
@@ -69,7 +69,9 @@ h1 {
 }
 
 h2 {
-  margin-left: 0.5rem;
+  width: 100%;
+  text-align: center;
+  font-family: 'Roboto Slab', sans-serif;
   font-size: 1.5rem;
   font-weight: normal;
 }

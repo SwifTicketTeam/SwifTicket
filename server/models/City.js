@@ -10,6 +10,10 @@ const SeatSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    isBooked: {
+        type: Boolean,
+        default: false,
+    },
     tier: {
         type: String,
         default: 'regular',
@@ -34,6 +38,10 @@ const ScreenSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Movie',
         default: null,
+    },
+    price: {
+      type: Number,
+      default: 0,
     },
     time: {
       type: String,
