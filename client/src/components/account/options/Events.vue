@@ -26,7 +26,7 @@ export default {
   data() {
     return{
       isComponent: "MyTheatres",
-      theatre: "",
+      theatre: {},
     }
   },
   created() {

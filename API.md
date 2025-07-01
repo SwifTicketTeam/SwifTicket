@@ -1,63 +1,51 @@
 # SwifTicket API Documentation
 
-All RESTful API endpoints used across the SwifTicket platform.
+## Base URL
 
----
-
-## Server & Documentation
-
-### `GET /`
-Returns the welcome message or status of the server.
-
----
-
-### `GET /api`
-Returns a basic landing page or the Markdown API documentation itself.
-
----
-
-## Authentication
-
-### `POST /api/auth/register`
-Registers a new user.
-
-**Body:**
-```json
-{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "password": "password"
-}
-````
-
----
-
-### `POST /api/auth/login`
-
-Logs in the user.
-
-**Body:**
-
-```json
-{
-  "email": "john@example.com",
-  "password": "password"
-}
+```
+https://yourdomain.com/api
 ```
 
 ---
 
-### `GET /api/auth/verified?token=xyz`
+## Authentication Routes (`/auth`)
 
-Verifies email with token from query string.
+### POST `/auth/register`
 
----
+Registers a new user.
 
-### `POST /api/auth/forgot-password`
+**Body**
 
-Initiates password reset.
+```json
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
 
-**Body:**
+### POST `/auth/login`
+
+Logs in an existing user.
+
+**Body**
+
+```json
+{
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+### GET `/auth/verified?token=...`
+
+Verifies a user's email using a token from their email.
+
+### POST `/auth/forgot-password`
+
+Sends a password reset link.
+
+**Body**
 
 ```json
 {
@@ -65,319 +53,306 @@ Initiates password reset.
 }
 ```
 
----
+### POST `/auth/reset-password`
 
-### `POST /api/auth/reset-password`
+Resets a user password using a reset token.
 
-Resets password using token.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "password": "new_password",
-  "token": "reset_token"
+  "password": "newPassword123",
+  "token": "<reset_token>"
 }
 ```
 
----
+### POST `/auth/jwt`
 
-### `POST /api/auth/jwt`
+Verifies session JWT.
 
-Validates a JWT and returns session info.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "token": "jwt_token"
+  "token": "<jwt>"
 }
 ```
 
 ---
 
-## User Profile
+## Account Routes (`/account`)
 
-### `POST /api/uploads/images/users/:userid`
+### GET `/uploads/images/users/:userId`
 
-Uploads user profile image.
+Fetch profile photo for a user.
 
-**FormData Fields:**
+### POST `/uploads/images/users/:userId`
 
-* `userProfilePhoto`: Image File
-* `token`: JWT
+Upload a profile photo (image/png or jpeg, max 1MB).
 
----
+### PUT `/account/users/:userId`
 
-### `GET /api/uploads/images/users/:userid`
+Change the username of a user.
 
-Fetches uploaded user profile image.
-
----
-
-### `PUT /api/account/users/:userid`
-
-Updates user profile information.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "username": "new_name",
-  "email": "new_email",
-  "bio": "new bio"
+  "username": "newUsername"
 }
 ```
 
----
+### POST `/vendor/request`
 
-## Movies & Events
+Promote a user to vendor.
 
-### `GET /api/events/movies`
-
-Fetches list of movies.
-
-**Query Parameters (optional):**
-
-* `search`: Title search
-* `genre`: Comma-separated genre list
-
----
-
-### `POST /api/events/movies/screens`
-
-Fetches list of screens and showtimes for a movie.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "movieId": "movie_id",
-  "date": "YYYY-MM-DD"
+  "userId": "<user_id>"
 }
 ```
 
 ---
 
-## Favorites System
+## Movie Favorites Routes (`/account/movies`)
 
-### `POST /api/events/movies/users/favorites`
+### POST `/movies/favorites`
 
-Checks if a movie is in user's favorites.
+Get all favorite movies for a user.
 
-**Body:**
+**Body**
 
 ```json
 {
-  "userId": "user_id",
-  "movieId": "movie_id"
+  "userId": "<user_id>"
 }
 ```
 
-**Response:**
-`true` or `false`
+### POST `/events/movies/users/favorites`
 
----
+Check if a movie is in the user's favorites.
 
-### `POST /api/account/movies/favorites`
-
-Fetches all favorite movies of a user.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "userId": "user_id"
+  "userId": "<user_id>",
+  "movieId": "<movie_id>"
 }
 ```
 
----
+### PUT `/movies/favorites`
 
-### `PUT /api/account/movies/favorites`
+Add or remove a movie from a user's favorites.
 
-Adds or removes movie from favorites.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "userId": "user_id",
-  "movieId": "movie_id"
+  "userId": "<user_id>",
+  "movieId": "<movie_id>"
 }
 ```
 
 ---
 
-## Vendor: Theatre Management
+## Movies & Discovery (`/events/movies`)
 
-### `POST /api/account/theatres/create`
+### GET `/movies`
 
-Creates a theatre for a vendor.
+Fetch movies (screening + discovery). Optional query params:
 
-**Body:**
+* `search`: movie title prefix
+* `genre`: comma-separated genres
+
+### POST `/movies/screens`
+
+Get available screens for a movie.
+
+**Body**
 
 ```json
 {
-  "vendor": "vendor_id",
-  "city": "City Name",
-  "name": "Theatre Name"
+  "movieId": "<movie_id>"
 }
 ```
 
 ---
 
-### `POST /api/account/theatres/get`
+## Theatre Management (`/account/theatres`)
 
-Returns all theatres of a vendor.
+### POST `/create`
 
-**Body:**
+Create a new theatre. If the city doesn't exist, it's created.
+
+**Body**
 
 ```json
 {
-  "vendor": "vendor_id"
+  "vendorId": "<vendor_id>",
+  "city": "Chennai",
+  "name": "PVR"
 }
 ```
 
----
+### POST `/get`
 
-## Vendor: Screen Management
+Fetch all theatres for a vendor.
 
-### `POST /api/account/theatres/screens/create`
-
-Creates a new screen.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "city": "city_name",
-  "theatre": "theatre_name",
-  "screenName": "Screen 1",
-  "rows": 6,
-  "cols": 12,
-  "gaps": [[1, 3], [4, 5]]
+  "vendorId": "<vendor_id>"
 }
 ```
 
 ---
 
-### `POST /api/account/theatres/screens/get`
+## Screen Management (`/account/theatres/screens`)
 
-Returns screens for a given theatre and city.
+### POST `/create`
 
-**Body:**
+Create a screen and seats in a theatre.
+
+**Body**
 
 ```json
 {
-  "city": "city_name",
-  "theatre": "theatre_name"
+  "city": "Chennai",
+  "theatre": "PVR",
+  "name": "Screen 1",
+  "seats": [["A", 1, false], ["A", 2, false], ["A", 3, true]]
 }
 ```
 
----
+### POST `/get`
 
-### `POST /api/account/theatres/screen/delete`
+Fetch all screens and seats layout of a theatre.
 
-Deletes a screen.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "city": "city_name",
-  "theatre": "theatre_name",
-  "screenName": "Screen 1"
+  "city": "Chennai",
+  "theatre": "PVR"
 }
 ```
 
----
+### POST `/delete`
 
-## Vendor: Movie Assignment
+Delete a screen and its seats.
 
-### `GET /api/account/theatres/movies`
-
-Returns movies available to assign to screens.
-
----
-
-### `POST /api/account/theatres/movie`
-
-Assigns a movie to a screen with time.
-
-**Body:**
+**Body**
 
 ```json
 {
-  "city": "city_name",
-  "theatre": "theatre_name",
-  "screenName": "Screen 1",
-  "movieId": "movie_id",
-  "time": "HH:mm"
+  "city": "Chennai",
+  "theatre": "PVR",
+  "screen": "Screen 1"
 }
 ```
 
 ---
 
-## Payments & Checkout
+## Screen-Movie Assignment (`/account/theatres/movie`)
 
-### POST `/api/payments/init`
+### POST `/movie`
 
-Starts the Stripe Checkout session for the booking process.
+Set or remove a movie for a screen.
 
-```js
+**Body**
+
+```json
 {
-  amount: this.bookAmount * 100,
-  email: this.$store.state.auth.email,
-  metadata: {
-    user: this.$store.state.auth.UID,
-    movie: this.evt.title,
-    movie_id: this.evt._id,
-    seats: [...this.selectedSeats].sort().join(', '),
-    theatre: `${this.selectedScreen.theatre}, ${this.selectedScreen.city}`,
-    show: this.selectedShow.name,
-    time: this.selectedShow.time,
-    amount: this.bookAmount * (1 + this.ConvenienceFeesPercentage)
-  }
+  "city": "Chennai",
+  "theatre": "PVR",
+  "screen": "Screen 1",
+  "movieId": "<movie_id>",
+  "moviePrice": 150,
+  "movieTime": "2025-07-01T14:30:00Z",
+  "method": "set"
 }
 ```
 
-Request Body Sample:
+or
 
-```js
+```json
 {
-  "amount": 35000,
-  "email": "user@example.com",
+  "city": "Chennai",
+  "theatre": "PVR",
+  "screen": "Screen 1",
+  "movieId": "<movie_id>",
+  "method": "delete"
+}
+```
+
+---
+
+## Get Movies for Screen Selection (`/account/theatres/movies`)
+
+### GET `/movies`
+
+Fetch 5 movies randomly or via search query.
+
+Query Params:
+
+* `search`: movie title prefix
+
+---
+
+## Payments (`/payments/init/movies`)
+
+### POST `/init/movies`
+
+Create a Stripe checkout session.
+
+**Body**
+
+```json
+{
+  "email": "john@example.com",
   "metadata": {
-    "user": "user_id_123",
-    "movie": "Movie Title",
-    "movie_id": "movie_id_abc",
+    "user": "<user_id>",
+    "ticket_id": "USERID-UNIQUEID",
+    "movie": "Inception",
+    "movie_id": "<movie_id>",
+    "theatre": "PVR",
+    "city": "Chennai",
+    "show": "Screen 1",
+    "time": "2025-07-01T14:30:00Z",
     "seats": "A1, A2",
-    "theatre": "Grand Cinema, Mumbai",
-    "show": "Evening Show",
-    "time": "18:30",
-    "amount": 350
+    "backend_seats": "A-1, A-2",
+    "amount": 300
   }
 }
 ```
 
-POST /api/payments/success?session_id=xyz
+---
 
-Triggered after successful Stripe checkout. Retrieves ticket metadata from Stripe session.
+### POST `/success/movies?session_id=...`
 
-Response Sample:
+Triggered after successful payment to confirm & store ticket and mark seats as booked.
 
-```js
-{
-  "metadata": {
-    "user": "user_id_123",
-    "movie": "Movie Title",
-    "movie_id": "movie_id_abc",
-    "seats": "A1, A2",
-    "theatre": "Grand Cinema, Mumbai",
-    "show": "Evening Show",
-    "time": "18:30",
-    "amount": 350
-  }
-}
-```
+---
+
+## Fetch Tickets (`/account/tickets/movies/:ticketId`)
+
+* `:ticketId` = `"*"` → fetch all
+* `:ticketId` = `"USERID-UNIQUEID"` → fetch one
+
+---
+
+## Server Routes
+
+### GET `/`
+
+Returns static `index.html`.
+
+### GET `/api`
+
+Returns static `api.html`.
+
 ---

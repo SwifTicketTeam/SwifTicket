@@ -5,6 +5,7 @@ import HomePage from "../components/home/HomePage.vue";
 import VerificationError from "../components/authentication/VerificationError.vue";
 import ShowTime from "@/components/events/Movies/ShowTime.vue";
 import PaymentSuccess from "@/components/PaymentSuccess.vue";
+import ViewTicket from "@/components/events/Movies/ViewTicket.vue";
 
 export default [
     {
@@ -34,6 +35,10 @@ export default [
     {
       path: '/success',
       component: PaymentSuccess,
+    },
+    {
+        path: '/tickets/movies/:ticketId',
+        component: ViewTicket
     },
     {
         path: '*',

@@ -34,6 +34,13 @@ const userSchema = new Schema({
     verified: {
         type: Boolean,
         default: false,
+    },
+    favorites: {
+        movies: [{
+            type: Schema.Types.ObjectId,
+            ref: "Movie",
+            default: []
+        }]
     }
 });
 

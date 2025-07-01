@@ -13,7 +13,7 @@ export default{
   name: "AccountOptions",
   data() {
     return {
-      options: ["Profile", "My Tickets", "My Favorites", "Transaction History"],
+      options: ["Profile", "My Tickets", "My Favorites"],
       selectedOption: "Profile",
     }
   },

@@ -27,6 +27,7 @@
     width: 90%;
     height: 6%;
     border-radius: 2rem;
+        font-family: "Poppins", sans-serif;
 }
 
 .field {
@@ -44,6 +45,7 @@ p {
     height: 2%;
     color: red;
     transition: opacity 0.6s ease;
+    font-family: "Poppins", sans-serif;
 }
 
 .isWarn {

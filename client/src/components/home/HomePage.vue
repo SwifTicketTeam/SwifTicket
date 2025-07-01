@@ -3,7 +3,7 @@
     <HomeHeader></HomeHeader>
     <transition name = "fade" mode = "out-in">
       <keep-alive>
-        <component :is = "isComponent" :evt = "evt"></component>
+        <component :is = "isComponent" :evt = "evt" :toFavorites = "toFavorites"></component>
       </keep-alive>
     </transition>
   </div>
@@ -26,6 +26,7 @@ export default{
     return{
       isComponent: "EventsList",
       evt: {},
+      toFavorites: false,
     }
   },
   created() {
@@ -39,10 +40,12 @@ export default{
     eventBus.$on("toAccount", (evt) => {
       this.isComponent = "Event";
       this.evt = evt
+      this.toFavorites = true;
     });
     eventBus.$on("toEvents", (evt) => {
       this.isComponent = "Event";
       this.evt = evt
+      this.toFavorites = false;
     });
   },
 };

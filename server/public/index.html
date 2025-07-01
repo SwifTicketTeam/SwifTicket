@@ -5,138 +5,152 @@
     <title>SwifTicket – Universal Ticketing Platform</title>
     <style>
         body {
-            font-family: "Segoe UI", Tahoma, sans-serif;
-            max-width: 900px;
-            margin: auto;
-            padding: 2rem;
-            line-height: 1.7;
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdfdfd;
             color: #222;
+            padding: 2rem;
+            line-height: 1.6;
         }
         h1, h2, h3 {
-            color: #b22222;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.3rem;
+            color: #c0392b;
         }
-        code {
-            background: #f5f5f5;
-            padding: 2px 5px;
-            border-radius: 4px;
+        h1 {
+            font-size: 2.2rem;
+            margin-top: 0;
+        }
+        h2 {
+            margin-top: 2rem;
+            font-size: 1.7rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
         }
         ul {
-            margin-left: 1.5rem;
+            padding-left: 1.4rem;
         }
-        section {
+        code {
+            background: #eee;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+        .section {
             margin-bottom: 2rem;
         }
     </style>
 </head>
 <body>
 
-<h1>SwifTicket – Universal Ticketing Platform</h1>
+<h1>SwifTicket – Cross-Industry Universal Ticketing Platform</h1>
+
 <p>
-    SwifTicket is a cross-industry ticket booking full-stack solution developed with Vue.js, Node.js, and MongoDB. It includes authentication, profile management, vendor dashboards, event discovery, booking flows, and real-time payment integrations. The platform integrates real-world movie data and is designed on a scalable, city-based model for multi-theatre and screen operations.
+    SwifTicket is a full-stack, cross-industry movie ticket booking solution built with Vue.js, Node.js, and MongoDB. It features authentication, profile management, vendor dashboards, event discovery, booking flows, and real-time payment integrations. The platform integrates actual movie data and is built on a scalable, city-based model for multi-theatre and screen operations.
 </p>
 
-<section>
+<hr>
+
+<div class="section">
     <h2>Project Roadmap</h2>
     <ul>
         <li>Phase 1: Frontend Foundation</li>
-        <li>Phase 2: Backend Server Setup and API Integration</li>
-        <li>Phase 3: Custom Database and Authentication</li>
-        <li>Phase 4: JWT Session Management and Email Messaging</li>
-        <li>Phase 5: Session Confirmation and Events Page Design</li>
-        <li>Phase 6: My Account Tab and Movie Page Routing</li>
-        <li>Phase 6 Extended: Persistent Storage and API Docs</li>
-        <li>Phase 7: Integration of Movie Dataset & Profile Enhancement</li>
-        <li>Phase 8: Filtering, Search & Dynamic Routing</li>
-        <li>Phase 9: Favorites Feature & UI Re-design</li>
-        <li>Phase 10: Ticket Booking Base and City Support</li>
-        <li>Phase 11: Vendor Panel, Theatre Management, and Screens</li>
-        <li>Phase 12: Showtime Assignment, Seat Booking, and Stripe Checkout</li>
+        <li>Phase 2: API Testing and Backend Server Integration</li>
+        <li>Phase 3: Database and Authentication</li>
+        <li>Phase 4: JWT Session Management, Email Messaging, and Forgot Password</li>
+        <li>Phase 5: Events Page Layout, Session Verification, and Visual Enhancements</li>
+        <li>Phase 6: My Account Tab, Transitions, and Movie Page Routing</li>
+        <li>Phase 6 Extended: Storage, Persistence, API Docs, and Restructure</li>
+        <li>Phase 7: Profile Enhancement & Movie Dataset Integration</li>
+        <li>Phase 8: Discovery Engine Activation, Search, Filter & Dynamic Routing</li>
+        <li>Phase 9: Favorites System & UI Overhaul</li>
+        <li>Phase 10: Ticket Booking Foundations & City Support Added</li>
+        <li>Phase 11: Screen System Launched & Vendor Management</li>
+        <li>Phase 12: Booking UI, Showtime Selection, & Layout Improvements</li>
+        <li>Phase 12 Extended: Seat Booking, Stripe Payments, and Ticket Generation Implemented</li>
+        <li>Phase 13: Schema Refactor, Ticketing Flow Complete</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="section">
     <h2>Project Overview</h2>
 
     <h3>Frontend Features</h3>
     <ul>
         <li>Vue.js and Flexbox-based responsive UI</li>
-        <li>Dynamic routes (<code>/</code>, <code>/home</code>, <code>/account</code>, <code>/event</code>, <code>/showtime</code>, etc.) handled by Vue Router</li>
-        <li>Vuex-driven state management for session, auth, favorites</li>
-        <li>Seamless route transitions, conditional navigation, and guarded routes</li>
-        <li>My Account tab with profile editing, favorites, security, and role swapping</li>
-        <li>Real-time favorite system with local storage and server-side persistence</li>
-        <li>Vendor Dashboard:
+        <li>Dynamic routes with Vue Router (<code>/</code>, <code>/home</code>, <code>/account</code>, <code>/events</code>, <code>/showtime</code>, etc.)</li>
+        <li>Vuex state for auth, favorites, and session</li>
+        <li>Smooth transitions and guarded navigation</li>
+        <li>My Account tab with editing, favorites, security, and role change</li>
+        <li>Real-time favorite system with persistence</li>
+        <li>Vendor Dashboard to:
             <ul>
-                <li>Create theatres and assign to cities</li>
-                <li>Add screens with rows, columns, and seat gaps</li>
-                <li>Map movies to screens with MovieCard UI</li>
+                <li>Create theatres and assign cities</li>
+                <li>Create screens with custom layouts</li>
             </ul>
         </li>
-        <li>Seat selection and deselection by users</li>
-        <li>Booking interface with screen-wise time slots under movie & date</li>
-        <li>Stripe Checkout integrated for secure payments</li>
-        <li>Ticket summary shown after payment with QR code generation</li>
+        <li>Seat selection with UI previews</li>
+        <li>Stripe Checkout integration</li>
+        <li>Confirmation screen with QR code generation</li>
+        <li>My Tickets tab with complete ticket history</li>
     </ul>
 
     <h3>Backend & API Features</h3>
     <ul>
-        <li>Modular controllers for Express.js backend</li>
-        <li>Schemas: <code>User</code>, <code>UserDetails</code>, <code>City</code>, <code>Movie</code>, <code>Theatre</code>, <code>Screen</code>, <code>Booking</code></li>
-        <li>JWT-based authentication with role validation</li>
+        <li>Modular Express.js backend</li>
+        <li>MongoDB schemas: <code>City</code>, <code>Theatre</code>, <code>Screen</code>, <code>Seat</code>, <code>User</code>, <code>Movie</code>, <code>MovieTicket</code></li>
+        <li>JWT authentication and role-based authorization</li>
         <li>Nodemailer for:
             <ul>
                 <li>Email verification</li>
-                <li>Reset/forgot password</li>
+                <li>Password reset</li>
             </ul>
         </li>
-        <li>Profile picture and poster uploads supported</li>
-        <li>Well-structured RESTful API with clear naming</li>
-        <li>Movie search and filter by genre/title via MongoDB queries</li>
-        <li>Favorite tracking and real-time syncing</li>
-        <li>Stripe integration:
-            <ul>
-                <li>Checkout session init with metadata</li>
-                <li>Ticket confirmation via webhook/session result</li>
-            </ul>
-        </li>
+        <li>Image upload support (profile & movie posters)</li>
+        <li>RESTful and documented API</li>
+        <li>Stripe integration for secure payments</li>
+        <li>Ticket creation and transactional metadata usage</li>
     </ul>
+</div>
 
-    <h3>Events & Booking System</h3>
+<div class="section">
+    <h2>Events & Booking System</h2>
     <ul>
-        <li>9,800+ real movie dataset imported</li>
-        <li>Local poster assets mapped to MongoDB records</li>
-        <li>Debounced search + multi-genre filter on <code>/events</code></li>
-        <li>Dynamic routing to movie detail pages</li>
-        <li>"Currently Showing" tag for assigned movies</li>
-        <li>Booking flow:
-            <ul>
-                <li>Movie → Date → Screen & Time → Seat</li>
-                <li>Payment via Stripe → Confirmation with QR</li>
-            </ul>
+        <li>Over 9,800 movie records with poster mapping</li>
+        <li>Filtering by genre, debounced search</li>
+        <li>Dynamic routes for movie details</li>
+        <li>"Currently Showing" badge for live screenings</li>
+        <li>Seat layout updates in real-time</li>
+        <li>Complete ticket booking flow:
+            <ol>
+                <li>Choose movie, date, and screen</li>
+                <li>Select available seats</li>
+                <li>Pay via Stripe</li>
+                <li>View summary and QR code</li>
+                <li>QR codes link to ticket details</li>
+            </ol>
         </li>
+        <li>Blocked seats are tracked in the database</li>
     </ul>
+</div>
 
-    <h3>Design & UX</h3>
+<div class="section">
+    <h2>Design & UX</h2>
     <ul>
-        <li>Color Theme:
+        <li>Color Palette:
             <ul>
-                <li>Salmon Red: <code>rgba(240, 128, 128, 0.75)</code></li>
-                <li>Accent Yellow: <code>#ffc94d</code></li>
+                <li>Salmon Red: <code>rgba(233, 106, 106)</code></li>
+                <li>Golden Yellow: <code>#FFFC94D</code></li>
             </ul>
         </li>
-        <li>Responsive layout with Flexbox + Vue's <code>keep-alive</code></li>
-        <li>Form validation and toast-based feedback</li>
-        <li>Vendor-only visibility of management panels</li>
-        <li>Minimalistic card-based layout with hierarchy</li>
-        <li>Seat layout grid responsive to real screen sizes</li>
+        <li>Clean card layout with minimal shadows</li>
+        <li>Responsive seat grid</li>
+        <li>Role-based navigation</li>
+        <li><code>keep-alive</code> used for persistent layout state</li>
+        <li>Toast notifications, async loaders, route guards</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="section">
     <h2>Tech Stack</h2>
-
     <h3>Frontend</h3>
     <ul>
         <li>Vue.js 2</li>
@@ -159,16 +173,25 @@
 
     <h3>Tools & Services</h3>
     <ul>
-        <li>Postman (API Testing)</li>
-        <li>Nodemailer (Email Services)</li>
-        <li>Stripe (Payment Gateway)</li>
+        <li>Postman</li>
+        <li>Nodemailer</li>
+        <li>Stripe</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="section">
+    <h2>Current Limitations</h2>
+    <ul>
+        <li>Admin analytics dashboard not implemented</li>
+        <li>Show scheduling and queuing not built</li>
+        <li>Future development may pause post-deployment</li>
+    </ul>
+</div>
+
+<div class="section">
     <h2>License</h2>
     <p>MIT</p>
-</section>
+</div>
 
 </body>
 </html>

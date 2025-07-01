@@ -18,7 +18,6 @@
       <div class = "fields">
         <label for = "email" class = "fieldLabel no-select">EMAIL</label>
         <input class = "field" v-model = "email" type = "text" name = "email" id = "email" ref = "email" spellcheck="false" autocomplete = "off" readonly>
-        <button @click.prevent = "saveEmail" ref = "saveEmail" class = "no-select">CHANGE EMAIL</button>
       </div>
       <div class = "fields">
         <label for = "role" class = "fieldLabel no-select">ROLE</label>
@@ -101,21 +100,6 @@ export default {
         this.$refs.name.readOnly = false;
       }
     },
-    saveEmail() {
-      if (this.$refs.saveEmail.textContent === "SEND VERIFICATION EMAIL") {
-        axios.put(process.env.VUE_APP_SERVER + '/api/account/users/' + this.uID, {
-          email: this.$store.state.auth.email,
-        }).then(() => {
-        }).catch(() => {
-        });
-        this.$refs.saveEmail.textContent = "CHANGE EMAIL"
-        this.$refs.email.readOnly = true;
-      } else {
-        this.$refs.saveEmail.textContent = "SEND VERIFICATION EMAIL"
-        this.$refs.email.readOnly = false;
-      }
-    },
-
     logout() {
       this.$store.dispatch('auth/deleteToken');
       this.$router.push({ path: "/" });

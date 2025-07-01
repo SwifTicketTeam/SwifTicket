@@ -10,6 +10,7 @@ import Profile from "./options/Profile.vue"
 import Tickets from "./options/MyTickets.vue"
 import Favorites from "./options/Favorites.vue"
 import Events from "./options/Events.vue"
+import Vendor from "./options/Vendor.vue"
 
 export default {
   name: "AccountSection",
@@ -18,6 +19,7 @@ export default {
     Tickets,
     Favorites,
     Events,
+    Vendor,
   },
   data() {
     return {

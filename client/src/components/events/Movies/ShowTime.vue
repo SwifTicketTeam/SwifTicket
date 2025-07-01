@@ -107,24 +107,19 @@ export default {
       layout: [],
       isChangeLayout: false,
       selectedSeats: [],
+      selectedBackendSeats: [],
       bookAmount: 0,
       isSummary: false,
-      ConvenienceFeesPercentage: process.env.VUE_APP_CONVENIENCE_FEE_PERCENTAGE,
+      ConvenienceFeesPercentage: parseFloat(process.env.VUE_APP_CONVENIENCE_FEE_PERCENTAGE),
     }
   },
   created() {
     this.dates = [this.getDate(0), this.getDate(1), this.getDate(2), this.getDate(3), this.getDate(4), this.getDate(5), this.getDate(6)];
     if (!this.evt._id) this.$router.push("/events");
     else axios.post(`${process.env.VUE_APP_SERVER}/api/events/movies/screens`, {
-      movieID: this.evt._id,
+      movieId: this.evt._id,
     }).then((res) => {
       this.screens = res.data.screens;
-      this.screens.forEach((screen) => {
-        const shows = screen.screens
-        shows.sort((show1, show2) => {
-          return show1.time.localeCompare(show2.time)
-        })
-      })
       this.isLoading = false;
     }).catch(() => {
       this.$router.push('/events')
@@ -188,15 +183,20 @@ export default {
       this.selectedSeats = [];
       this.bookAmount = 0;
       this.isChangeLayout = false;
-      this.layout = show.layout;
+      this.layout = show.seats;
       nextTick(() => {
         this.isChangeLayout = true;
       });
     },
-    selectSeat(row, seat) {
-      const selectedSeat = `${row}${seat}`
-      if (this.selectedSeats.includes(selectedSeat)) this.selectedSeats = this.selectedSeats.filter((seat) => seat !== selectedSeat);
-      else this.selectedSeats.push(selectedSeat);
+    selectSeat(seat, backendSeat) {
+      if (this.selectedSeats.includes(seat)) {
+        this.selectedSeats = this.selectedSeats.filter((Seat) => Seat !== seat);
+        this.selectedBackendSeats = this.selectedBackendSeats.filter((Seat) => Seat !== backendSeat);
+      }
+      else {
+        this.selectedSeats.push(seat);
+        this.selectedBackendSeats.push(backendSeat);
+      }
       this.bookAmount = this.selectedShow.price * this.selectedSeats.length;
     },
     getSymbol() {
@@ -227,18 +227,20 @@ export default {
       if (Object.keys(this.selectedShow).length && this.bookAmount) this.isSummary = true
     },
     initPayments() {
-      axios.post(`${process.env.VUE_APP_SERVER}/api/payments/init`, {
-        amount: this.bookAmount * 100,
+      axios.post(`${process.env.VUE_APP_SERVER}/api/payments/init/movies`, {
         email: this.$store.state.auth.email,
         metadata: {
           user: this.$store.state.auth.UID,
+          ticket_id: `${this.$store.state.auth.UID}-${Math.floor(Math.random() * 10000)}-${Date.now()}`,
           movie: this.evt.title,
           movie_id: this.evt._id,
           seats: [...this.selectedSeats].sort().join(', '),
-          theatre: `${this.selectedScreen.theatre}, ${this.selectedScreen.city}`,
-          show: this.selectedShow.name,
+          backend_seats: [...this.selectedBackendSeats].sort().join(', '),
+          theatre: `${this.selectedScreen.theatre}`,
+          city : `${this.selectedScreen.city}`,
+          screen: this.selectedShow.name,
           time: this.selectedShow.time,
-          amount: this.bookAmount * (1 + this.ConvenienceFeesPercentage),
+          amount: (this.bookAmount * (1 + this.ConvenienceFeesPercentage)).toFixed(2),
         }
       }).then((res) => {
         if (res.data.url) window.location.href = res.data.url;
@@ -520,6 +522,14 @@ h3 {
   margin-top: 2rem;
   width: 95%;
   height: 80%;
+}
+
+.modal h1 {
+  text-wrap: wrap;
+  font-size: 1.8rem;
+  padding: 0 2rem;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .modal h4 {

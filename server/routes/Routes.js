@@ -9,10 +9,4 @@ router.get('/api', controller.getAPIDocs);
 // Server Home Page
 router.get('/', controller.serverHome);
 
-// Payments
-router.post('/api/payments/init', controller.initPayments)
-
-//Payment Success
-router.post('/api/payments/success', controller.saveTickets)
-
 module.exports = router;

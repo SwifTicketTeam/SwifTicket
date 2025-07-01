@@ -2,7 +2,7 @@
   <div id = "Main">
     <div class = "fields">
       <label>NAME</label>
-      <input type="text" v-model="ScreenName" placeholder = "Enter Screen Name" spellcheck = "false" autocomplete = "off" />
+      <input type="text" v-model="screenName" placeholder = "Enter Screen Name" spellcheck = "false" autocomplete = "off" />
       <label>ROWS</label>
       <input type="number" v-model="rows">
       <label>COLUMNS</label>
@@ -15,7 +15,7 @@
         <br><br>
         <strong>Rows & Columns:</strong>
         <br>
-        - Each row is labeled with a letter (A, B, C...) and each seat is numbered (1, 2, 3...).<br>
+        - Each row is labeled with a letter (A, B, C...) and each movieSeat is numbered (1, 2, 3...).<br>
         - Seat IDs will follow the format like "B4", "C10".
         <br><br>
         <strong>Creating Gaps:</strong>
@@ -30,7 +30,6 @@
         <br><br>
       </p>
     </div>
-
     <p>{{warning}}</p>
     <div id = "layout" v-if = "!isRefresh">
       <div id = "screen">
@@ -38,15 +37,15 @@
         <div id = "ScreenLine"></div>
       </div>
       <div class = "row">
-        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1)">▼</div>
+        <div v-for = "(movieSeat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1)">▼</div>
       </div>
       <div v-for = "(row, index) in parseInt(rows)" :key = index class = "row">
         <div class = "RowNumber no-select" @click = "toggleRow($event.target)">{{numbersToLetters(rows - row + 1)}}</div>
-        <button v-for = "(seat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="seat no-select" @click = "toggleGap($event.target)">{{seat}}</button>
+        <button v-for = "(movieSeat, index) in parseInt(columns)" :key = index :data-id = "`${numbersToLetters(rows - row + 1)}, ${index + 1}`" class ="movieSeat no-select" @click = "toggleGap($event.target)">{{movieSeat}}</button>
         <div class = "RowNumber no-select" @click = "toggleRow($event.target)">{{numbersToLetters(rows - row + 1)}}</div>
       </div>
       <div class = "row">
-        <div v-for = "(seat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1 )"  >▲</div>
+        <div v-for = "(movieSeat, index) in parseInt(columns)" :key = index class = "SeatNumber no-select" @click = "toggleColumn($event.target, index + 1 )"  >▲</div>
       </div>
       <button id = "create" @click = "createScreen($event.target)">CREATE SCREEN</button>
     </div>
@@ -59,12 +58,11 @@ import axios from "axios";
 export default {
   name: "CreateScreen",
   props: {
-    city: String,
-    theatre: String,
+    theatre: Object,
   },
   data() {
     return {
-      ScreenName: "",
+      screenName: "",
       rows: 10,
       columns: 10,
       warning: "",
@@ -88,36 +86,36 @@ export default {
       this.calculateLayout(el);
     },
     toggleRow(el) {
-      const seats = el.parentElement.querySelectorAll(".seat");
+      const seats = el.parentElement.querySelectorAll(".movieSeat");
       if (el.classList.contains("isRGap")) {
         el.classList.remove("isRGap");
-        seats.forEach(seat => {
-          seat.classList.remove("isGap");
+        seats.forEach(movieSeat => {
+          movieSeat.classList.remove("isGap");
         })
       }
       else {
         el.classList.add("isRGap");
-        seats.forEach(seat => {
-          seat.classList.add("isGap");
+        seats.forEach(movieSeat => {
+          movieSeat.classList.add("isGap");
         })
       }
       this.calculateLayout(el);
     },
     toggleColumn(el, index) {
-      const seats = el.parentElement.parentElement.querySelectorAll(".seat");
+      const seats = el.parentElement.parentElement.querySelectorAll(".movieSeat");
       if (el.classList.contains("isCGap")) {
         el.classList.remove("isCGap");
-        seats.forEach(seat => {
-          if (seat.dataset.id.split(', ')[1]  === index.toString()) {
-            seat.classList.remove("isGap");
+        seats.forEach(movieSeat => {
+          if (movieSeat.dataset.id.split(', ')[1]  === index.toString()) {
+            movieSeat.classList.remove("isGap");
           }
         })
       }
       else {
         el.classList.add("isCGap");
-        seats.forEach(seat => {
-          if (seat.dataset.id.split(', ')[1] === index.toString()) {
-            seat.classList.add("isGap");
+        seats.forEach(movieSeat => {
+          if (movieSeat.dataset.id.split(', ')[1] === index.toString()) {
+            movieSeat.classList.add("isGap");
           }
         })
       }
@@ -127,14 +125,14 @@ export default {
       const rows = Array.from(el.parentElement.parentElement.querySelectorAll(".row")).reverse();
       let RowNumber = 1;
       rows.forEach(row => {
-        const seats = row.querySelectorAll(".seat");
+        const seats = row.querySelectorAll(".movieSeat");
 
         if (seats.length === 0) return;
 
         let SeatNumber = 1
-        seats.forEach(seat => {
-          if (!seat.classList.contains("isGap")) {
-            seat.textContent = SeatNumber;
+        seats.forEach(movieSeat => {
+          if (!movieSeat.classList.contains("isGap")) {
+            movieSeat.textContent = SeatNumber;
             SeatNumber++;
           }
         });
@@ -157,15 +155,15 @@ export default {
         this.warning = "Rows and Columns should be at least 1";
       } else {
         this.warning = "";
-        const seatsEl = el.parentElement.querySelectorAll(".seat");
+        const seatsEl = el.parentElement.querySelectorAll(".movieSeat");
         let seats = [];
         seatsEl.forEach(seatEl => {
           seats.push([...seatEl.dataset.id.split(', '), seatEl.classList.contains("isGap")]);
         });
         axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screens/create`, {
-          city: this.city,
-          theatre: this.theatre,
-          name: this.ScreenName,
+          city: this.theatre.city.name,
+          theatre: this.theatre.name,
+          name: this.screenName,
           seats: seats,
         }).then(() => {
           this.$emit("updatedScreen");
@@ -303,7 +301,7 @@ p {
   text-align: center;
 }
 
-.seat {
+.movieSeat {
   width: 2rem;
   height: 2rem;
   font-size: 0.9rem;
@@ -315,7 +313,7 @@ p {
   color: black;
 }
 
-.seat:hover {
+.movieSeat:hover {
   background-color: #CCC;
   border-radius: 0.5rem;
   box-shadow: -0.01rem 0.01rem 0.8rem 0 rgba(0, 0, 0, 0.05);

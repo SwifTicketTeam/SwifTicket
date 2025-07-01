@@ -1,24 +1,26 @@
-# SwifTicket – Universal Ticketing Platform
+# SwifTicket – Cross-Industry Universal Ticketing Platform
 
-SwifTicket is a cross-industry ticket booking full-stack solution developed with Vue.js, Node.js, and MongoDB. It includes authentication, profile management, vendor dashboards, event discovery, booking flows, and real-time payment integrations. The platform integrates real-world movie data and is designed on a scalable, city-based model for multi-theatre and screen operations.
+SwifTicket is a full-stack, cross-industry movie ticket booking solution built with Vue.js, Node.js, and MongoDB. It features authentication, profile management, vendor dashboards, event discovery, booking flows, and real-time payment integrations. The platform integrates actual movie data and is built on a scalable, city-based model for multi-theatre and screen operations.
 
 ---
 
 ## Project Roadmap
 
 - Phase 1: Frontend Foundation
-- Phase 2: Backend Server Setup and API Integration
-- Phase 3: Custom Database and Authentication
-- Phase 4: JWT Session Management and Email Messaging
-- Phase 5: Session Confirmation and Events Page Design
-- Phase 6: My Account Tab and Movie Page Routing
-- Phase 6 Extended: Persistent Storage and API Docs
-- Phase 7: Integration of Movie Dataset & Profile Enhancement
-- Phase 8: Filtering, Search & Dynamic Routing
-- Phase 9: Favorites Feature & UI Re-design
-- Phase 10: Ticket Booking Base and City Support
-- Phase 11: Vendor Panel, Theatre Management, and Screens
-- Phase 12: Showtime Assignment, Seat Booking, and Stripe Checkout
+- Phase 2: API Testing and Backend Server Integration
+- Phase 3: Database and Authentication
+- Phase 4: JWT Session Management, Email Messaging, and Forgot Password
+- Phase 5: Events Page Layout, Session Verification, and Visual Enhancements
+- Phase 6: My Account Tab, Transitions, and Movie Page Routing
+- Phase 6 Extended: Storage, Persistence, API Docs, and Restructure
+- Phase 7: Profile Enhancement & Movie Dataset Integration
+- Phase 8: Discovery Engine Activation, Search, Filter & Dynamic Routing
+- Phase 9: Favorites System & UI Overhaul
+- Phase 10: Ticket Booking Foundations & City Support Added
+- Phase 11: Screen System Launched & Vendor Management
+- Phase 12: Booking UI, Showtime Selection, & Layout Improvements
+- Phase 12 Extended: Seat Booking, Stripe Payments, and Ticket Generation Implemented
+- Phase 13: Schema Refactor, Ticketing Flow Complete
 
 ---
 
@@ -27,67 +29,67 @@ SwifTicket is a cross-industry ticket booking full-stack solution developed with
 ### Frontend Features
 
 - Vue.js and Flexbox-based responsive UI
-- Dynamic routes (`/`, `/home`, `/account`, `/event`, `/showtime`, etc.) handled by Vue Router
-- Vuex-driven state management for session, auth, favorites
-- Seamless route transitions, conditional navigation, and guarded routes
-- My Account tab with profile editing, favorites, security, and role swapping
-- Real-time favorite system with local storage and server storage persistence
+- Dynamic routes (`/`, `/home`, `/account`, `/events`, `/showtime`, etc.) managed by Vue Router
+- Vuex-state-managed session, auth, favorite state
+- Smooth route transition, conditional nav, and guarded routes
+- My Account tab with editing profile, favorites, security, and role change
+- Real-time favorite system with local and server-side persistence
 - Vendor Dashboard:
-  - Create the theatres and allocate to cities
-  - Add screens with customized layout (rows, columns, gaps between seats)
-  - Map movies to screens using MovieCard interface
-- Seat selection and deselection for the users
-- Booking interface with screen-wise time slots under selected movie and date
-- Stripe Checkout integrated for secure payment
-- Ticket summary displayed after payment with QR code generated
+  - Create theatres and assign to cities
+  - Add screens with custom layout (rows, columns, and gaps)
+- Map movies to screens through an easy-to-use card interface
+- User preview, deselection, and selection of seats
+- Integration of Stripe Checkout for payment security
+- Confirmation screen for tickets with QR code generation
+- My Tickets tab listing all reserved tickets including showtime, seats, and movie details
 
----
+--- 
 
 ### Backend & API Features
 
-- Modular controllers for Express.js backend
-- Schemas for MongoDB:
-  - `User`, `UserDetails`, `City`, `Movie`, `Theatre`, `Screen`, `Booking`
-- JWT authentication
-- Support for Nodemailer:
+- Express.js backend with modularity in controllers
+- MongoDB with schemas fully normalized:
+  - `City`, `Theatre`, `Screen`, `Seat`, `User`, `Movie`, `MovieTicket`
+- JWT authentication and role-based authorization
+- Integration of Nodemailer for:
   - Email verification
-  - Reset/forgot password
-- Support for upload of profile pictures and movie posters
-- Properly named and documented RESTful API
-- Movies queryable by title and genre through MongoDB queries
-- Favorite movies saved per user and accessible at any time
-- Preview and save layout for screen design
-- Stripe integration:
-  - Checkout session
-  - Ticket confirmation and redirect
+  - Password reset
+- Support for uploading profile pics and movie posters
+- RESTful API endpoints with named and documented structure
+- Integration of Stripe for payments and ticket creation
+- Ticket system with use of metadata to guarantee transactional booking
+- My Tickets saved in `MovieTicket`, pointing to ticket and movie metadata
 
 ---
 
+
 ### Events & Booking System
 
-- Live movie dataset with 9,800+ records
-- Poster assets managed and mapped locally
-- Genre chips and debounced search on `/events` page
-- Dynamic movie detail route
-- Filtered movie view with tag for "Currently Showing"
-- User can book tickets by:
-  - Choosing movie → date → screen & time → seats
-  - Checkout using Stripe
-- Ticket confirmation with QR
+- 9,800+ authentic movie records with local poster mapping
+- Filtering by genre and debounced search
+- Dynamic routing for movie detail pages
+- "Currently Showing" tag for live shows
+- Seat layout reflects real-time availability
+- Book tickets by:
+  1. Picking a movie, date, and screen
+  2. Picking available seats
+  3. Paying securely through Stripe
+  4. Displaying the booking summary and QR code
+  5. Ticket QR codes are scannable and lead directly to the booked ticket details page.
+- Blocked seats remain in the DB and update immediately
 
 ---
 
 ### Design & UX
 
-- Soft borders and unified color scheme:
-  - Salmon red (`rgba(240, 128, 128, 0.75)`)
-  - Yellow accent (`#ffc94d`)
-- Personalized transitions and layout retention through Vue's `keep-alive`
-- Form validation, toast, and async feedback built in
-- Role-based navigation:
-  - Vendor access to theatre management only
-- Clear visual hierarchy and minimalist cards
-- Seat layout view matches actual seat plan with responsive grid
+- Light color palette with:
+  - Salmon red (`rgba(233, 106, 106)`)
+  - Golden yellow (`#FFFC94D`)
+- Card-like layout with minimal shadows
+- Responsive grid layout for seat maps
+- Simple navigation by user roles
+- `keep-alive` for layout state management and seamless UX
+- Toast notifications, async loading states, and route guards
 
 ---
 
@@ -108,17 +110,17 @@ SwifTicket is a cross-industry ticket booking full-stack solution developed with
 - MongoDB Atlas / Compass
 
 ### Tools & Services
-- Postman (API Testing)
-- Nodemailer (Email Services)
-- Stripe (Payment Gateway)
+- Postman
+- Nodemailer
+- Stripe
 
 ---
 
 ## Current Limitations
 
-- Booked tickets are not saved to database yet
-- Admin Panel and reporting tools not yet integrated
-- Movie queuing system left pending for future releases
+- Admin analytics and reporting dashboard not implemented
+- Movie queuing system and show scheduler not built yet
+- Project may not receive future dev updates beyond deployment
 
 ---
 

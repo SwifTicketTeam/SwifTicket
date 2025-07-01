@@ -158,8 +158,8 @@ All notable changes to this project are documented here.
 - Added Logout Functionality:
   - Removes session and resets application state
 - Added first **Theatre Schema** to enable scalable layout and screen mapping
-  - Simple layout with rows and seat types
-  - Streamlined structure for future testing and seat selection logic
+  - Simple layout with rows and movieSeat types
+  - Streamlined structure for future testing and movieSeat selection logic
 ---
 
 ## [v0.2] – June 25, 2025
@@ -188,7 +188,7 @@ All notable changes to this project are documented here.
 - Refactored API routes for maintainability and scalability enhancements
 
 > **Note:**
-> _v0.3 will finalize the foundation of the ticket booking system and implement fully operational, user-defined Favorites functionality._
+> _v0.3 will finalize the foundation of the movieTicket booking system and implement fully operational, user-defined Favorites functionality._
 
 ---
 
@@ -203,13 +203,13 @@ All notable changes to this project are documented here.
 - Added **Screen Adding UI**:
 - Vendors can title the screen and assign rows/columns
 - Manual gap selection or whole rows/columns are supported
-- (Note: Backend logic for seat layout and screen saving still to be implemented)
+- (Note: Backend logic for movieSeat layout and screen saving still to be implemented)
 - Renamed `/booking` route to more intuitive `/showtime`
 - Updated route styling: changed all input borders from `#000` to `#CCC`
 
 ---
 
-> Note: This step lays the foundation for vendor-side management and opens the door to dynamic seat layout logic in future updates._
+> Note: This step lays the foundation for vendor-side management and opens the door to dynamic movieSeat layout logic in future updates._
 
 ---
 
@@ -230,8 +230,8 @@ All notable changes to this project are documented here.
 
 ---
 
-> Note: Showtime scheduling, screen-time mapping, and seat reservation flow will be implemented in version next.  
-Version `v0.4` and its sub-versions will finish up the entire ticket booking flow from timing, seat locking to payment integration.
+> Note: Showtime scheduling, screen-time mapping, and movieSeat reservation flow will be implemented in version next.  
+Version `v0.4` and its sub-versions will finish up the entire movieTicket booking flow from timing, movieSeat locking to payment integration.
 
 ---
 
@@ -246,16 +246,16 @@ Version `v0.4` and its sub-versions will finish up the entire ticket booking flo
 - Title of movie and five dates that are selectable (today + subsequent 6 days)
   - Screens grouped by theatre under chosen date and movie
   - Each screen shows its respective showtime
-- Layout piece now shows the screen name and details over the seat grid
+- Layout piece now shows the screen name and details over the movieSeat grid
 - Delete screen functionality now has confirmation handling to prevent unwanted deletions
 - Booking UI added:
   - Screens and layouts are selectable
-- "Book Now" and true ticket reservation logic to be implemented
+- "Book Now" and true movieTicket reservation logic to be implemented
 
 ---
 
-> Note: Movie queuing and full seat reservation flow will be completed in `v0.4`.
-Booking feature like seat selection, lock, and confirmation is being actively developed.
+> Note: Movie queuing and full movieSeat reservation flow will be completed in `v0.4`.
+Booking feature like movieSeat selection, lock, and confirmation is being actively developed.
 
 ## [Beta Extended v0.4] - July 1, 2025
 
@@ -264,9 +264,26 @@ Booking feature like seat selection, lock, and confirmation is being actively de
 - "Book Now" now directs to Stripe-enabled payment checkout
 - Summary page displays chosen seats, timing, and price prior to payment
 - Automatic refresh for "Currently Showing" movies according to vendor assignments
-- Stripe integration with redirection to ticket summary and QR generation after payment
+- Stripe integration with redirection to movieTicket summary and QR generation after payment
 - Ticket QR code shown after successful payment
+- Ticket QR codes are scannable and lead directly to the booked ticket details page.
 - Booking page UI revised with salmon red theme and light text
-- Bugs in screen rendering and seat management conflicts fixed
+- Bugs in screen rendering and movieSeat management conflicts fixed
 
-> Note: Booked tickets are not yet persisted in the database.
+> Note: Booked movieTicket are not yet persisted in the database.
+
+## [v0.4] - July 1, 2025
+
+### Phase 13 – Schema Refactor, Ticketing Flow Completion
+
+- Completed and normalized all MongoDB schemas for long-term performance and scalability
+- Completely reorganized: cities, theatres, screens, seats, users, tickets, and movies in separate collections
+- My Tickets page created under user account with view of all past and future bookings
+- Booked seats permanently marked and blocked during the selection of seats
+- Stripe session successful flow mixed in with DB ticket creation
+- Layout system dynamically updates seat statuses in real-time by show
+
+---
+
+> Note: This is the final significant update to the development process. Unless deployment work resumes, SwifTicket's future is in limbo. The version is stable and finished for full user and vendor use, including support for booking, ticket management, and responsive design.
+

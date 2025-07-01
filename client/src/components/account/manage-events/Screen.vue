@@ -16,10 +16,10 @@
         <button @click = "confirmRemoveMovie">REMOVE CURRENT MOVIE</button>
       </div>
       <div id = "movies">
-         <EventCardScreen @MovieChanged = "NewMovie" :is-select = "true" v-for = "(movie, index) in movies" :key = "index" :movie = "movie" @selectMovie = "MovieSelected"></EventCardScreen>
+         <EventCardScreen @MovieChanged = "NewMovie" :is-select = "true" v-for = "movie in movies" :key = "movie._id" :movie = "movie" @selectMovie = "MovieSelected"></EventCardScreen>
       </div>
       <button id = "preview" @click = "previewLayout" class = "no-select">{{ isPreview ? "BACK" : "PREVIEW LAYOUT"}}</button>
-      <MovieLayout v-if = "isPreview" :layout = "Screen.layout" :is-booking = false></MovieLayout>
+      <MovieLayout v-if = "isPreview" :layout = "screen.seats" :is-booking = false></MovieLayout>
       <ConfirmationModal :show = "isDeleteShow" :message = "DeleteMessage" @confirm = "deleteScreen" @cancel = "() => {isDeleteShow = false}"></ConfirmationModal>
       <button v-if = "isPreview" id = "delete" @click = "showConfirmationDelete" class = "no-select">DELETE SCREEN</button>
     </div>
@@ -66,15 +66,14 @@ export default {
     EventCardScreen: MovieCardScreen,
   },
   props: {
-    Screen: Object,
-    theatre: Object,
+    screen: Object,
   },
   data() {
     return {
       isEdit: false,
       movies: [],
       search: "",
-      editableScreen: {...this.Screen},
+      editableScreen: {...this.screen},
       isPreview: false,
       isDeleteShow: false,
       isDeleteConfirm: false,
@@ -107,7 +106,7 @@ export default {
       this.isEdit = !this.isEdit
     },
     startSearch() {
-      axios.get(`${process.env.VUE_APP_SERVER}/api/account/theatres/movies?search=${this.search}`)
+      axios.get(`${process.env.VUE_APP_SERVER}/api/account/theatres/movies?search=${encodeURIComponent(this.search)}`)
           .then((res) => {
             this.movies = res.data.movies;
           }).catch((err) => {
@@ -125,9 +124,9 @@ export default {
     },
     deleteScreen() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screen/delete`, {
-        city: this.theatre.city,
-        TheatreName: this.theatre.name,
-        ScreenName: this.Screen.name,
+        city: this.screen.theatre.city.name,
+        theatre: this.screen.theatre.name,
+        screen: this.screen.name,
       }).then(() => {
         this.$emit("updatedScreen");
       }).catch((err) => {
@@ -146,12 +145,13 @@ export default {
     scheduleMovie() {
       this.isSelectedMovie = false;
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/movie`, {
-        city: this.theatre.city,
-        TheatreName: this.theatre.name,
-        ScreenName: this.Screen.name,
-        movieID: this.selectedMovie._id,
+        city: this.screen.theatre.city.name,
+        theatre: this.screen.theatre.name,
+        screen: this.screen.name,
+        movieId: this.selectedMovie._id,
         moviePrice: parseFloat(this.seatPrice).toFixed(2),
         movieTime: new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString(),
+        method: 'set',
       }).then(() => {
         this.editableScreen.movie = this.selectedMovie;
         this.editableScreen.time = new Date(`${this.selectedDate}T${this.selectedTime.padStart(5, "0")}:00`).toISOString();
@@ -213,9 +213,10 @@ export default {
     },
     RemoveMovie() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/movie`, {
-        city: this.theatre.city,
-        TheatreName: this.theatre.name,
-        ScreenName: this.Screen.name,
+        city: this.screen.theatre.city.name,
+        theatre: this.screen.theatre.name,
+        screen: this.screen.name,
+        method: 'delete',
       }).then(() => {
         this.isRemoveCurrentMovie = false;
         this.editableScreen.movie = {};
@@ -351,7 +352,7 @@ button {
 }
 
 #delete {
-  margin-left: 0;
+  margin: 0;
   width: 18%;
 }
 

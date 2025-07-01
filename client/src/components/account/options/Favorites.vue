@@ -59,7 +59,7 @@ export default {
 
 h2 {
   font-size: 1.6rem;
-  margin: 2rem 0.1rem 0 0;
+  margin: 2rem 0.1rem 1rem 0;
 }
 
 </style>

@@ -1,8 +1,12 @@
-const City = require('../models/City');
 const User = require('../models/User');
-const UserDetails = require('../models/UserDetails');
-const Movie = require('../models/Movie');
+const City = require('../models/City');
+const Movie = require('../models/Movies/Movie');
+const Theatre = require('../models/Movies/Theatre');
+const Screen = require('../models/Movies/Screen');
+const MovieSeat = require('../models/Movies/MovieSeat');
+const MovieTicket  = require('../models/Movies/MovieTicket');
 const mongoose = require('mongoose');
+const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 
 
 async function isScreeningCheck() {
@@ -19,23 +23,25 @@ async function isScreeningCheck() {
 module.exports.getFavorites = async (req, res) => {
     try {
         const {userId} = req.body;
+
+        if (!userId) return res.status(400).json({ message: "User ID required" });
+
         await isScreeningCheck();
-        const userDetail = await UserDetails.findById(userId).populate("favorites.movies")
-        if (!userDetail) {
-            return res.status(400).send({
-                message: "Invalid User or Movie ID"
+        const user = await User.findById(userId).populate("favorites.movies").lean();
+        if (!user) {
+            return res.status(400).json({
+                message: "Invalid User ID"
             })
         } else {
-            return res.status(200).send({
-                message: `Ticket Added to Favorites`,
-                movies: userDetail.favorites.movies,
+            return res.status(200).json({
+                message: `Favorites fetched for ${userId}`,
+                movies: user.favorites.movies,
             })
         }
 
     } catch (err) {
-        console.error(err);
-        return res.status(400).send({
-            message: "Invalid User ID"
+        return res.status(500).json({
+            message: "Server Error"
         })
     }
 }
@@ -43,14 +49,14 @@ module.exports.getFavorites = async (req, res) => {
 // Get Movies
 module.exports.getMovies = async (req, res) => {
     const movieLimit = 48;
-    const { search = "", genre = "" } = req.query;
-
-    const genres = genre
-        .split(',')
-        .map(g => g.trim() === "Sci-Fi" ? "Science Fiction" : g.trim())
-        .filter(Boolean);
-
     try {
+        const { search = "", genre = "" } = req.query;
+
+        const genres = genre
+            .split(',')
+            .map(g => g.trim() === "Sci-Fi" ? "Science Fiction" : g.trim())
+            .filter(Boolean);
+
         let query = {};
         if (search) {
             query.title = { $regex: `^${search}`, $options: "i" };
@@ -63,26 +69,26 @@ module.exports.getMovies = async (req, res) => {
         const screening_movies = await Movie.find({
             ...query,
             is_screening: true,
-        }).limit(movieLimit);
+        }).limit(movieLimit).lean();
 
 
-        let movies;
+        let movies = [];
         const newMovieLimit = movieLimit - screening_movies.length - 6 + screening_movies.length % 6;
         if (movieLimit - screening_movies.length > 0) {
             movies = Object.keys(query).length
-                ? await Movie.find(query).limit(newMovieLimit)
+                ? await Movie.find(query).limit(newMovieLimit).lean()
                 : await Movie.aggregate([{$sample: {size: newMovieLimit}}]);
 
         }
 
-        return res.status(200).send({
+        return res.status(200).json({
             message: "Movies Found!",
             screening_movies: screening_movies,
             movies: movies,
         })
 
     } catch(err) {
-        return res.status(400).send({
+        return res.status(400).json({
             message: "Invalid Queries!"
         })
     }
@@ -92,14 +98,19 @@ module.exports.getMovies = async (req, res) => {
 module.exports.checkFavorites = async (req, res) => {
     try {
         const {userId, movieId} = req.body;
-        const user = await UserDetails.findOne({
+
+        if (!userId || !movieId) return res.status(400).json({
+            message: "User ID and Movie ID required" ,
+        });
+
+        const user = await User.findOne({
             _id: userId,
             "favorites.movies": movieId,
-        });
+        }).lean();
 
         return res.status(200).send(!!user);
     } catch (err) {
-        return res.status(400).send({
+        return res.status(400).json({
             message: "Invalid User or Movie ID"
         })
     }
@@ -109,254 +120,313 @@ module.exports.checkFavorites = async (req, res) => {
 module.exports.updateFavorites = async (req, res) => {
     try {
         const {userId, movieId} = req.body;
-        const user = await UserDetails.findById(userId);
 
-        if(!user) return res.status(400).send({
+        if(!userId || !mongoose.Types.ObjectId.isValid(movieId)) return res.status(400).json({
+            message: "User ID and Movie ID required"
+        })
+
+        const user = await User.findById(userId).lean();
+        if(!user) return res.status(400).json({
             message: "Invalid User ID"
         });
 
-        const userDetail = await UserDetails.updateOne(
+        const movie = new mongoose.Types.ObjectId(movieId);
+        const isFavorite = user.favorites.movies.some(m => m.equals(movie));
+
+        const userFavorites = await User.updateOne(
             { _id: userId },
-            user.favorites.movies.includes(movieId)
-                ? { $pull: { 'favorites.movies': movieId } }
-                : { $addToSet: { 'favorites.movies': movieId } }
+            isFavorite
+                ? { $pull: { 'favorites.movies': movie } }
+                : { $addToSet: { 'favorites.movies': movie } }
         );
-        if (!userDetail.matchedCount) {
-            return res.status(400).send({
+        if (!userFavorites.matchedCount) {
+            return res.status(400).json({
                 message: "Invalid Movie ID"
             })
         } else {
-            return res.status(200).send({
-                message: `Event Updated to Favorites`
+            return res.status(200).json({
+                message: `Favorites Updated Successfully.`
             })
         }
     } catch (err) {
-        console.log(err);
-        return res.status(400).send({
-            message: "Error Updating Favorites"
+        return res.status(500).json({
+            message: "Server Error"
         })
     }
 }
 
-// Create Theatres
+// Create Theatre
 module.exports.createTheatre = async (req, res) => {
-    const {vendor, city, name} = req.body;
     try {
-        const isVendor = await User.findOne({
-            _id: vendor,
-            role: 'vendor'
-        });
-
-        if (!isVendor) {
-            return res.status(400).send({
-                message: "Invalid Vendor ID"
-            })
-        }
-
-        const isCity = await City.findOne({
-            city: city
-        }, {
-            _id: 0,
-            "theatres": 1
+        const {city, vendorId, name} = req.body;
+        if(!city || !vendorId || !name) return res.status(400).json({
+            message: "City, Vendor and Name of Theatre is required"
         })
+
+        const isVendor = await User.findOne({
+            _id: vendorId,
+            role: 'vendor'
+        }).lean();
+
+        if (!isVendor) return res.status(400).json({
+            message: "Invalid Vendor ID"
+        })
+
+        const isCity = await City.findOne({name: city}).lean();
 
         if(!isCity) {
-            await City.create({
-                city: city,
-                theatres: [{
-                    vendor: vendor,
-                    name: name
-                }]
-            });
-            return res.status(200).send({
+            const cityDoc = await City.create({name: city});
+
+            await Theatre.create({
+                name,
+                city: cityDoc._id,
+                vendor: vendorId,
+            })
+            return res.status(200).json({
                 message: `New City with Theatre Added`
             })
-        } else if (!isCity.theatres.some(theatre => theatre.name.trim().toLowerCase() === name.trim().toLowerCase())) {
-            await City.updateOne({city: city}, {
-                $push: {
-                    theatres: {
-                        vendor: vendor,
-                        name: name,
-                    }
-                }
-            });
-            return res.status(200).send({
-                message: `New Theatre added to ${city}`
-            })
-        } else {
-            return res.status(400).send({
-                message: `Theatre already exists in ${city}`
-            })
         }
+
+        const isTheatre = await Theatre.findOne({
+            name,
+            city: isCity._id
+        }).lean();
+
+        if(isTheatre) return res.status(400).json({
+            message: `Theatre already exists in ${city}`
+        });
+
+        await Theatre.create({
+            name,
+            city: isCity._id,
+            vendor: vendorId,
+        });
+        return res.status(200).json({
+            message: `New Theatre added to ${city}`
+        });
+
     } catch (err) {
-        return res.status(400).send({
-            message: `No City or Name Provided`
-        })
+        return res.status(500).json({
+            message: `Server Error`
+        });
     }
 }
 
 // Get Theatres
 module.exports.getTheatres = async (req, res) => {
-    let {vendor} = req.body;
-    vendor = new mongoose.Types.ObjectId(vendor);
     try {
-        const cities = await City.aggregate([
-            {$match : {'theatres.vendor': vendor} },
-            {$unwind: "$theatres"},
-            {
-                $replaceWith: {
-                    $mergeObjects: [
-                        "$theatres",
-                        { city: "$city" }
-                    ]
-                }
-            }
-        ]);
+        let {vendorId} = req.body;
+        if(!vendorId) return res.status(400).json({
+            message: "Vendor ID required"
+        })
 
-        if (cities.length) return res.status(200).send({
-            theatres: cities
+        try {
+            vendorId = new mongoose.Types.ObjectId(vendorId);
+        }
+        catch(err) {
+            return res.status(400).json({
+                message: "Invalid Vendor ID"
+            })
+        }
+
+        const theatres = await Theatre.find({vendor: vendorId}).populate('city').lean();
+        const theatreIds = theatres.map(theatre => theatre._id);
+        const screens = await Screen.find({
+            theatre: { $in: theatreIds }
+        }).lean();
+
+        const screensByTheatre = {};
+        screens.forEach(screen => {
+            const theatreId = screen.theatre.toString();
+            if (!screensByTheatre[theatreId]) screensByTheatre[theatreId] = [];
+            screensByTheatre[theatreId].push(screen._id);
         });
-        else return res.status(400).send({
-            message: `No Theatres for ${vendor}`
+
+        const theatresWithScreens = theatres.map(theatre => ({
+            ...theatre,
+            screens: screensByTheatre[theatre._id.toString()] || []
+        }));
+
+        if (theatres.length) return res.status(200).json({
+            message: `${theatres.length} Theatres Found for ${vendorId}`,
+            theatres: theatresWithScreens,
+        });
+        else return res.status(200).json({
+            message: `No Theatres Found for ${vendorId}`,
+            theatres: []
         });
     } catch (err) {
-        return res.status(400).send({
-            message: `Invalid Vendor ID`
+        return res.status(500).json({
+            message: `Server Error`
         })
     }
 }
 
 // Create Screen
 module.exports.createScreen = async (req, res) => {
-    const {city, theatre, name, seats} = req.body;
+    try {
+        const {city, theatre, name, seats} = req.body;
 
-    if (!city || !theatre || !name || !Array.isArray(seats)) {
-        return res.status(400).send({
-            message: "Invalid Details"
-        });
-    }
-
-    let layout = [];
-    seats.forEach(([row, number, isGap]) => {
-        let rowGroup = layout.find(r => r.row === row);
-        if (rowGroup) {
-            rowGroup.seat.push({ number, isGap });
-        } else {
-            layout.push({
-                row: row,
-                seat: [{ number, isGap }]
+        if (!city || !theatre || !name || !Array.isArray(seats)) {
+            return res.status(400).json({
+                message: "Invalid Details"
             });
         }
-    });
 
-    const screen = {
-        name: name,
-        layout: layout,
-    }
-    try {
-        const isScreenAlreadyExists = await City.findOne({
-            city: city,
-            'theatres.name': theatre,
-        }, {
-            'theatres.$': 1,
+        const isCity = await City.findOne({name: city}).lean();
+        if(!isCity) return res.status(400).json({
+            message: "Invalid City"
         })
 
-        if (isScreenAlreadyExists?.theatres?.[0]?.screens.some(s => s.name.trim().toLowerCase() === name.trim().toLowerCase())) return res.status(400).send({
-            message: `Screen with Name ${name} already exists`
+        const isTheatre = await Theatre.findOne({
+            name: theatre,
+            city: isCity._id,
+        }).lean();
+        if(!isTheatre) return res.status(400).json({
+            message: "Invalid Theatre"
+        })
+
+        const isScreen = await Screen.findOne({
+            name,
+            theatre: isTheatre._id,
+        }).lean();
+        if(isScreen) return res.status(400).json({
+            message: "Screen Already Exists"
+        })
+
+        const screen = await Screen.create({
+            name,
+            theatre: isTheatre._id,
         });
 
-        const NewScreenCity = await City.updateOne({
-            city: city,
-            'theatres.name': theatre,
-        }, {
-            $push : {'theatres.$.screens': screen},
-            upsert: false,
-        });
+        try {
+            const newSeats = seats.map(seat => ({
+                screen: screen._id,
+                row: seat?.[0],
+                column: seat?.[1],
+                isGap: seat?.[2],
+            }))
 
-        if (NewScreenCity.modifiedCount) return res.status(200).send({
-            message: `Screen ${name} has been Added`,
-        }) ;
-        else if (!NewScreenCity.matchedCount) res.status(400).send({
-            message: 'Theatre not found',
-        });
-        else return res.status(400).send({
-            message: "Error Adding Screen"
-        });
+            await MovieSeat.insertMany(newSeats, {
+                ordered: true,
+                rawResult: false
+            })
+        } catch(err) {
+            return res.status(400).json({
+                message: "Your Seat Layout is Invalid. Each Seat Needs to follow Format: [row, column, isGap]"
+            })
+        }
+
+        return res.status(200).json({
+            message: `Screen ${name} has been added to ${theatre}, ${city}.`
+        })
     } catch (err) {
-        return res.status(400).send({
-            message: "Error Adding Screen"
+        return res.status(500).json({
+            message: "Server Error"
         });
     }
 }
 
 // Get Screens
 module.exports.getScreens = async (req, res) => {
-    const {city, theatre} = req.body;
-
-    if (!city || !theatre) {
-        return res.status(400).send({ message: "City and Theatre are required" });
-    }
-
     try {
-        await City.updateOne(
-            {
-                city: city,
-                'theatres.name': theatre,
-            },
-            {$set: {
-                    'theatres.$[t].screens.$[s].time': "",
-                    'theatres.$[t].screens.$[s].price': 0,
-                    'theatres.$[t].screens.$[s].movie': null,
-                }
-            }, {
-                arrayFilters: [
-                    { 't.name': theatre },
-                    { 's.time': { $lt: new Date().toISOString() } }
-                ]});
+        const {city, theatre} = req.body;
 
-        const cityData = await City.findOne(
-            { city: city, "theatres.name": theatre },
-            { "theatres.$": 1 }
-        );
-
-        if (!cityData?.theatres?.[0]) {
-            return res.status(400).send({
-                message: "Theatre not found"
-            });
+        if (!city || !theatre) {
+            return res.status(400).send({ message: "City and Theatre are required" });
         }
 
+        const isCity = await City.findOne({name: city}).lean();
+        if(!isCity) return res.status(400).json({
+            message: "Invalid City"
+        })
 
-        const screens = await Promise.all(
-            cityData.theatres[0].screens.map(async (screen) => {
-                if (screen.movie) {
-                    const movie = await Movie.findById(screen.movie);
-                    return {
-                        ...screen.toObject(),
-                        movie,
-                    };
-                } else {
-                    return {
-                        ...screen.toObject(),
-                        movie: null,
-                    };
-                }
+        const isTheatre = await Theatre.findOne({
+            name: theatre,
+            city: isCity._id,
+        }).lean();
+        if(!isTheatre) return res.status(400).json({
+            message: "Invalid Theatre"
+        })
+
+        const now = new Date().toISOString();
+        const screens = await Screen.find({ theatre: isTheatre._id })
+            .populate({
+                path: 'theatre',
+                populate: 'city',
             })
-        );
+            .populate('movie')
+            .lean();
 
-        screens.sort((screen1, screen2) => screen1.time.localeCompare(screen2.time));
+        const expiredScreens = [];
 
-        if (!screens.length) {
-            return res.status(200).send({
-                screens: [],
-            });
+        for (const screen of screens) {
+            if (screen.time && screen.time < now) {
+                expiredScreens.push(screen._id);
+                screen.movie = null;
+                screen.time = "";
+                screen.price = 0;
+            }
         }
 
-        return res.status(200).send({
-            screens: screens,
+        if (expiredScreens.length > 0) {
+            await Screen.updateMany(
+                { _id: { $in: expiredScreens } },
+                {
+                    $set: {
+                        movie: null,
+                        time: "",
+                        price: 0,
+                    }
+                }
+            );
+        }
+
+
+        const screenIds = screens.map(screen => screen._id);
+        const seats = await MovieSeat.find({
+            screen: {$in : screenIds},
+        }).lean();
+
+        const seatsByScreen = {};
+        seats.forEach(seat => {
+            const screenId = seat.screen.toString();
+            if (!seatsByScreen[screenId]) seatsByScreen[screenId] = {};
+
+            const row = seat.row;
+            if (!seatsByScreen[screenId][row]) seatsByScreen[screenId][row] = [];
+
+            seatsByScreen[screenId][row].push(seat);
+        });
+
+        const screensWithSeats = screens.map(screen => {
+            const screenId = screen._id.toString();
+            const seatRows = seatsByScreen[screenId];
+
+            const groupedRows = Object.entries(seatRows)
+                .sort((row1, row2) => row2[0].localeCompare(row1[0]))
+                .map(([row, seats]) =>
+                    seats.sort((seat1, seat2) => seat1.column - seat2.column)
+                );
+
+            return {
+                ...screen,
+                seats: groupedRows,
+            };
+        });
+
+        if (!screens.length) return res.status(200).json({
+            message: `No Screens found for ${theatre}`,
+            screens: [],
+        });
+
+        return res.status(200).json({
+            message: `${screens.length} Screens found in ${theatre}, ${city}`,
+            screens: screensWithSeats,
         })
     } catch (err) {
-        return res.status(400).send({
-            message: "Error Getting Screens"
+        return res.status(500).json({
+            message: "Server Error"
         })
     }
 }
@@ -365,7 +435,8 @@ module.exports.getScreens = async (req, res) => {
 module.exports.getScreenMovies = async (req, res) => {
     const movieLimit = 5
     try {
-        const search = req.query.search
+        const search = (req.query.search || "").trim();
+
         if (search === "") return res.status(200).json({
             message: "Discover Movies",
             movies: await Movie.aggregate([
@@ -374,100 +445,112 @@ module.exports.getScreenMovies = async (req, res) => {
         });
         const movies = await Movie.find({
             title: {$regex: `^${search}`, $options: "i" }
-        }).limit(movieLimit)
-        return res.status(200).send({
+        }).limit(movieLimit).lean();
+        return res.status(200).json({
             message: "Movies Found!",
             movies: movies
         })
     } catch(err) {
-        return res.status(400).send({
-            message: "Invalid Queries!"
+        return res.status(500).json({
+            message: "Server Error"
+        })
+    }
+}
+
+async function deleteMovieFromScreen(movieId) {
+    const isMovie = await Screen.find({
+        movie: movieId,
+    }, {
+        time: 1,
+    }).lean();
+
+    if (!isMovie.length) {
+        await Movie.updateOne({_id: movieId}, {
+            is_screening: false,
+            last_screening_time: "",
+        })
+    } else {
+        await Movie.updateOne({_id: movieId}, {
+            last_screening_time: Math.max(...isMovie.map((movie) => movie.time)),
         })
     }
 }
 
 // Set Movie for Screen
 module.exports.setScreenMovie = async (req, res) => {
-    const {city, TheatreName, ScreenName, movieID = null, moviePrice = 0, movieTime = ""} = req.body;
-
     try {
-        const OldMovie = await City.aggregate([
-            {$match: {city}},
-            {$unwind: "$theatres"},
-            {$match: {"theatres.name": TheatreName}},
-            {$unwind: "$theatres.screens"},
-            {$match: {"theatres.screens.name": ScreenName}},
-            {$project: {
-                    movieID: "$theatres.screens.movie"
-                }}
-        ]);
+        const {city, theatre, screen, movieId , moviePrice, movieTime, method} = req.body;
 
-        const OldMovieID = OldMovie?.[0]?.movieID;
+        if (!city || !theatre || !screen) return res.status(400).json({
+            message: "City, Theatre and Screen are required"
+        })
 
-        if (OldMovieID) {
-            const isStillScreened = await City.aggregate([
-                {$unwind: "$theatres"},
-                {$unwind: "$theatres.screens"},
-                {$match: {
-                        "theatres.screens.movie": OldMovieID,
-                        "theatres.screens.name": {$ne: ScreenName}
-                    }},
-                {$limit: 1}
-            ]);
-            if (!isStillScreened.length) {
-                await Movie.updateOne({_id: OldMovieID}, {
-                    $set: {is_screening: false, last_screening_time: ""}
-                });
-            }
+        const isCity = await City.findOne({name: city}).lean();
+        if (!isCity) return res.status(400).json({
+            message: "Invalid City"
+        })
+
+        const isTheatre = await Theatre.findOne({
+            name: theatre,
+            city: isCity._id,
+        }).lean();
+        if (!isTheatre) return res.status(400).json({
+            message: "Invalid Theatre"
+        })
+
+        const isScreen = await Screen.findOne({
+            name: screen,
+            theatre: isTheatre._id,
+        }).lean();
+        if (!isScreen) return res.status(400).json({
+            message: "Invalid Screen"
+        })
+
+        if (method === 'set') {
+            if (!movieId || moviePrice === undefined || !movieTime) return res.status(400).json({
+                message: "Movie ID, Price of Each Ticket and Time of Movie Screening are Required"
+            })
+
+            if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/.test(movieTime) && !isNaN(Date.parse(movieTime))) return res.status(400).json({
+                message: "Invalid Movie Time"
+            })
+
+            await Screen.findByIdAndUpdate(isScreen._id, {
+                movie: movieId,
+                price: moviePrice,
+                time: movieTime,
+            })
+
+            await Movie.updateOne({_id: movieId}, {
+                is_screening: true,
+                $max: {last_screening_time: movieTime},
+            })
+
+            return res.status(200).json({
+                message: `Movie Set to ${movieId}`,
+            })
+
+        } else if (method === 'delete') {
+            await Screen.findByIdAndUpdate(isScreen._id, {
+                movie: null,
+                price: 0,
+                time: '',
+            })
+
+            await deleteMovieFromScreen(movieId)
+
+            return res.status(200).json({
+                message: `Movie Deleted from ${screen}`,
+            })
+        } else {
+            return res.status(400).json({
+                message: "Invalid Method"
+            })
         }
-
-        await City.updateOne({
-            city,
-            "theatres.name": TheatreName,
-            "theatres.screens.name": ScreenName
-        }, {
-            $set: {
-                "theatres.$[t].screens.$[s].movie": movieID,
-                "theatres.$[t].screens.$[s].price": moviePrice,
-                "theatres.$[t].screens.$[s].time": movieTime
-            }
-        }, {
-            arrayFilters: [
-                {"t.name": TheatreName},
-                {"s.name": ScreenName}
-            ]
-        });
-
-        if (!movieID) {
-            return res.status(200).send({
-                message: "Screen's Movie Deleted Successfully",
-            });
-        }
-
-        await Movie.updateOne({ _id: movieID }, [
-            {$set: {
-                    is_screening: true,
-                    last_screening_time: {
-                        $cond: [
-                            {$or: [
-                                    { $eq: ["$last_screening_time", ""] },
-                                    { $lt: ["$last_screening_time", movieTime] }
-                                ]},
-                            movieTime,
-                            "$last_screening_time",
-                        ]
-                    }
-                }}
-        ]);
-
-
-        return res.status(200).send({
-            message: "Screen's Movie Updated Successfully",
-        });
 
     } catch (err) {
-        return res.status(400).send({
-            message: "Error Setting the New Movie"
+        return res.status(500).json({
+            message: "Server Error"
         });
     }
 
@@ -475,68 +558,45 @@ module.exports.setScreenMovie = async (req, res) => {
 
 // Delete Screen
 module.exports.deleteScreen = async (req, res) => {
-    const {city, TheatreName, ScreenName} = req.body;
     try {
-        const DeleteMovie = await City.aggregate([
-            {$match: {
-                    city: city
-                }},
-            {$unwind: "$theatres"},
-            {$unwind: "$theatres.screens"},
-            {$match: {
-                    "theatres.name": TheatreName,
-                    "theatres.screens.name": ScreenName
-                }},
-            {$project: {
-                    movie: "$theatres.screens.movie"
-                }}
-        ])
+        const {city, theatre, screen} = req.body;
 
-        const movieID = DeleteMovie?.[0]?.movie;
-
-        if (movieID) {
-            const isPresent = await City.aggregate([
-                {$unwind: "$theatres"},
-                {$unwind: "$theatres.screens"},
-                {$match: {
-                        "theatres.screens.movie": movieID,
-                        "theatres.screens.name": {$ne: ScreenName}
-                    }},
-                {$limit: 1}
-            ])
-
-            if (!isPresent.length) {
-                await Movie.updateOne({
-                    _id: movieID
-                }, {
-                    $set: {is_screening: false, last_screening_time: ""}
-                });
-            }
-        }
-
-        const Screen = await City.updateOne(
-            {
-                city: city,
-                "theatres.name": TheatreName
-            },
-            {
-                $pull: {
-                    "theatres.$.screens": {
-                        name: ScreenName
-                    }
-                }
-            }
+        if (!city || !theatre || !screen) return res.status(400).json({
+            message: "City, Theatre and Screen are required" }
         );
 
-        if (Screen.modifiedCount) return res.status(200).send({
-            message: "Deleted Screen"
+        const isCity = await City.findOne({name: city}).lean();
+        if(!isCity) return res.status(400).json({
+            message: "Invalid City"
         })
-        else res.status(400).send({
+
+        const isTheatre = await Theatre.findOne({
+            name: theatre,
+            city: isCity._id,
+        }).lean();
+        if(!isTheatre) return res.status(400).json({
+            message: "Invalid Theatre"
+        })
+
+        const isScreen = await Screen.findOne({
+            name: screen,
+            theatre: isTheatre._id,
+        }).lean();
+
+        if(!isScreen) return res.status(400).json({
             message: "Invalid Screen"
         })
+
+        await deleteMovieFromScreen(isScreen.movie);
+        await Screen.findByIdAndDelete(isScreen._id);
+        await MovieSeat.deleteMany({ screen: isScreen._id });
+
+        return res.status(200).json({
+            message: `${screen} Deleted from ${theatre}, ${city}`,
+        })
     } catch (err) {
-        return res.status(400).send({
-            message: "Could not Delete Screen"
+        return res.status(500).json({
+            message: "Server Error"
         })
     }
 
@@ -544,36 +604,277 @@ module.exports.deleteScreen = async (req, res) => {
 
 // Get Screen for Specific Movie
 module.exports.getMovieScreens = async (req, res) => {
-    let {movieID} = req.body;
     try {
-        movieID = new mongoose.Types.ObjectId(movieID);
+        const {movieId} = req.body;
 
-        const Screens = await City.aggregate([
-            {$unwind: "$theatres"},
-            {$project: {
-                    _id: 0,
-                    city: 1,
-                    theatre: "$theatres.name",
-                    screens: {
-                        $filter: {
-                            input: "$theatres.screens",
-                            as: "screens",
-                            cond: { $and:
-                                [{$eq: ["$$screens.movie", movieID]}, {$gt: ["$$screens.time", new Date().toISOString()]}]
-                            }
-                        }
-                    }
-            }},
-            {$match: {"screens.0": { $exists: true }}   }
-        ])
+        if(!mongoose.Types.ObjectId.isValid(movieId)) return res.status(400).json({
+            message: "Movie ID is required"
+        })
 
+        await Screen.updateMany(
+            { time: { $lt: new Date().toISOString() } },
+            {
+                $set: {
+                    time: '',
+                    price: 0,
+                    movie: null,
+                }
+            }
+        );
+
+        const screens = await Screen.find({ movie: movieId })
+            .populate({
+                path: "theatre",
+                populate: {
+                    path: "city",
+                }
+            }).lean();
+
+        const screenIds = screens.map(screen => screen._id);
+        const seats = await MovieSeat.find({
+            screen: {$in : screenIds},
+        }).lean();
+
+        const seatsByScreen = {};
+        seats.forEach(seat => {
+            const screenId = seat.screen.toString();
+            if (!seatsByScreen[screenId]) seatsByScreen[screenId] = {};
+
+            const row = seat.row;
+            if (!seatsByScreen[screenId][row]) seatsByScreen[screenId][row] = [];
+
+            seatsByScreen[screenId][row].push(seat);
+        });
+
+        const screensWithSeats = screens.map(screen => {
+            const screenId = screen._id.toString();
+            const seatRows = seatsByScreen[screenId];
+
+            const groupedRows = Object.entries(seatRows)
+                .sort((row1, row2) => row2[0].localeCompare(row1[0]))
+                .map(([row, seats]) =>
+                    seats.sort((seat1, seat2) => seat1.column - seat2.column)
+                );
+
+            return {
+                ...screen,
+                seats: groupedRows,
+            };
+        });
+
+        const grouped = {};
+
+        screensWithSeats.forEach(screen => {
+            const cityName = screen.theatre.city.name;
+            const theatreName = screen.theatre.name;
+
+            const key = `${cityName}::${theatreName}`;
+            if (!grouped[key]) {
+                grouped[key] = {
+                    city: cityName,
+                    theatre: theatreName,
+                    screens: []
+                };
+            }
+
+            grouped[key].screens.push(screen);
+        });
+
+        const groupedScreens = Object.values(grouped);
+        console.log(groupedScreens);
         return res.status(200).send({
-            message: `Found ${Screens.length} Screens`,
-            screens: Screens,
+            message: `Found ${screens.length} Screens`,
+            screens: groupedScreens,
         })
     } catch (err) {
-        return res.status(400).send({
-            message: "Invalid Movie ID"
+        return res.status(500).send({
+            message: "Server Error"
+        })
+    }
+}
+
+// Create Checkout Session - Movies
+module.exports.initPayments = async (req, res) => {
+    const {email, metadata} = req.body;
+    if(!email || !metadata) {
+        return res.status(400).json({
+            message: "Missing Email or Metadata"
+        });
+    }
+
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            line_items: [
+                {
+                    price_data: {
+                        currency: "inr",
+                        product_data: {
+                            name: metadata.movie,
+                            description: `${metadata.theatre}, ${metadata.city}, ${metadata.show} at ${new Date(metadata.time).toLocaleString("en-US", {
+                                weekday: "short",
+                                month: "short",
+                                day: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                            })} • ${metadata.seats}`,
+                        },
+                        unit_amount: Math.round(Number(metadata.amount) * 100),
+                    },
+                    quantity: 1
+                },
+            ],
+            mode: "payment",
+            customer_email: email,
+            metadata: metadata,
+            success_url: `${process.env.CLIENT}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT}/events`
+        })
+
+        return res.status(200).json({
+            message: "Created Checkout Session",
+            url: session.url,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: "Failed to Create Checkout Session"
+        })
+    }
+}
+
+// Save Tickets - Movies
+module.exports.saveTickets = async (req, res) => {
+    const session_id = req.query.session_id;
+
+    try {
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+        const metadata = session.metadata;
+
+        const { city, theatre, screen } = metadata;
+
+        const isCity = await City.findOne({name: city}).lean();
+        if(!isCity) return res.status(400).json({
+            message: "Invalid City"
+        })
+
+        const isTheatre = await Theatre.findOne({
+            name: theatre,
+            city: isCity._id,
+        }).lean();
+        if(!isTheatre) return res.status(400).json({
+            message: "Invalid Theatre"
+        })
+
+        const isScreen = await Screen.findOne({
+            name: screen,
+            theatre: isTheatre._id,
+        }).lean();
+
+        if(!isScreen) return res.status(400).json({
+            message: "Invalid Screen"
+        })
+
+        const ticket = await MovieTicket.findOne({
+            user: metadata.user,
+            ticketId: metadata.ticket_id
+        }).lean();
+
+        const ticketData = {
+            user: metadata.user,
+            ticketId: metadata.ticket_id,
+            movie: {
+                _id: metadata.movie_id,
+                title: metadata.movie
+            },
+            city: city,
+            theatre: theatre,
+            show: screen,
+            time: metadata.time,
+            seats: metadata.seats.split(', '),
+            amount: Number(parseFloat(metadata.amount).toFixed(2)),
+        }
+
+        if (!ticket) {
+            await MovieTicket.create({
+                user: metadata.user,
+                ticketId: metadata.ticket_id,
+                movie: new mongoose.Types.ObjectId(metadata.movie_id),
+                city: city,
+                theatre: theatre,
+                show: screen,
+                time: metadata.time,
+                seats: metadata.seats.split(', '),
+                amount: Number(parseFloat(metadata.amount).toFixed(2)),
+            });
+
+            const seats = metadata.backend_seats.split(', ');
+            const seatUpdates = seats.map(seat => {
+                const [row, col] = seat.split('-');
+                return {
+                    updateOne: {
+                        filter: {
+                            screen: isScreen._id,
+                            row,
+                            column: parseInt(col),
+                        },
+                        update: {
+                            $set: { status: "Booked" }
+                        }
+                    }
+                };
+            });
+
+            await MovieSeat.bulkWrite(seatUpdates);
+
+            return res.status(200).json({
+                message: "Paid Successfully",
+                metadata: ticketData,
+            })
+        }
+        else return res.status(200).json({
+            message: "Ticket Already Added",
+            metadata: ticketData,
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: "Server Error",
+        })
+    }
+}
+
+// Fetch User Movie Tickets
+module.exports.getTickets = async (req, res) => {
+    try {
+        const ticketId = req.params.ticketId;
+
+        const userId = (ticketId) ? ticketId.split('-')[0] : req.body.userId;
+        if(!userId) return res.status(400).json({
+            message: "User ID is required"
+        })
+        if(ticketId === "*") {
+            const tickets = await MovieTicket.find({
+                user: userId
+            }).populate('movie').lean()
+
+            return res.status(200).json({
+                message: `Tickets Fetched for ${userId}`,
+                tickets: tickets,
+            })
+        } else {
+            const ticket = await MovieTicket.findOne({
+                user: userId,
+                ticketId: ticketId
+            }).populate('movie').lean();
+
+            return res.status(200).json({
+                message: "Ticket Fetched Successfully",
+                ticket: ticket
+            })
+        }
+    } catch (err) {
+        return res.status(400).json({
+            message: "Failed to Get Tickets",
         })
     }
 }

@@ -27,7 +27,9 @@ export default {
   height: 100vh;
   z-index: 2;
   background: rgba(0,0,0,0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .modal {
   display: flex;

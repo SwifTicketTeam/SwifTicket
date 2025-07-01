@@ -42,21 +42,15 @@ export default {
   name: "MovieInfo",
   props: {
     evt: Object,
+    toFavorites: Boolean,
   },
   data() {
     return {
       storageUrl: process.env.VUE_APP_STORAGE_URL,
       isFavorite: false,
-      toFavorites: false,
     }
   },
   created() {
-    eventBus.$on("toEvents", () => {
-      this.toFavorites = false;
-    });
-    eventBus.$on("toAccount", () => {
-      this.toFavorites = true;
-    });
     this.checkFavorites()
   },
   activated() {

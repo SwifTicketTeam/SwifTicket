@@ -2,7 +2,6 @@ const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const User = require('../models/User');
-const UserDetails = require('../models/UserDetails');
 
 const storageAddress = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/users')
 const storage = multer.diskStorage({
@@ -104,30 +103,18 @@ module.exports.getProfilePhoto = async (req, res) => {
 
 // Change Account Details
 module.exports.changeUserDetails = async (req, res) => {
-    const {username, email, bio} = req.body;
+    const {username} = req.body;
     const uID = path.basename(req.url)
     const user = await User.findById(uID);
-    const userDetails = await UserDetails.findById(uID);
-    if(!user || !userDetails) {
+    if(!user) {
         return res.status(400).send({
             message: "No Such User Found",
         })
-    }
-    const details = {
-        ...user.toObject(),
-        ...userDetails.toObject(),
     }
 
     if (username !== user.username) {
         await User.updateOne({_id: uID}, {
             username: username,
-        })
-    }
-    if (email !== user.email) {
-    }
-    if (bio !== user.bio) {
-        await UserDetails.updateOne({_id: uID}, {
-            bio: bio,
         })
     }
     res.status(200).send({

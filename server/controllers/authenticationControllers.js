@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const UserDetails = require('../models/UserDetails');
 const { sendMail } = require("../mails/sendMail");
 require('dotenv').config();
 
@@ -24,8 +23,6 @@ module.exports.putUserCredentials = async (req, res) => {
                 message: "Give us a Valid Email"
             });
         }
-
-        await UserDetails.create({_id: user._id});
 
         return res.status(201).json({
             user : user._id,
@@ -222,18 +219,15 @@ module.exports.sessionVerification = async (req, res) => {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
 
         const user = await User.findById(payload.id)
-        const userDetails = await UserDetails.findById(payload.id);
 
         res.status(200).send({
             UID: user._id,
             username: user.username,
             email : user.email,
             role : user.role,
-            bio: userDetails.bio,
         });
 
     } catch(err) {
-        console.log(err)
         if(err.name === "JsonWebTokenError") return res.status(400).send({
             message: "Invalid Token"
         });
@@ -242,5 +236,22 @@ module.exports.sessionVerification = async (req, res) => {
         }); else return res.status(400).send({
             message: "Invalid User"
         });
+    }
+}
+
+module.exports.createVendorRequest = async (req, res) => {
+    try {
+        const {userId} = req.body;
+        if(!userId) return res.status(400).json({
+            message: "Invalid User ID"
+        });
+
+        await User.findByIdAndUpdate(userId, {
+            role: "vendor"
+        })
+    } catch (err) {
+        return res.status(500).send({
+            message: "Server Error"
+        })
     }
 }

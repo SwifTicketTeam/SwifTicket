@@ -1,11 +1,14 @@
 <template>
-  <div id = "theatre">
+  <div id = "theatre" v-if = "!isLoading">
     <h1 class = "no-select">{{theatre.name}}</h1>
-    <h2 class = "no-select">{{theatre.city}}</h2>
+    <h2 class = "no-select">{{theatre.city.name}}</h2>
+    <div>
+      <h1 v-if = "!screens.length">You have No Screens for this theatre. Add one to get started!</h1>
+    </div>
     <div id = "screens">
-      <Screen v-for = "Screen in screens" :key = "Screen.name" :theatre = theatre :Screen = Screen @updatedScreen = "getScreens"></Screen>
+      <Screen v-for = "screen in screens" :key = "screen._id" @updatedScreen = "getScreens" :screen = "screen"></Screen>
       <button @click = "createScreen" ref = "createScreen" class = "no-select">ADD SCREEN</button>
-      <CreateScreen v-if = "isCreate" :theatre = "theatre.name" :city = "theatre.city" @updatedScreen = "createScreen"></CreateScreen>
+      <CreateScreen v-if = "isCreate" @updatedScreen = "createScreen" :theatre = "theatre"></CreateScreen>
     </div>
   </div>
 </template>
@@ -17,17 +20,16 @@ import axios from "axios";
 
 export default {
   name: "ManageTheatre",
+  props: ["theatre"],
   components: {
     Screen,
     CreateScreen,
-  },
-  props: {
-    theatre: Object,
   },
   data() {
     return {
       screens: [],
       isCreate: false,
+      isLoading: false,
     }
   },
   created() {
@@ -44,11 +46,13 @@ export default {
       this.getScreens();
     },
     getScreens() {
+      this.isLoading = true;
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screens/get`, {
-        city: this.theatre.city,
+        city: this.theatre.city.name,
         theatre: this.theatre.name,
       }).then((res) => {
         this.screens = res.data.screens;
+        this.isLoading = false;
       }).catch((err) => {
         console.log(err)
       })

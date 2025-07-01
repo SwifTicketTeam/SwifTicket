@@ -40,6 +40,7 @@ export default {
   background-color: #FFF;
   box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
   border-radius: 2rem;
+  font-family: "Poppins", sans-serif;
 }
 
 img {
@@ -52,7 +53,7 @@ h3 {
 }
 
 h3, p {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: normal;
   margin-bottom: 5rem;
   padding: 0 1.5rem 1rem 1.5rem;

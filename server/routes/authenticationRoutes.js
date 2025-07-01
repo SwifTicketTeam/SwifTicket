@@ -21,4 +21,7 @@ router.post('/api/auth/reset-password', controller.resetPassword)
 // Session Verification
 router.post('/api/auth/jwt', controller.sessionVerification)
 
+// Request to Become a Vendor
+router.post('/api/vendor/request', controller.createVendorRequest)
+
 module.exports = router;

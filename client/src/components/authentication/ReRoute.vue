@@ -39,6 +39,7 @@ export default {
 h1 {
   text-align: center;
   padding: 1rem;
+  font-weight: normal;
 }
 
 </style>

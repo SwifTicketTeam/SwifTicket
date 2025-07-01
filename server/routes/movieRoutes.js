@@ -39,4 +39,13 @@ router.post('/api/account/theatres/movie', controller.setScreenMovie);
 // Delete Screen
 router.post('/api/account/theatres/screen/delete', controller.deleteScreen);
 
+// Payments - Movies
+router.post('/api/payments/init/movies', controller.initPayments)
+
+// Save Tickets - Movies
+router.post('/api/payments/success/movies', controller.saveTickets)
+
+// Fetch User Tickets
+router.post('/api/account/tickets/movies/:ticketId', controller.getTickets)
+
 module.exports = router;

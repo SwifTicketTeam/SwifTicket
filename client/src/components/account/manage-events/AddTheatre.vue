@@ -47,7 +47,7 @@ export default {
   methods: {
     addTheatre() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/create`, {
-        vendor: this.vendorID,
+        vendorId: this.vendorID,
         city: this.city,
         name: this.theatreName,
       }).then(() => {

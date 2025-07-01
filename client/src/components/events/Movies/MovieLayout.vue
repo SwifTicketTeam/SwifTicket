@@ -28,7 +28,7 @@ export default {
   },
   created() {
     this.rows = this.layout.length;
-    this.columns = this.layout?.[0]?.seat.length;
+    this.columns = this.layout?.[0]?.length;
   },
   mounted() {
     const seats = this.$refs.layout.querySelectorAll(".seat");
@@ -38,7 +38,7 @@ export default {
 
     for(const row of this.layout) {
       let ColNumber = 1
-      for(const seat of row.seat) {
+      for(const seat of row) {
         if (!seat.isGap) ColNumber++;
       }
       if (ColNumber === 1) GapRows++;
@@ -46,8 +46,8 @@ export default {
 
     for(const row of this.layout) {
       let ColNumber = 1
-      for(const seat of row.seat) {
-        if (seat.isBooked && this.isBooking) seats[SeatNumber].classList.add("isBooked");
+      for(const seat of row) {
+        if (seat.status === "Booked" && this.isBooking) seats[SeatNumber].classList.add("isBooked");
         if (seat.isGap) seats[SeatNumber].classList.add("isGap");
         else {
           seats[SeatNumber].textContent = ColNumber.toString();
@@ -76,13 +76,18 @@ export default {
       return letters;
     },
     selectSeat(event) {
-      if (!this.isBooking || this.selectedSeats > 4) return;
-      if (event.target.classList.contains("isSelected")) event.target.classList.remove("isSelected");
-      else event.target.classList.add("isSelected");
+      if (!this.isBooking || this.selectedSeats > 4 || event.target.classList.contains("isBooked")) return;
+      if (event.target.classList.contains("isSelected")) {
+        event.target.classList.remove("isSelected");
+        this.selectedSeats--;
+      }
+      else {
+        event.target.classList.add("isSelected");
+        this.selectedSeats++;
+      }
       const RowValue = event.target.parentElement.querySelector(".RowNumber").innerText;
-      const ColumnValue = event.target.innerText
-      this.$emit('select', RowValue, ColumnValue);
-      this.selectedSeats++;
+      const ColumnValue = event.target.innerText;
+      this.$emit('select', `${RowValue}${ColumnValue}`, event.target.dataset.id.replace(', ', '-'));
     }
   }
 }
@@ -98,7 +103,7 @@ export default {
   width: auto;
   height: auto;
   gap: 2rem;
-  padding: 1.5rem;
+  padding: 3rem 1.5rem;
   margin: 1rem 0;
   border-radius: 1rem;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
