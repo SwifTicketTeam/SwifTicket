@@ -201,7 +201,7 @@ button {
 }
 
 button:hover {
-  border-radius: 1.4rem;
+  border-radius: 1rem;
 }
 
 #logout {

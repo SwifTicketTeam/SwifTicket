@@ -7,17 +7,18 @@
           <img :src = "`${storageUrl}/${ticket.movie._id}.jpg`" class = "poster">
           <h3>{{ticket.movie.title}}</h3>
           <h3>{{formatDate(ticket.time)}}</h3>
-          <p @click = "expand(ticket)">EXPAND TICKET</p>
+          <p :class = "{finished : ticket.time < new Date().toISOString()}">{{ ticket.time < new Date().toISOString() ? "FINISHED" : `SEATS :  ${ticket.seats.join(', ')}` }} </p>
+          <p @click = "expand(ticket)" class = "expand">EXPAND TICKET</p>
         </div>
       </div>
     </div>
-    <div class = "overlay" v-if = "isModal" ref = "ticket" >
-      <div class = "fill">
+    <div class = "overlay" v-if = "isModal">
+      <div class = "fill" ref = "ticket">
         <div class = "modal">
           <GenerateTicket :ticket = "selectedTicket" @save = save></GenerateTicket>
         </div>
-        <button @click = "back">BACK</button>
       </div>
+      <button @click = "back">BACK</button>
     </div>
   </div>
 </template>
@@ -42,7 +43,10 @@ export default {
     axios.post(`${process.env.VUE_APP_SERVER}/api/account/tickets/movies/*`, {
       userId: this.$store.state.auth.UID
     }).then((res) => {
-      this.tickets = res.data.tickets;
+      const tickets = res.data.tickets;
+      const upcoming = tickets.filter(ticket => ticket.time > new Date().toISOString()).sort((ticket1, ticket2) => ticket1.time.localeCompare(ticket2.time));
+      const completed = tickets.filter(ticket => ticket.time <= new Date().toISOString()).sort((ticket1, ticket2) => ticket2.time.localeCompare(ticket1.time));
+      this.tickets = upcoming.concat(completed)
     }).catch((err) => {
       console.log(err);
     })
@@ -96,6 +100,7 @@ export default {
   flex-direction: row;
   gap: 1rem;
   padding: 1.2rem;
+  justify-content: center;
 }
 
 .ticket {
@@ -127,6 +132,7 @@ img {
 h2 {
   font-size: 1.6rem;
   margin: 1rem 0.1rem 1rem 1.2rem;
+  text-align: center;
 }
 
 h3 {
@@ -139,43 +145,63 @@ h3 {
 p {
   margin: 0.2rem 0 0 0;
   font-size: 0.8rem;
+}
+
+.expand {
   text-decoration: underline;
   cursor: pointer;
 }
-.overlay {
-  height: 100vh;
+
+.finished {
+  background-color: #CCC;
+  border-radius: 0.2rem;
+  text-decoration: none;
+  text-align: center;
+  padding: 0 1.5rem;
 }
 
-.overlay, .fill {
+.overlay {
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   z-index: 3;
-  height: 100%;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.overlay, .fill {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 1rem;
+}
+
+.fill {
+  width: 100%;
+  height: auto;
 }
 
 .overlay button {
-  width: 33%;
+  width: 33.5%;
   font-size: 1.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 33%;
+  height: auto;
+  border-radius: 1rem;
+  padding: 0.3rem;
+  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  transition: opacity 1s ease;
+  background-color: rgb(233, 106, 106);
 }
 
 .pdf-mode .modal {
-  width: 595px !important;
+  width: 613px !important;
 }
 
 .pdf-mode .poster {

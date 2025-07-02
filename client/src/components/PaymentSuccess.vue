@@ -1,7 +1,7 @@
 <template>
   <div class = "root_component" v-if = "!isLoading">
     <div class = "fill" ref = "ticket">
-      <div class = "movieTicket">
+      <div class = "ticket">
         <GenerateTicket :ticket = "ticket" @save = "save"></GenerateTicket>
       </div>
     </div>
@@ -16,9 +16,7 @@ import html2pdf from "html2pdf.js";
 
 export default {
   name: "PaymentSuccess",
-  components: {
-    GenerateTicket,
-  },
+  components: {GenerateTicket},
   data() {
     return {
       ticket: {},
@@ -55,51 +53,4 @@ export default {
 </script>
 
 <style scoped src = "../styles/button.css"></style>
-<style scoped>
-
-.root_component {
-  height: 100%;
-}
-
-.root_component, .fill {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.movieTicket {
-  width: 33%;
-  height: auto;
-  border-radius: 1rem;
-  padding: 0.3rem;
-  box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
-  opacity: 1;
-  transition: opacity 1s ease;
-  background-color: rgb(233, 106, 106);
-}
-
-.pdf-mode .movieTicket {
-  width: 595px !important;
-}
-
-.pdf-mode .poster {
-  width: 250px !important;
-  height: auto !important;
-  object-fit: contain !important;
-}
-
-.pdf-mode .QR {
-  width: 200px !important;
-  height: 200px !important;
-  object-fit: contain !important;
-}
-
-button {
-  width: 33.5%;
-  font-size: 1.5rem;
-  padding: 0.5rem 0;
-}
-
-</style>
+<style scoped src = "../styles/ticket.css"></style>

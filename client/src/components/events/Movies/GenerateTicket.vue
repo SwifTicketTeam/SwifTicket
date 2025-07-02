@@ -21,12 +21,13 @@
       <h3>TICKET(S) PRICE : {{getSymbol()}}{{(ticket.amount / (1 + ConvenienceFeesPercentage)).toFixed(2)}}</h3>
       <h3>CONVENIENCE FEES : {{getSymbol()}}{{(ticket.amount * ConvenienceFeesPercentage / (1 + ConvenienceFeesPercentage)).toFixed(2)}}</h3>
     </div>
-    <button @click = "save" class = "no-select">SAVE TICKET AS PDF</button>
+    <button @click = "saveTicket" class = "no-select" v-if = "!isSave">SAVE TICKET AS PDF</button>
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcode';
+import {nextTick} from "vue";
 
 export default {
   name: "GenerateTicket",
@@ -38,6 +39,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      isSave: false,
       storageUrl: process.env.VUE_APP_STORAGE_URL,
       qrUrl: '',
       ConvenienceFeesPercentage: parseFloat(process.env.VUE_APP_CONVENIENCE_FEE_PERCENTAGE),
@@ -92,9 +94,13 @@ export default {
         console.log("QR Generation Failed: ", err);
       })
     },
-    save() {
+    saveTicket() {
+      this.isSave = true;
       this.$emit('save');
-    }
+      nextTick(() => {
+        this.isSave = false;
+      })
+    },
   }
 }
 </script>

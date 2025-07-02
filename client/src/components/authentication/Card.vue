@@ -1,6 +1,6 @@
 <template>
   <div id = "card">
-    <img src = "../../assets/swifticket-logo.png" class = "no-select">
+    <img src = "../../assets/swifticket-logo.png" alt = "SwifTicket Logo" class = "no-select">
     <h3>{{ (isNewUser) ? 'Already have a SwifTicket account? Log in to continue booking your favorite events.' : 'New to SwifTicket? Create an account to start your event journey.' }}</h3>
     <button @click.stop = "isUserTypeChanged" class = "no-select">{{ (isNewUser) ? 'LOG IN' : 'REGISTER NOW' }}</button>
   </div>

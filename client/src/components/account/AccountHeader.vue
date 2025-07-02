@@ -1,4 +1,4 @@
-<template>
+w<template>
   <header>
     <img @click = "home" class = "no-select" src = "../../assets/swifticket-logo.png">
     <button @click = "home" class = "no-select">Home</button>
@@ -45,7 +45,7 @@ button {
 }
 
 button:hover {
-  border-radius: 1.3rem;
+  border-radius: 1rem;
 }
 
 </style>

@@ -18,7 +18,15 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/storage/images', express.static('/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/movies'));
+app.use('/storage/images', express.static(
+    '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/movies',
+    {
+        setHeaders: (res) => {
+            res.set('Access-Control-Allow-Origin', '*'); // Allow any frontend to access images
+        }
+    }
+));
+
 
 // Connect with MongoDB
 dbURI = process.env.MONGODB_URI

@@ -525,6 +525,7 @@ module.exports.setScreenMovie = async (req, res) => {
                 is_screening: true,
                 $max: {last_screening_time: movieTime},
             })
+            await deleteMovieFromScreen(isScreen.movie)
 
             return res.status(200).json({
                 message: `Movie Set to ${movieId}`,
@@ -537,7 +538,7 @@ module.exports.setScreenMovie = async (req, res) => {
                 time: '',
             })
 
-            await deleteMovieFromScreen(movieId)
+            await deleteMovieFromScreen(isScreen.movie)
 
             return res.status(200).json({
                 message: `Movie Deleted from ${screen}`,
@@ -587,8 +588,8 @@ module.exports.deleteScreen = async (req, res) => {
             message: "Invalid Screen"
         })
 
-        await deleteMovieFromScreen(isScreen.movie);
         await Screen.findByIdAndDelete(isScreen._id);
+        await deleteMovieFromScreen(isScreen.movie);
         await MovieSeat.deleteMany({ screen: isScreen._id });
 
         return res.status(200).json({
@@ -848,7 +849,7 @@ module.exports.getTickets = async (req, res) => {
     try {
         const ticketId = req.params.ticketId;
 
-        const userId = (ticketId) ? ticketId.split('-')[0] : req.body.userId;
+        const userId = (ticketId !== "*") ? ticketId.split('-')[0] : req.body.userId;
         if(!userId) return res.status(400).json({
             message: "User ID is required"
         })

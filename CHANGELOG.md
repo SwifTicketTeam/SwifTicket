@@ -187,6 +187,7 @@ All notable changes to this project are documented here.
 - Included `keep-alive` in Express routes for enhanced session handling and performance
 - Refactored API routes for maintainability and scalability enhancements
 
+---
 > **Note:**
 > _v0.3 will finalize the foundation of the movieTicket booking system and implement fully operational, user-defined Favorites functionality._
 
@@ -257,6 +258,8 @@ Version `v0.4` and its sub-versions will finish up the entire movieTicket bookin
 > Note: Movie queuing and full movieSeat reservation flow will be completed in `v0.4`.
 Booking feature like movieSeat selection, lock, and confirmation is being actively developed.
 
+---
+
 ## [Beta Extended v0.4] - July 1, 2025
 
 ### Phase 12 – Seat Booking, Stripe Payments, and Ticket Generation
@@ -270,8 +273,11 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Booking page UI revised with salmon red theme and light text
 - Bugs in screen rendering and movieSeat management conflicts fixed
 
+---
+
 > Note: Booked movieTicket are not yet persisted in the database.
 
+--- 
 ## [v0.4] - July 1, 2025
 
 ### Phase 13 – Schema Refactor, Ticketing Flow Completion
@@ -286,4 +292,13 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 ---
 
 > Note: This is the final significant update to the development process. Unless deployment work resumes, SwifTicket's future is in limbo. The version is stable and finished for full user and vendor use, including support for booking, ticket management, and responsive design.
+
+---
+### [v0.4.1] - July 2, 2025
+> Note: This is a minor update focused on bug fixes and stability improvements for v0.4.
+
+- PDF Ticket Inconsistencies and the "SAVE TICKET AS PDF" appearing the PDF have been fixed.
+- Tickets in My Tickets now show the upcoming movies before showing the finished movies. Labels have been given accordingly too.
+- Fixed Broken "ADD SCREEN" Button
+- Minor UI Changes
 

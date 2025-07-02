@@ -5,9 +5,10 @@
       <img v-show = "showImage" :src = "`${storageUrl}/${currentID}.jpg`">
     </transition>
     <div>
-      <div class = "box">
+      <div class = "box" :class = "{favorite: isFav}">
         <p id = "rating"  v-if = "!isFav">{{(event.rating) ? event.rating : "NaN"}} / 10</p>
-        <p>{{event.language}}</p>
+        <p v-if = "!isFav">{{event.language}}</p>
+        <p v-if = "isFav">• {{event.genres.slice(0, 2).join(' • ')}} •</p>
       </div>
     </div>
   </div>
@@ -105,6 +106,15 @@ div {
   width: 100%;
   height: 55%;
   justify-content: space-between;
+}
+
+.box.favorite {
+  justify-content: center;
+}
+
+.favorite p {
+  font-size: 1rem;
+  margin: 0.6rem;
 }
 
 img {

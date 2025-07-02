@@ -7,7 +7,7 @@
     </div>
     <div id = "screens">
       <Screen v-for = "screen in screens" :key = "screen._id" @updatedScreen = "getScreens" :screen = "screen"></Screen>
-      <button @click = "createScreen" ref = "createScreen" class = "no-select">ADD SCREEN</button>
+      <button @click = "createScreen" ref = "createScreen" class = "no-select">{{isCreate ? "CANCEL" : "ADD SCREEN"}}</button>
       <CreateScreen v-if = "isCreate" @updatedScreen = "createScreen" :theatre = "theatre"></CreateScreen>
     </div>
   </div>

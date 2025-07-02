@@ -26,7 +26,7 @@
           <p>ORIGINAL LANGUAGE : {{evt.language.toUpperCase()}}</p>
         </div>
         <div class = "line-box last">
-          <p>RATING : {{evt.rating}} / 10</p>
+          <p>RATING : {{(evt.rating) ? evt.rating : "NaN"}} / 10</p>
           <button class = "no-select" @click = "book" v-if = "evt.is_screening">BOOK NOW</button>
         </div>
       </div>
