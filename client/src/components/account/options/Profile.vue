@@ -3,7 +3,7 @@
     <div class = "first">
       <div>
         <label id = "profile-picture">
-          <img v-if = "image" :src = "image">
+          <img :src = "imageUrl" v-if = "isImage" @error = "() => {isImage = false}">
           <input type = "file" ref = "file" accept="image/*" @change = "changeProfilePicture" hidden>
         </label>
         <p :class = "{isWarn : isWarn}">{{ warning }}</p>
@@ -40,28 +40,15 @@ export default {
       email: this.$store.state.auth.email,
       role: this.$store.state.auth.role,
       bio: this.$store.state.account.bio,
-      image: null,
-      isImage: false,
       warning: "",
+      imageUrl: "",
+      isImage: true,
       isWarn: false,
     }
   },
   created() {
     this.role = this.role.charAt(0).toUpperCase() + this.role.slice(1);
-    axios.get(`${process.env.VUE_APP_SERVER}/api/uploads/images/users/${this.uID}`, {
-      responseType: "blob",
-    }).
-    then((res) => {
-      this.isImage = true;
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        this.image = evt.target.result;
-      }
-      reader.readAsDataURL(res.data)
-    }).catch(() => {
-      this.isWarn = true;
-      this.warning = "You have not set up your Profile Picture!";
-    })
+    this.imageUrl = `${process.env.VUE_APP_STORAGE_URL}users/${this.uID}.jpg`;
   },
   methods: {
     changeProfilePicture() {

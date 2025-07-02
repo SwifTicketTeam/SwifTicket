@@ -24,7 +24,7 @@ export default {
     return {
       currentID: this.movie._id,
       showImage: true,
-      storageUrl: process.env.VUE_APP_STORAGE_URL,
+      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
       isSelectedMovie: false,
     }
   },

@@ -1,17 +1,8 @@
+const User = require('../models/User');
+const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const path = require('path');
-const User = require('../models/User');
-
-const storageAddress = path.relative(process.cwd(), '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/users')
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, storageAddress);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-})
+const storage = require('../cloudinary');
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.includes('image/jpeg') || file.mimetype.includes('image/png')) {
@@ -31,6 +22,12 @@ const upload = multer({
 
 // Save Profile Photo
 module.exports.saveProfilePhoto = async (req, res) => {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if(!user) return res.status(400).json({
+        message: 'Invalid User ID'
+    });
+
     upload.single('userProfilePhoto')(req, res, async (err) => {
         if (err instanceof multer.MulterError) {
             let error = "";
@@ -51,54 +48,17 @@ module.exports.saveProfilePhoto = async (req, res) => {
                 message: "No File Uploaded",
             })
         }
-        try {
-            const uID = path.basename(req.url);
-            const isUser = await User.findById(uID)
-            if (isUser) {
-                const imageAddress = storageAddress + '/' + uID + path.extname(req.file.originalname);
-                fs.rename(req.file.path, imageAddress, (err) => {
-                    if (err) {
-                        return res.status(400).send({
-                            message: "Error Renaming File",
-                        })
-                    }
-                    return res.status(200).json({
-                        message: 'Profile Photo Uploaded Successfully',
-                    })
-                })
-            } else {
-                return res.status(400).send({
-                    message: "No Such User Found",
-                })
-            }
-        } catch(err) {
-            return res.status(400).send({
-                message: "Invalid Image Address",
-            })
-        }
+
+        const cloudinaryUrl = req.file.path;
+        const publicId = req.file.filename;
+
+        res.status(200).json({
+            message: 'Image uploaded successfully!',
+            url: cloudinaryUrl,
+            public_id: publicId,
+        });
     });
 
-}
-
-// Get Profile Photo
-module.exports.getProfilePhoto = async (req, res) => {
-    const uID = path.basename(req.url)
-    try {
-        const imageName = '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/users/' + uID
-        for (const ext of ['.jpg', '.jpeg', '.png']) {
-            const imageAddress = imageName + ext;
-            if (fs.existsSync(imageAddress)) {
-                return res.status(200).sendFile(imageAddress);
-            }
-        }
-        return res.status(400).send({
-            message: "No Profile Photo"
-        });
-    } catch(err) {
-        return res.status(400).send({
-            message: "Invalid Image Address"
-        })
-    }
 }
 
 // Change Account Details

@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       evt: this.$store.getters["event/getEvent"],
-      storageUrl: process.env.VUE_APP_STORAGE_URL,
+      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
       selectedDate: 0,
       isLoading: true,
       dates: [],

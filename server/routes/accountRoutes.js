@@ -4,10 +4,7 @@ const controller = require('../controllers/accountControllers');
 const router = express.Router();
 
 // Upload Profile Photo
-router.post('/api/uploads/images/users/:userid', controller.saveProfilePhoto)
-
-// Get Profile Photo
-router.get('/api/uploads/images/users/:userid', controller.getProfilePhoto)
+router.post('/api/uploads/images/users/:userId', controller.saveProfilePhoto)
 
 // Change User Details
 router.put('/api/account/users/:userid', controller.changeUserDetails)

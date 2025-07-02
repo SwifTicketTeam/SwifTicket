@@ -21,6 +21,7 @@ SwifTicket is a full-stack, cross-industry movie ticket booking solution built w
 - Phase 12: Booking UI, Showtime Selection, & Layout Improvements
 - Phase 12 Extended: Seat Booking, Stripe Payments, and Ticket Generation Implemented
 - Phase 13: Schema Refactor, Ticketing Flow Complete
+- Phase 14 - First Deployment of SwifTicket
 
 ---
 
@@ -120,7 +121,6 @@ SwifTicket is a full-stack, cross-industry movie ticket booking solution built w
 
 - Admin analytics and reporting dashboard not implemented
 - Movie queuing system and show scheduler not built yet
-- Project may not receive future dev updates beyond deployment
 
 ---
 

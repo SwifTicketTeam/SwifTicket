@@ -3,7 +3,7 @@
 ## Base URL
 
 ```
-https://yourdomain.com/api
+https://swifticket-web.vercel.app
 ```
 
 ---
@@ -81,10 +81,6 @@ Verifies session JWT.
 ---
 
 ## Account Routes (`/account`)
-
-### GET `/uploads/images/users/:userId`
-
-Fetch profile photo for a user.
 
 ### POST `/uploads/images/users/:userId`
 

@@ -302,3 +302,13 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Fixed Broken "ADD SCREEN" Button
 - Minor UI Changes
 
+### [v0.5] - July 2, 2025
+
+### Phase 14 - First Deployment of SwifTicket
+- Changed Multer Storage Code to Cloudinary Multer Code
+- Changed File Paths of Images to Cloudinary
+- MongoDB Atlas DB URI Added
+- Made Changes to environment variables for deployment
+
+> Note: This is the Initial Deployment of this Project. v0.5.x is completely focused on converting from the LocalHost Server to Web Deployment
+

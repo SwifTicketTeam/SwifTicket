@@ -17,12 +17,11 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
-
-app.use('/storage/images', express.static(
-    '/home/pranavsaravanan-r/Documents/SwifTicket/swifticket-storage/images/movies',
+app.use('/images/movies', express.static(
+    process.env.CLOUDINARY_URL,
     {
         setHeaders: (res) => {
-            res.set('Access-Control-Allow-Origin', '*'); // Allow any frontend to access images
+            res.set('Access-Control-Allow-Origin', '*')
         }
     }
 ));
@@ -33,12 +32,12 @@ dbURI = process.env.MONGODB_URI
 mongoose.connect(dbURI)
     .then(() => {
         console.log('Connected to DB');
-        app.listen(process.env.PORT, () => {
-            console.log(`Server running on port ${process.env.PORT}`);
+        app.listen(process.env.PORT || 5000, () => {
+            console.log(`Server running on port ${process.env.PORT || 5000}`);
         })
     })
     .catch((err) => {
-        console.log("Failed to connect to the Database.");
+        console.log(`Failed to connect to the Database -> ${err}`);
     })
 
 // Routes

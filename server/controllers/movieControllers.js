@@ -1,10 +1,10 @@
 const User = require('../models/User');
 const City = require('../models/City');
-const Movie = require('../models/Movies/Movie');
-const Theatre = require('../models/Movies/Theatre');
-const Screen = require('../models/Movies/Screen');
-const MovieSeat = require('../models/Movies/MovieSeat');
-const MovieTicket  = require('../models/Movies/MovieTicket');
+const Movie = require('../models/movies/Movie');
+const Theatre = require('../models/movies/Theatre');
+const Screen = require('../models/movies/Screen');
+const MovieSeat = require('../models/movies/MovieSeat');
+const MovieTicket  = require('../models/movies/MovieTicket');
 const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 
@@ -46,7 +46,7 @@ module.exports.getFavorites = async (req, res) => {
     }
 }
 
-// Get Movies
+// Get movies
 module.exports.getMovies = async (req, res) => {
     const movieLimit = 48;
     try {
@@ -82,7 +82,7 @@ module.exports.getMovies = async (req, res) => {
         }
 
         return res.status(200).json({
-            message: "Movies Found!",
+            message: "movies Found!",
             screening_movies: screening_movies,
             movies: movies,
         })
@@ -431,14 +431,14 @@ module.exports.getScreens = async (req, res) => {
     }
 }
 
-// Get Movies for Screen
+// Get movies for Screen
 module.exports.getScreenMovies = async (req, res) => {
     const movieLimit = 5
     try {
         const search = (req.query.search || "").trim();
 
         if (search === "") return res.status(200).json({
-            message: "Discover Movies",
+            message: "Discover movies",
             movies: await Movie.aggregate([
                 { $sample: { size: movieLimit } },
             ])
@@ -447,7 +447,7 @@ module.exports.getScreenMovies = async (req, res) => {
             title: {$regex: `^${search}`, $options: "i" }
         }).limit(movieLimit).lean();
         return res.status(200).json({
-            message: "Movies Found!",
+            message: "movies Found!",
             movies: movies
         })
     } catch(err) {
@@ -694,7 +694,7 @@ module.exports.getMovieScreens = async (req, res) => {
     }
 }
 
-// Create Checkout Session - Movies
+// Create Checkout Session - movies
 module.exports.initPayments = async (req, res) => {
     const {email, metadata} = req.body;
     if(!email || !metadata) {
@@ -744,7 +744,7 @@ module.exports.initPayments = async (req, res) => {
     }
 }
 
-// Save Tickets - Movies
+// Save Tickets - movies
 module.exports.saveTickets = async (req, res) => {
     const session_id = req.query.session_id;
 

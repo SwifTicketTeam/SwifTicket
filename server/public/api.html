@@ -47,7 +47,7 @@
 <body>
 
 <h1>SwifTicket API Documentation</h1>
-<p>This documentation outlines the endpoints available for the SwifTicket backend. All responses are in JSON format. Base URL is assumed to be <code>https://api.swifticket.com</code>.</p>
+<p>This documentation outlines the endpoints available for the SwifTicket backend. All responses are in JSON format. Base URL is assumed to be <code>https://swifticket-web.vercel.app</code>.</p>
 
 <h2>User Authentication</h2>
 
@@ -252,12 +252,7 @@
 
 <div class="endpoint">
     <span class="method post">POST</span> <strong>/user/profile/:userId</strong>
-    <p>Upload a profile photo (jpeg/png ≤ 1MB). Use form-data key <code>userProfilePhoto</code>.</p>
-</div>
-
-<div class="endpoint">
-    <span class="method get">GET</span> <strong>/user/profile/:userId</strong>
-    <p>Get user's profile image if exists.</p>
+    <p>Upload a profile photo (jpeg/png ≤ 512KB). Use form-data key <code>userProfilePhoto</code>.</p>
 </div>
 
 <div class="endpoint">

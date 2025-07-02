@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      storageUrl: process.env.VUE_APP_STORAGE_URL,
+      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
       isFavorite: false,
     }
   },
