@@ -38,7 +38,7 @@ export default {
 
 div {
   margin-top: 2rem;
-  max-width: 70%;
+  width: 70%;
   height: 75vh;
   border-radius: 1.5rem;
   border: 0.1rem solid #CCC;

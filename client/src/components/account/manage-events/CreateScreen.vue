@@ -4,9 +4,9 @@
       <label>NAME</label>
       <input type="text" v-model="screenName" placeholder = "Enter Screen Name" spellcheck = "false" autocomplete = "off" />
       <label>ROWS</label>
-      <input type="number" v-model="rows">
+      <input type="number" v-model="rows" @input = "limitSeats" min = 0 max = 50>
       <label>COLUMNS</label>
-      <input type="number" v-model="columns">
+      <input type="number" v-model="columns" @input = "limitSeats" min = 0 max = 100>
     </div>
     <div id="ForNote">
       <h2>NOTE:</h2>
@@ -150,10 +150,21 @@ export default {
         }
       })
     },
+    limitSeats() {
+      if (this.rows < 0) this.rows = 0;
+      else if (this.rows > 50) this.rows = 50;
+      if (this.columns < 0) this.columns = 0;
+      else if (this.columns > 100) this.columns = 100;
+    },
     createScreen(el) {
       if (this.rows < 1 || this.columns < 1) {
         this.warning = "Rows and Columns should be at least 1";
-      } else {
+      } else if (this.screenName.length < 3 || this.screenName.length > 20) {
+        this.warning = "Screen's Name should be atleast 3 characters and atmost 20 characters";
+      } else if (!/^[A-Za-z0-9_ \t]+$/.test(this.screenName)) {
+        this.warning = "Screen Name should not have special characters excluding underscores (_) and spaces ( )"
+      }
+      else {
         this.warning = "";
         const seatsEl = el.parentElement.querySelectorAll(".movieSeat");
         let seats = [];
@@ -163,7 +174,7 @@ export default {
         axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/screens/create`, {
           city: this.theatre.city.name,
           theatre: this.theatre.name,
-          name: this.screenName,
+          name: this.screenName.trim(),
           seats: seats,
         }).then(() => {
           this.$emit("updatedScreen");

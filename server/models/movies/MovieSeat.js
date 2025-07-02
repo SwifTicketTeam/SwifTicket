@@ -22,7 +22,7 @@ const SeatSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'Available',
+        default: 'available',
     },
     tier: {
         type: String,

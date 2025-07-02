@@ -27,6 +27,7 @@ Website: https://swifticket-web.vercel.app
 - Phase 12 Extended: Seat Booking, Stripe Payments, and Ticket Generation Implemented
 - Phase 13: Schema Refactor, Ticketing Flow Complete
 - Phase 14 - First Deployment of SwifTicket
+- Phase 15 - Implementing Better UX Changes
 
 ---
 

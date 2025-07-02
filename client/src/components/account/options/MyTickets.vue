@@ -2,12 +2,12 @@
   <div>
     <h2>MY TICKETS</h2>
     <div class = "tickets">
-      <div class="ticket" v-for = "ticket in tickets" :key = "ticket._id">
+      <div class="ticket" v-for = "ticket in tickets" :key = "ticket._id" :class = "{cancelled: ticket.status === 'cancelled'}">
         <div class = "inner-ticket">
           <img :src = "`${storageUrl}/${ticket.movie._id}.jpg`" class = "poster">
           <h3>{{ticket.movie.title}}</h3>
           <h3>{{formatDate(ticket.time)}}</h3>
-          <p :class = "{finished : ticket.time < new Date().toISOString()}">{{ ticket.time < new Date().toISOString() ? "FINISHED" : `SEATS :  ${ticket.seats.join(', ')}` }} </p>
+          <p :class = "{notUpcoming : ticket.status !== 'upcoming'}">{{ ticket.status !== "upcoming" ? ticket?.status?.toUpperCase() : `SEATS :  ${ticket.seats.join(', ')}` }} </p>
           <p @click = "expand(ticket)" class = "expand">EXPAND TICKET</p>
         </div>
       </div>
@@ -152,7 +152,7 @@ p {
   cursor: pointer;
 }
 
-.finished {
+.notUpcoming {
   background-color: #CCC;
   border-radius: 0.2rem;
   text-decoration: none;
@@ -181,6 +181,10 @@ p {
 .fill {
   width: 100%;
   height: auto;
+}
+
+.cancelled {
+  filter: grayscale(100%);
 }
 
 .overlay button {

@@ -38,7 +38,7 @@
           </div>
           <div class = "fields">
             <label for = "MovieStartDate" class = "fieldLabel">PRICE ({{getSymbol()}})</label>
-            <input type = "number" v-model = "seatPrice" min = 0 class = "no-select" id = "MovieTicketPrice" @input = "stopNegative">
+            <input type = "number" v-model = "seatPrice" min = 55 class = "no-select" id = "MovieTicketPrice" @input = "stopNegative">
           </div>
           <p>STARTS AT : {{formatDateTime(selectedDate, selectedTime)}}</p>
           <div class = "fields">
@@ -88,7 +88,7 @@ export default {
         hour12: false,
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }),
-      seatPrice: 0,
+      seatPrice: 55,
     }
   },
   created() {
@@ -162,7 +162,7 @@ export default {
       })
     },
     stopNegative() {
-      (this.seatPrice < 0) ? this.seatPrice = 0 : this.seatPrice;
+      (this.seatPrice < 55) ? this.seatPrice = 55 : this.seatPrice;
     },
     getSymbol() {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;

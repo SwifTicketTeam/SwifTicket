@@ -1,12 +1,12 @@
 <template>
-  <div class = "inner-border" :class = "{loading: isLoading}" v-if = "!isLoading">
+  <div class = "inner-border" v-if = "!isLoading" :class = "{loading: isLoading, cancelled: ticket?.status === 'cancelled'}">
     <div class = "up">
       <img :src = "`${storageUrl}/${ticket.movie._id}.jpg`" class = "poster">
       <div class = "mini-block">
         <h2>{{ticket.movie.title.toUpperCase()}}</h2>
         <h3>{{formatDate(ticket.time)}}</h3>
         <h3>{{ticket.theatre}}</h3>
-        <h3>Screen: {{ticket.show}}</h3>
+        <h3>Screen: {{ticket.screen}}</h3>
         <h3>Seats: {{ticket.seats.join(', ')}}</h3>
       </div>
     </div>
@@ -187,6 +187,10 @@ hr {
 
 .end h3 {
   margin: 0.25rem 1rem;
+}
+
+.cancelled {
+  filter: grayscale(100%);
 }
 
 button {

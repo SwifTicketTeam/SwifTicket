@@ -51,10 +51,14 @@ export default {
         this.warning = "Passwords do not match";
         this.isWarning = true;
         return;
+      } else if (!/^[A-Za-z0-9_ \t]+$/.test(this.username)) {
+        this.warning = "Username should not have special characters excluding underscores (_) and spaces ( )";
+        this.isWarning = true;
+        return;
       }
       this.isWarning = false;
       axios.post(`${process.env.VUE_APP_SERVER}/api/auth/register`, {
-        username: this.username,
+        username: this.username.trim(),
         email: this.email,
         password: this.password,
       }).then(() => {

@@ -362,16 +362,20 @@ module.exports.getScreens = async (req, res) => {
 
         for (const screen of screens) {
             if (screen.time && screen.time < now) {
-                expiredScreens.push(screen._id);
+                expiredScreens.push([screen._id, screen.name]);
                 screen.movie = null;
                 screen.time = "";
                 screen.price = 0;
             }
         }
 
+        const expiredScreenIds = expiredScreens.map(screen => screen[0]);
+        const expiredScreenNames = expiredScreens.map(screen => screen[1]);
+
         if (expiredScreens.length > 0) {
+
             await Screen.updateMany(
-                { _id: { $in: expiredScreens } },
+                { _id: { $in: expiredScreenIds} },
                 {
                     $set: {
                         movie: null,
@@ -380,6 +384,21 @@ module.exports.getScreens = async (req, res) => {
                     }
                 }
             );
+
+            await MovieTicket.updateMany({
+                screen: {$in: expiredScreenNames},
+            }, {
+                $set: {
+                    status: "finished",
+                }
+            });
+
+
+            await MovieSeat.updateMany({
+                screen: {$in : expiredScreenIds},
+            }, {
+                $set: {status : "available"}
+            }).lean();
         }
 
 
@@ -507,6 +526,16 @@ module.exports.setScreenMovie = async (req, res) => {
             message: "Invalid Screen"
         })
 
+        if(isScreen.movie && isScreen.time) await MovieTicket.updateMany({
+                time: isScreen.time,
+                movie: isScreen.movie,
+                screen: isScreen.name,
+            }, {
+                $set: {
+                    status: "cancelled",
+                }
+            }).lean();
+
         if (method === 'set') {
             if (!movieId || moviePrice === undefined || !movieTime) return res.status(400).json({
                 message: "Movie ID, Price of Each Ticket and Time of Movie Screening are Required"
@@ -613,16 +642,39 @@ module.exports.getMovieScreens = async (req, res) => {
             message: "Movie ID is required"
         })
 
-        await Screen.updateMany(
-            { time: { $lt: new Date().toISOString() } },
-            {
-                $set: {
-                    time: '',
-                    price: 0,
-                    movie: null,
-                }
+        const expiredScreens = await Screen.find(
+        { time: { $lt: new Date().toISOString() }
+        }, {
+                _id: 1,
+                name: 1,
+        }).lean()
+
+        const expiredScreenIds = expiredScreens.map((screen) => screen._id);
+        const expiredScreenNames = expiredScreens.map((screen) => screen.name);
+
+        await Screen.updateMany({
+            _id: {$in: expiredScreenIds},
+        }, {
+            $set: {
+                movie: null,
+                time: "",
+                price: 0,
             }
-        );
+        });
+
+        await MovieTicket.updateMany({
+            screen: {$in: expiredScreenNames},
+        }, {
+            $set: {
+                status: "finished",
+            }
+        });
+
+        await MovieSeat.updateMany({
+            screen: {$in : expiredScreenIds},
+        }, {
+            $set: {status : "available"}
+        }).lean();
 
         const screens = await Screen.find({ movie: movieId })
             .populate({
@@ -803,7 +855,7 @@ module.exports.saveTickets = async (req, res) => {
                 movie: new mongoose.Types.ObjectId(metadata.movie_id),
                 city: city,
                 theatre: theatre,
-                show: screen,
+                screen: screen,
                 time: metadata.time,
                 seats: metadata.seats.split(', '),
                 amount: Number(parseFloat(metadata.amount).toFixed(2)),
@@ -820,7 +872,7 @@ module.exports.saveTickets = async (req, res) => {
                             column: parseInt(col),
                         },
                         update: {
-                            $set: { status: "Booked" }
+                            $set: { status: "booked" }
                         }
                     }
                 };

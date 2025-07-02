@@ -46,10 +46,16 @@ export default {
   },
   methods: {
     addTheatre() {
+      if (this.theatreName.length < 3 || this.theatreName.length > 20) {
+        this.warning = "Theatre's Name should be atleast 3 characters and atmost 20 characters.";
+        this.isWarn = true;
+      } else if (!/^[A-Za-z0-9_ \t]+$/.test(this.theatreName)) {
+        this.warning = "Theatre Name should not have special characters excluding underscores (_) and spaces ( )"
+      }
       axios.post(`${process.env.VUE_APP_SERVER}/api/account/theatres/create`, {
         vendorId: this.vendorID,
         city: this.city,
-        name: this.theatreName,
+        name: this.theatreName.trim(),
       }).then(() => {
         this.isWarn = false;
         this.warning = "";

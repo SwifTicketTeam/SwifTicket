@@ -47,7 +47,7 @@ export default {
     for(const row of this.layout) {
       let ColNumber = 1
       for(const seat of row) {
-        if (seat.status === "Booked" && this.isBooking) seats[SeatNumber].classList.add("isBooked");
+        if (seat.status === "booked" && this.isBooking) seats[SeatNumber].classList.add("isBooked");
         if (seat.isGap) seats[SeatNumber].classList.add("isGap");
         else {
           seats[SeatNumber].textContent = ColNumber.toString();

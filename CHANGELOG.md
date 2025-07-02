@@ -301,7 +301,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Tickets in My Tickets now show the upcoming movies before showing the finished movies. Labels have been given accordingly too.
 - Fixed Broken "ADD SCREEN" Button
 - Minor UI Changes
-
+---
 ## v0.5 - July 2, 2025
 
 ### Phase 14 - First Deployment of SwifTicket
@@ -311,7 +311,17 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Made Changes to environment variables for deployment
 
 > Note: This is the Initial Deployment of this Project. v0.5.x is completely focused on converting from the LocalHost Server to Web Deployment
-
+---
 ### v0.5.1
 > Note: Minor Bug Fixes to the Web Deployment.
+
+---
+## v0.6 - July 2, 2025
+
+### Phase 15 - Implementing Better UX Changes
+- Fixed Minor Bugs for Stable Deployment Release
+- Added Limits to Rows and Columns in Seats
+- Username, Screen and Theatre Name can only be Alphanumeric, Underscore or Space.
+- If a Movie is Cancelled, Seats also change to Available.
+- If A Movie is Cancelled, The Ticket is Grayed out and says movie is cancelled.
 

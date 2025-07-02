@@ -31,7 +31,6 @@ div {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
 }
 
 button {
@@ -39,7 +38,7 @@ button {
 }
 
 h2 {
-  width: 95%;
+  width: 85%;
   text-align: center;
 }
 

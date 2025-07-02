@@ -24,7 +24,7 @@ const ticketSchema = new Schema({
         type: String,
         required: true,
     },
-    show: {
+    screen: {
         type: String,
         required: true,
     },
@@ -39,6 +39,10 @@ const ticketSchema = new Schema({
     amount: {
         type: Number,
         default: 0,
+    },
+    status: {
+        type: String,
+        default: 'upcoming',
     }
 }, {timestamps: true});
 
