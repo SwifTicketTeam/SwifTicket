@@ -16,7 +16,8 @@
         <button @click = "confirmRemoveMovie">REMOVE CURRENT MOVIE</button>
       </div>
       <div id = "movies">
-         <EventCardScreen @MovieChanged = "NewMovie" :is-select = "true" v-for = "movie in movies" :key = "movie._id" :movie = "movie" @selectMovie = "MovieSelected"></EventCardScreen>
+        <EventCardScreen @MovieChanged = "NewMovie" v-for = "movie in movies" :key = "movie._id" :movie = "movie" @selectMovie = "MovieSelected"></EventCardScreen>
+        <h1 v-if = "!movies.length">START SEARCHING TO SCHEDULE MOVIES</h1>
       </div>
       <button id = "preview" @click = "previewLayout" class = "no-select">{{ isPreview ? "BACK" : "PREVIEW LAYOUT"}}</button>
       <MovieLayout v-if = "isPreview" :layout = "screen.seats" :is-booking = false></MovieLayout>
@@ -25,7 +26,7 @@
     </div>
     <div v-if = "isSelectedMovie" class = "overlay">
       <div class = "modal">
-        <EventCardScreen @MovieChanged = "NewMovie" :is-select = "false" :movie = "selectedMovie"></EventCardScreen>
+        <EventCardScreen @MovieChanged = "NewMovie" :movie = "selectedMovie"></EventCardScreen>
         <div id = "selectDetails">
           <h3>{{selectedMovie.title.toUpperCase()}}</h3>
           <div class = "fields">
@@ -249,7 +250,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   transition: height 0.5s ease;
-  overflow-x: hidden;
+  overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -259,7 +260,7 @@ export default {
 }
 
 #screen.edit {
-  height: 47rem;
+  height: 45rem;
 }
 
 #afterEdit {
@@ -267,11 +268,11 @@ export default {
 }
 
 #screen.preview {
-  height: 90rem;
+  height: 87rem;
 }
 
 #afterEdit.preview {
-  height: 80rem;
+  height: 77rem;
 }
 
 #beforeEdit {
@@ -285,6 +286,12 @@ export default {
   flex-direction: row;
   gap: 1.5rem;
   justify-content: center;
+  min-height: 26rem;
+}
+
+#movies h1 {
+  margin-top: 10rem;
+  font-size: 3rem;
 }
 
 #details {

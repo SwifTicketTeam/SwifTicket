@@ -28,7 +28,7 @@ export default {
     startSearch() {
       axios.get(`${process.env.VUE_APP_SERVER}/api/events/movies?search=${encodeURIComponent(this.search)}&genre=${this.selectedGenres}`)
           .then((res) => {
-            this.$emit('movies', res.data.screening_movies, res.data.movies)
+            this.$emit('movies', res.data.screening_movies, res.data.movies, this.search.length)
           }).catch((err) => {
             console.log(err)
       })

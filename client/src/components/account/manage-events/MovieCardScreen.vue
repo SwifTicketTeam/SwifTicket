@@ -1,5 +1,5 @@
 <template>
-  <div id = "card">
+  <div id = "card" @click = "SelectMovie">
     <transition name = "fade">
       <img v-show = "showImage" :src = "`${storageUrl}/${currentID}.jpg`">
     </transition>
@@ -9,7 +9,6 @@
         <p>{{movie.language}}</p>
       </div>
     </div>
-    <button v-if = "isSelect" @click = "SelectMovie">SELECT MOVIE</button>
   </div>
 </template>
 
@@ -24,7 +23,7 @@ export default {
     return {
       currentID: this.movie._id,
       showImage: true,
-      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
+      storageUrl: `${process.env.VUE_APP_STORAGE_URL}/swifticket/movies`,
       isSelectedMovie: false,
     }
   },
@@ -65,7 +64,7 @@ export default {
 }
 
 #card:hover {
-  transform: scale(102%);
+  transform: scale(1.02) translateY(-2%);
   box-shadow: 0.01rem 0.01rem 0.6rem 0.05rem rgba(0, 0, 0, 0.25);
 }
 
@@ -77,13 +76,11 @@ div {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 55%;
   justify-content: space-between;
 }
 
 img {
   width: 100%;
-  height: 80%;
   border-radius: 1.5rem 1.5rem 0 0;
 }
 
@@ -96,14 +93,8 @@ img {
 
 p {
   padding: 0 0.8rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   text-wrap: nowrap;
-}
-
-button {
-  margin: 1rem auto;
-  padding: 0.3rem 1rem;
-  font-size: 1.1rem;
 }
 
 </style>

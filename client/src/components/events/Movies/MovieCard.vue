@@ -26,7 +26,7 @@ export default{
     return {
       currentID: this.event._id,
       showImage: true,
-      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
+      storageUrl: `${process.env.VUE_APP_STORAGE_URL}/swifticket/movies`,
       isFav: false,
     }
   },

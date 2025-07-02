@@ -48,7 +48,7 @@ module.exports.getFavorites = async (req, res) => {
 
 // Get movies
 module.exports.getMovies = async (req, res) => {
-    const movieLimit = 48;
+    const movieLimit = 30;
     try {
         const { search = "", genre = "" } = req.query;
 
@@ -73,11 +73,11 @@ module.exports.getMovies = async (req, res) => {
 
 
         let movies = [];
-        const newMovieLimit = movieLimit - screening_movies.length - 6 + screening_movies.length % 6;
-        if (movieLimit - screening_movies.length > 0) {
+        const newMovieLimit = Math.floor((movieLimit - screening_movies.length) / 6) * 6;
+        if (newMovieLimit > 0) {
             movies = Object.keys(query).length
                 ? await Movie.find(query).limit(newMovieLimit).lean()
-                : await Movie.aggregate([{$sample: {size: newMovieLimit}}]);
+                : [];
 
         }
 
@@ -457,16 +457,14 @@ module.exports.getScreenMovies = async (req, res) => {
         const search = (req.query.search || "").trim();
 
         if (search === "") return res.status(200).json({
-            message: "Discover movies",
-            movies: await Movie.aggregate([
-                { $sample: { size: movieLimit } },
-            ])
+            message: "Start Searching",
+            movies: []
         });
         const movies = await Movie.find({
             title: {$regex: `^${search}`, $options: "i" }
         }).limit(movieLimit).lean();
         return res.status(200).json({
-            message: "movies Found!",
+            message: "Movies Found!",
             movies: movies
         })
     } catch(err) {
@@ -526,7 +524,8 @@ module.exports.setScreenMovie = async (req, res) => {
             message: "Invalid Screen"
         })
 
-        if(isScreen.movie && isScreen.time) await MovieTicket.updateMany({
+        if(isScreen.movie && isScreen.time) {
+            await MovieTicket.updateMany({
                 time: isScreen.time,
                 movie: isScreen.movie,
                 screen: isScreen.name,
@@ -535,6 +534,15 @@ module.exports.setScreenMovie = async (req, res) => {
                     status: "cancelled",
                 }
             }).lean();
+            await MovieSeat.updateMany({
+                screen: isScreen._id,
+                status: {$ne: "available"},
+            }, {
+                $set: {
+                    status: "available",
+                }
+            });
+        }
 
         if (method === 'set') {
             if (!movieId || moviePrice === undefined || !movieTime) return res.status(400).json({
@@ -764,7 +772,7 @@ module.exports.initPayments = async (req, res) => {
                         currency: "inr",
                         product_data: {
                             name: metadata.movie,
-                            description: `${metadata.theatre}, ${metadata.city}, ${metadata.show} at ${new Date(metadata.time).toLocaleString("en-US", {
+                            description: `${metadata.theatre}, ${metadata.city}, ${metadata.screen} at ${new Date(metadata.time).toLocaleString("en-US", {
                                 weekday: "short",
                                 month: "short",
                                 day: "numeric",

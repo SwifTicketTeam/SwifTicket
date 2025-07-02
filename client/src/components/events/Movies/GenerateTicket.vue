@@ -40,7 +40,7 @@ export default {
     return {
       isLoading: true,
       isSave: false,
-      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
+      storageUrl: `${process.env.VUE_APP_STORAGE_URL}/swifticket/movies`,
       qrUrl: '',
       ConvenienceFeesPercentage: parseFloat(process.env.VUE_APP_CONVENIENCE_FEE_PERCENTAGE),
     }

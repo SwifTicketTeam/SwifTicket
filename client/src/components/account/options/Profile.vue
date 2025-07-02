@@ -3,7 +3,7 @@
     <div class = "first">
       <div>
         <label id = "profile-picture">
-          <img :src = "imageUrl" v-if = "isImage" @error = "() => {isImage = false}">
+          <img :src = "imageUrl" :key = "imageUrl" v-if = "isImage" @error = "() => {isImage = false}">
           <input type = "file" ref = "file" accept="image/*" @change = "changeProfilePicture" hidden>
         </label>
         <p :class = "{isWarn : isWarn}">{{ warning }}</p>
@@ -47,25 +47,29 @@ export default {
   },
   created() {
     this.role = this.role.charAt(0).toUpperCase() + this.role.slice(1);
-    this.imageUrl = `${process.env.VUE_APP_STORAGE_URL}users/${this.uID}.jpg`;
+    this.imageUrl = `${process.env.VUE_APP_STORAGE_URL}/swifticket/users/${this.uID}.jpg?v=${Date.now()}`;
   },
   methods: {
     changeProfilePicture() {
       let file = this.$refs.file.files[0];
+      if (!file) return;
+      if (file.size > 512 * 1024) {
+        this.isWarn = true;
+        this.warning = "Image should not exceed 512KB";
+        return;
+      }
 
       const image = new FormData();
       image.append("userProfilePhoto", file);
 
+      this.isImage = false;
       axios.post(`${process.env.VUE_APP_SERVER}/api/uploads/images/users/${this.uID}`, image, {
         headers: {"Content-Type": "multipart/form-data"},
       }).then(() => {
         this.isWarn = false;
         this.warning = "";
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          this.image = evt.target.result;
-        }
-        reader.readAsDataURL(file)
+        this.imageUrl = `${process.env.VUE_APP_STORAGE_URL}/swifticket/users/${this.uID}.jpg?v=${Date.now()}`;
+        this.isImage = true;
       }).catch((err) => {
         this.isWarn = true;
         this.warning = err.response.data.message;
@@ -73,6 +77,12 @@ export default {
     },
     saveName() {
       if (this.$refs.saveName.textContent === "SAVE USERNAME") {
+        if (!/^[A-Za-z0-9_ \t]+$/.test(this.username)) {
+          this.username = this.$store.state.auth.username;
+          this.$refs.saveName.textContent = "EDIT USERNAME"
+          this.$refs.name.readOnly = true;
+          return;
+        }
         this.$store.dispatch("auth/saveName", this.username)
         axios.put(process.env.VUE_APP_SERVER + '/api/account/users/' + this.uID, {
           username: this.$store.state.auth.username,

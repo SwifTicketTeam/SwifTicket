@@ -45,17 +45,13 @@ export default {
 
 <style scoped>
 
-#section {
-  padding-left: 1.5rem;
-}
-
 #favorites {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 1.3rem;
   flex-wrap: wrap;
-  padding: 0;
+  padding: 1rem;
 }
 
 #card {

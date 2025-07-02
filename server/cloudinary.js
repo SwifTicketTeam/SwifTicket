@@ -17,6 +17,7 @@ const storage = new CloudinaryStorage({
             public_id: userId,
             allowed_formats: ['jpeg', 'png'],
             overwrite: true,
+            invalidate: true,
         }
     }
 });

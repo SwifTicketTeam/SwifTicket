@@ -324,4 +324,14 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Username, Screen and Theatre Name can only be Alphanumeric, Underscore or Space.
 - If a Movie is Cancelled, Seats also change to Available.
 - If A Movie is Cancelled, The Ticket is Grayed out and says movie is cancelled.
+---
 
+### v0.6.1 - July 3, 2025
+
+- Added Version to Cloudinary Fetching Profile Picture to remove caching.
+- Added the New Username condition while changing usernames too, but it does not show a warning, just reverts to original username.
+- Fixed Favorites Tab Section having a slight increase in width.
+- When Movie is Cancelled, Seats don't revert to Available
+- Optimised Cloud Requests by Removing the Discover Feature unless User types in search.
+- Fixed a Bug in metadata while creating checkout session.
+---

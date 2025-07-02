@@ -10,7 +10,7 @@
     <div class = "DiscoverList">
       <MovieCard v-for = "(event, index) in movies" :key = "index" :event = "event"></MovieCard>
     </div>
-    <h1 v-if = "isNoResults">NO MOVIES FOUND</h1>
+    <h1 v-if = "!movies.length">{{!isNoResults ? "START SEARCHING TO DISCOVER MOVIES" : "NO MOVIES FOUND"}}</h1>
   </div>
 </template>
 
@@ -32,12 +32,10 @@ export default{
     }
   },
   methods: {
-    getMovies(screening_movies, movies) {
+    getMovies(screening_movies, movies, search) {
       this.screening_movies = screening_movies
       this.movies = movies
-      if (!Object.keys(this.screening_movies).length && !Object.keys(this.movies).length) {
-        this.isNoResults = true;
-      }
+      this.isNoResults = !Object.keys(this.screening_movies).length && !Object.keys(this.movies).length && search;
     }
   }
 }

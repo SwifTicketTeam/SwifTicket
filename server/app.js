@@ -17,15 +17,6 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/images/movies', express.static(
-    process.env.CLOUDINARY_URL,
-    {
-        setHeaders: (res) => {
-            res.set('Access-Control-Allow-Origin', '*')
-        }
-    }
-));
-
 
 // Connect with MongoDB
 dbURI = process.env.MONGODB_URI

@@ -235,6 +235,16 @@ export default {
             : rowA.localeCompare(rowB);
       });
     },
+    soetBackendSeats(seats) {
+      return seats.sort((a, b) => {
+        const [, rowA, numA] = a.match(/^([A-Z]+)-(\d+)$/);
+        const [, rowB, numB] = b.match(/^([A-Z]+)-(\d+)$/);
+
+        return rowA === rowB
+            ? +numA - +numB
+            : rowA.localeCompare(rowB);
+      });
+    },
     initPayments() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/payments/init/movies`, {
         email: this.$store.state.auth.email,
@@ -244,7 +254,7 @@ export default {
           movie: this.evt.title,
           movie_id: this.evt._id,
           seats: this.sortSeats([...this.selectedSeats]).join(', '),
-          backend_seats: this.sortSeats([...this.selectedBackendSeats]).join(', '),
+          backend_seats: this.soetBackendSeats([...this.selectedBackendSeats]).join(', '),
           theatre: `${this.selectedScreen.theatre}`,
           city : `${this.selectedScreen.city}`,
           screen: this.selectedShow.name,
