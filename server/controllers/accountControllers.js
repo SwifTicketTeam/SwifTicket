@@ -16,7 +16,7 @@ const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024,
+        fileSize: 512 * 1024,
     },
 });
 
@@ -34,7 +34,7 @@ module.exports.saveProfilePhoto = async (req, res) => {
             if (err.code === "LIMIT_FILE_EXTENSION") {
                 error = "Profile Picture should be of .jpeg or .png";
             } else if (err.code === "LIMIT_FILE_SIZE") {
-                error = "Image should not exceed 1MB";
+                error = "Image should not exceed 512KB";
             }
             return res.status(400).send({
                 message: error,

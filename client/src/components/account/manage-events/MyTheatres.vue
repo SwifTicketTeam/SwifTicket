@@ -58,6 +58,8 @@ export default {
   width: 100%;
   height: auto;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #myTheatres::-webkit-scrollbar {

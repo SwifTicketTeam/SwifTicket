@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import Routes from "./routes";
 import AuthStore from '@/stores/AuthStore';
-import AccountStore from '@/stores/AccountStore';
 import Client from "./client.vue";
 import axios from "axios";
 import EventStore from "@/stores/EventStore";
@@ -21,7 +20,6 @@ const router = new VueRouter({
 const store = new Vuex.Store({
     modules: {
         auth: AuthStore,
-        account: AccountStore,
         event: EventStore,
     }
 })
@@ -34,7 +32,6 @@ export const authenticate = async () => {
         store.state.auth.username = res.data.username;
         store.state.auth.email = res.data.email;
         store.state.auth.role = res.data.role;
-        store.state.account.bio = res.data.bio;
     }).catch(() => {
         try {
             store.dispatch('auth/deleteToken');

@@ -76,11 +76,12 @@ export default {
       return letters;
     },
     selectSeat(event) {
-      if (!this.isBooking || this.selectedSeats > 4 || event.target.classList.contains("isBooked")) return;
+      if(!this.isBooking || event.target.classList.contains("isBooked")) return;
       if (event.target.classList.contains("isSelected")) {
         event.target.classList.remove("isSelected");
         this.selectedSeats--;
       }
+      else if (this.selectedSeats > 4) return;
       else {
         event.target.classList.add("isSelected");
         this.selectedSeats++;
@@ -109,6 +110,8 @@ export default {
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
   border: 0.1rem solid #CCC;
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #layout-root::-webkit-scrollbar {

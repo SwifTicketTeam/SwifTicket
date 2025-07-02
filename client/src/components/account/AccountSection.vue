@@ -38,13 +38,15 @@ export default {
 
 div {
   margin-top: 2rem;
-  width: 70%;
+  max-width: 70%;
   height: 75vh;
   border-radius: 1.5rem;
   border: 0.1rem solid #CCC;
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 div::-webkit-scrollbar {

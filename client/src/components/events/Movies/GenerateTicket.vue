@@ -87,7 +87,7 @@ export default {
       }).replace(/\d/g, '').trim();
     },
     createQRCode() {
-      QRCode.toDataURL(`${process.env.VUE_APP_CLIENT}/tickets/movie/${this.ticket.ticketId}`).then((url) => {
+      QRCode.toDataURL(`${process.env.VUE_APP_CLIENT}/tickets/movies/${this.ticket.ticketId}`).then((url) => {
         this.qrUrl = url;
         this.isLoading = false;
       }).catch(err => {

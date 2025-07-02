@@ -40,7 +40,7 @@
           <MovieLayout :layout = "layout" v-if = "isChangeLayout" :is-booking = true @select = "selectSeat"></MovieLayout>
         </div>
         <div class = "SeatsFooter">
-          <h1>SELECTED: {{[...selectedSeats].sort().join(', ') || "NONE"}}</h1>
+          <h1>SELECTED: {{sortSeats([...selectedSeats]).join(', ') || "NONE"}}</h1>
           <button id = "pay" @click = "toSummary">PAY {{getSymbol()}}{{bookAmount.toFixed(2)}}</button>
         </div>
       </div>
@@ -54,7 +54,7 @@
           </div>
           <div class = "summary">
             <div class = "SummaryFields">
-              <h4 class = "SummaryField">SELECTED : </h4><h4 class = "SummaryDetails">{{[...selectedSeats].sort().join(', ')}}</h4>
+              <h4 class = "SummaryField">SELECTED : </h4><h4 class = "SummaryDetails">{{sortSeats([...selectedSeats]).join(', ')}}</h4>
             </div><br>
             <div class = "SummaryFields">
              <h4 class = "SummaryField">NUMBER OF TICKETS : </h4><h4 class = "SummaryDetails">{{selectedSeats.length}}</h4>
@@ -97,7 +97,6 @@ export default {
   data() {
     return {
       evt: this.$store.getters["event/getEvent"],
-      storageUrl: process.env.VUE_APP_STORAGE_URL + 'movies',
       selectedDate: 0,
       isLoading: true,
       dates: [],
@@ -226,6 +225,16 @@ export default {
     toSummary() {
       if (Object.keys(this.selectedShow).length && this.bookAmount) this.isSummary = true
     },
+    sortSeats(seats) {
+      return seats.sort((a, b) => {
+        const [, rowA, numA] = a.match(/^([A-Z]+)(\d+)$/);
+        const [, rowB, numB] = b.match(/^([A-Z]+)(\d+)$/);
+
+        return rowA === rowB
+            ? +numA - +numB
+            : rowA.localeCompare(rowB);
+      });
+    },
     initPayments() {
       axios.post(`${process.env.VUE_APP_SERVER}/api/payments/init/movies`, {
         email: this.$store.state.auth.email,
@@ -234,8 +243,8 @@ export default {
           ticket_id: `${this.$store.state.auth.UID}-${Math.floor(Math.random() * 10000)}-${Date.now()}`,
           movie: this.evt.title,
           movie_id: this.evt._id,
-          seats: [...this.selectedSeats].sort().join(', '),
-          backend_seats: [...this.selectedBackendSeats].sort().join(', '),
+          seats: this.sortSeats([...this.selectedSeats]).join(', '),
+          backend_seats: this.sortSeats([...this.selectedBackendSeats]).join(', '),
           theatre: `${this.selectedScreen.theatre}`,
           city : `${this.selectedScreen.city}`,
           screen: this.selectedShow.name,
@@ -325,6 +334,8 @@ export default {
   border-radius: 0.8rem;
   box-shadow: -0.01rem 0.01rem 0.2rem 0.03rem rgba(0, 0, 0, 0.15);
   overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .ViewLayout::-webkit-scrollbar {
@@ -415,6 +426,8 @@ export default {
   gap: 1rem;
   overflow: hidden auto;
   border-radius: 0.8rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #screens::-webkit-scrollbar {
@@ -442,15 +455,6 @@ export default {
 .screen h3 {
   font-size: 1.2rem;
   margin: 0 0 0 0.6rem;
-}
-
-img {
-  width: min(19.5%, 7.5vw);
-  height: auto;
-  border: 0.1rem solid #333;
-  box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
-  cursor: pointer;
 }
 
 .date {

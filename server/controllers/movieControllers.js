@@ -431,7 +431,7 @@ module.exports.getScreens = async (req, res) => {
     }
 }
 
-// Get movies for Screen
+// Get Movies for Screen
 module.exports.getScreenMovies = async (req, res) => {
     const movieLimit = 5
     try {
@@ -470,8 +470,9 @@ async function deleteMovieFromScreen(movieId) {
             last_screening_time: "",
         })
     } else {
+        const timestamps = [...isMovie.map((movie) => movie.time)].sort()
         await Movie.updateOne({_id: movieId}, {
-            last_screening_time: Math.max(...isMovie.map((movie) => movie.time)),
+            last_screening_time: timestamps[timestamps.length - 1]
         })
     }
 }
@@ -682,7 +683,6 @@ module.exports.getMovieScreens = async (req, res) => {
         });
 
         const groupedScreens = Object.values(grouped);
-        console.log(groupedScreens);
         return res.status(200).send({
             message: `Found ${screens.length} Screens`,
             screens: groupedScreens,

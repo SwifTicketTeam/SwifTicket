@@ -15,8 +15,8 @@ export default{
   name: "HomeHeader",
   data() {
     return {
-      ticketClasses: ["movies", "Shows", "Sports", "Travels"],
-      selectedTicketClass: "movies"
+      ticketClasses: ["Movies", "Shows", "Sports", "Travels"],
+      selectedTicketClass: "Movies"
     }
   },
   methods: {

@@ -100,6 +100,8 @@ export default {
   border-radius: 0.8rem;
   border: none;
   box-shadow: 0.01rem 0.01rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .dropdown:focus {

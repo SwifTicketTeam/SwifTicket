@@ -39,7 +39,6 @@ export default {
       username: this.$store.state.auth.username,
       email: this.$store.state.auth.email,
       role: this.$store.state.auth.role,
-      bio: this.$store.state.account.bio,
       warning: "",
       imageUrl: "",
       isImage: true,

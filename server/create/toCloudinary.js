@@ -53,7 +53,7 @@ const uploadAll = async () => {
         await sleep(DELAY_BETWEEN_BATCHES);
     }
 
-    const logPath = path.join(__dirname, 'upload-results-batched.json');
+    const logPath = path.join(__dirname, 'toCloudinary.json');
     fs.writeFileSync(logPath, JSON.stringify(results, null, 2));
     console.log(`Upload complete. Log saved to: ${logPath}`);
 };

@@ -262,6 +262,8 @@ p {
   box-shadow: -0.05rem 0.05rem 0.8rem 0 rgba(0, 0, 0, 0.15);
   border: 0.1rem solid #CCC;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #layout::-webkit-scrollbar {

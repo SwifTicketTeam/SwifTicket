@@ -33,6 +33,8 @@ html, body {
   box-sizing: border-box;
   font-size: min(0.9vw, 1.5vh);
   font-family: 'Roboto Slab', sans-serif;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 html::-webkit-scrollbar {
   display: none;

@@ -16,6 +16,7 @@ const storage = new CloudinaryStorage({
             folder: 'swifticket/users',
             public_id: userId,
             allowed_formats: ['jpeg', 'png'],
+            overwrite: true,
         }
     }
 });

@@ -2,6 +2,11 @@
 
 SwifTicket is a full-stack, cross-industry movie ticket booking solution built with Vue.js, Node.js, and MongoDB. It features authentication, profile management, vendor dashboards, event discovery, booking flows, and real-time payment integrations. The platform integrates actual movie data and is built on a scalable, city-based model for multi-theatre and screen operations.
 
+Website: https://swifticket-web.vercel.app
+- Frontend - **Vercel**
+- Backend (Server + API) - **Render**
+- Database - **MongoDB Atlas**
+- Cloud Storage - **Cloudinary**
 ---
 
 ## Project Roadmap

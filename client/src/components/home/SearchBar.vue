@@ -61,6 +61,8 @@ export default {
   margin: 2rem 0 1.5rem 0;
   overflow-x: auto;
   align-self: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #genres::-webkit-scrollbar {

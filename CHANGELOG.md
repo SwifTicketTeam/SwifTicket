@@ -4,7 +4,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Pre Beta v0.0] – June 18, 2025
+## Pre Beta v0.0 – June 18, 2025
 
 ### Phase 1 – Frontend Foundation
 
@@ -18,7 +18,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Beta v0.0] – June 19, 2025
+## Beta v0.0 – June 19, 2025
 
 ### Phase 2 – API Testing and Backend Server Integration
 
@@ -40,7 +40,7 @@ All notable changes to this project are documented here.
 - Full registration and login flow completed
 
 ---
-## [Beta Extended v0.0] – June 19, 2025
+## Beta Extended v0.0 – June 19, 2025
 
 ### Phase 4 – JWT Session Management, Email Messaging, and Forgot Password (In Progress)
 
@@ -55,7 +55,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [v0.0] – June 20, 2025
+## v0.0 – June 20, 2025
 
 ### Phase 4 – Forgot Password Done and Bug Fixes
 
@@ -71,7 +71,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Pre Beta v0.1] – June 21, 2025
+## Pre Beta v0.1 – June 21, 2025
 > **Note**:
 > OAuth and Role-Based Route Protection have been delayed. Route Protection is pending vendor/admin page structures definition.
 
@@ -91,7 +91,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Beta v0.1] – June 22, 2025
+## Beta v0.1 – June 22, 2025
 
 ### Phase 6 – My Account Tab, Transitions, and Movie Page Routing
 
@@ -115,7 +115,7 @@ All notable changes to this project are documented here.
 
 *Note:* Versioning is still continued from Beta since now features are stable. Subsequent release can start OAuth and Vendor Panel integrations.
 
-## [Beta Extended v0.1] – June 23, 2025
+## Beta Extended v0.1 – June 23, 2025
 
 ### Phase 6 Extended – Storage, Persistence, API Docs, and Restructure
 
@@ -125,7 +125,7 @@ All notable changes to this project are documented here.
 - Included an **API documentation page** describing all backend routes and how they should be used
 - Updated various `GET` and `POST` API endpoints for consistency and RESTful principles
 
-## [Beta Polished v0.1] – June 24, 2025
+## Beta Polished v0.1 – June 24, 2025
 
 ### Phase 7 – Profile Enhancement & Movie Dataset Integration
 
@@ -142,7 +142,7 @@ All notable changes to this project are documented here.
   - Imported all **9,826 movie posters** to local storage
   - Inserted movie data and referenced poster in MongoDB
 
-## [v0.1] – June 24, 2025
+## v0.1 – June 24, 2025
 
 ### Phase 8 – Discovery Engine Activation, Search, Filter & Dynamic Routing
 
@@ -162,7 +162,7 @@ All notable changes to this project are documented here.
   - Streamlined structure for future testing and movieSeat selection logic
 ---
 
-## [v0.2] – June 25, 2025
+## v0.2 – June 25, 2025
 
 ### Phase 9 – UI Overhaul and Favorites System
 
@@ -174,7 +174,7 @@ All notable changes to this project are documented here.
   - Favorites are **loaded upon open** but not yet rendered in the UI
 ---
 
-## [Pre Beta v0.3] – June 27, 2025
+## Pre Beta v0.3 – June 27, 2025
 
 ### Phase 10 – Ticket Booking Foundations & City Support
 
@@ -193,7 +193,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [Beta v0.3] – June 28, 2025
+## Beta v0.3 – June 28, 2025
 
 ### Phase 10 – Vendor Panel & Theatre Management
 
@@ -214,7 +214,7 @@ All notable changes to this project are documented here.
 
 ---
 
-## [v0.3] - June 29, 2025
+## v0.3 - June 29, 2025
 
 ### Phase 11 - Vendor Management & Screen System Launched
 - Vendor-specific city selector to create theatres
@@ -236,7 +236,7 @@ Version `v0.4` and its sub-versions will finish up the entire movieTicket bookin
 
 ---
 
-## [Beta v0.4] - June 30, 2025
+## Beta v0.4 - June 30, 2025
 
 ### Phase 12 - Showtime Selection, Booking UI & Layout Improvements
 - Vendors are able to choose a time while selecting movies for their screens
@@ -260,7 +260,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 
 ---
 
-## [Beta Extended v0.4] - July 1, 2025
+## Beta Extended v0.4 - July 1, 2025
 
 ### Phase 12 – Seat Booking, Stripe Payments, and Ticket Generation
 - Seat choice and unchoice completed with interactive layout
@@ -278,7 +278,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 > Note: Booked movieTicket are not yet persisted in the database.
 
 --- 
-## [v0.4] - July 1, 2025
+## v0.4 - July 1, 2025
 
 ### Phase 13 – Schema Refactor, Ticketing Flow Completion
 
@@ -294,7 +294,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 > Note: This is the final significant update to the development process. Unless deployment work resumes, SwifTicket's future is in limbo. The version is stable and finished for full user and vendor use, including support for booking, ticket management, and responsive design.
 
 ---
-### [v0.4.1] - July 2, 2025
+### v0.4.1 - July 2, 2025
 > Note: This is a minor update focused on bug fixes and stability improvements for v0.4.
 
 - PDF Ticket Inconsistencies and the "SAVE TICKET AS PDF" appearing the PDF have been fixed.
@@ -302,7 +302,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Fixed Broken "ADD SCREEN" Button
 - Minor UI Changes
 
-### [v0.5] - July 2, 2025
+## v0.5 - July 2, 2025
 
 ### Phase 14 - First Deployment of SwifTicket
 - Changed Multer Storage Code to Cloudinary Multer Code
@@ -311,4 +311,7 @@ Booking feature like movieSeat selection, lock, and confirmation is being active
 - Made Changes to environment variables for deployment
 
 > Note: This is the Initial Deployment of this Project. v0.5.x is completely focused on converting from the LocalHost Server to Web Deployment
+
+### v0.5.1
+> Note: Minor Bug Fixes to the Web Deployment.
 

@@ -250,6 +250,8 @@ export default {
   justify-content: space-between;
   transition: height 0.5s ease;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #screen::-webkit-scrollbar {
